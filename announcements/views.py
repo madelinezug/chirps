@@ -1,22 +1,8 @@
 from django.shortcuts import render
 
 from django.http import HttpResponse
-<<<<<<< HEAD
-from announcements.models import .
+from announcements.models import *
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the announcements index.")
-
-
-
-def atext(request, announcement_id):
-    try
-        text = Announcement.announce_text
-        context = {'announcement_id': announcement_id}
-    except Announcement.DoesNotExist:
-        raise Http404("Announcement does not exist")
-    return render(request,'chirps/atext.html', context)
-=======
 from django.template import loader
 
 # Register your models here.
@@ -42,4 +28,3 @@ def index(request):
         'latest_announcement_list': latest_announcement_list,
     }
     return HttpResponse(template.render(context, request))
->>>>>>> f5370922d1ac25c4088152bbf293c654ff15d815

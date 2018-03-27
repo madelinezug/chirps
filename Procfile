@@ -1,0 +1,1 @@
+web: gunicorn chirps.wsgi --log-file -
