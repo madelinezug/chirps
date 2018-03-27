@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'chirps.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'chirps',
+        'USER': 'maddiezug',
+        'PASSWORD':'chirp47',
+        'HOST': '',
+        'PORT': ''
     }
 }
 
