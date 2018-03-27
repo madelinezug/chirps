@@ -1,7 +1,7 @@
 {% if latest_announcement_list %}
     <ul>
     {% for announcement in latest_announcement_list %}
-        <li><a href="/announcement/{{ announcement.id }}/">{{ announcement.announcement_text }}</a></li>
+        <li><a href="/announcement/{{ announcement.id }}/">{{ announcement}}</a></li>
     {% endfor %}
     </ul>
 {% else %}
