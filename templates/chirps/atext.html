@@ -1,5 +1,5 @@
 {% if announcement_id %}
-      <li><a href="/polls/{{ announcement.announce_ID }}/">{{ announcement.announce_text }}</a></li>
+      <li><a href="/{{ announcement.announce_ID }}/">{{ announcement.announce_text }}</a></li>
 {% else %}
-    <p>No polls are available.</p>
+    <p>No chirps are available.</p>
 {% endif %}
