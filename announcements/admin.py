@@ -15,3 +15,14 @@ from .models import Save
 
 
 admin.site.register(Individual)
+admin.site.register(Organization)
+admin.site.register(Affiliation)
+admin.site.register(Announcement)
+admin.site.register(Tags)
+admin.site.register(AnnounceTags)
+admin.site.register(SubmitAnnouncement)
+admin.site.register(SubmitTag)
+admin.site.register(UserSearch)
+admin.site.register(TagSearch)
+admin.site.register(Save)
+
