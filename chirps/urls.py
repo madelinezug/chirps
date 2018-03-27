@@ -19,5 +19,4 @@ from django.urls import include, path
 urlpatterns = [
     path('announcements/', include('announcements.urls')),
     path('admin/', admin.site.urls),
-    #path('<int:announcement_id>/',views.atext,name='description')
 ]
