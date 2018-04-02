@@ -1,0 +1,8 @@
+<h1>{{ announcement.announce_text }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<ul>
+  <p>Submitted on: </p>
+<li>{{ announcement.submit_date }}</li>
+</ul>
