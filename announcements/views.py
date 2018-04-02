@@ -2,8 +2,11 @@ from django.shortcuts import get_object_or_404, render
 from django.http import Http404
 
 from django.http import HttpResponse
-from django.http import HttpResponseRedirect
 from announcements.models import *
+
+from django.shortcuts import redirect
+
+from django.utils import timezone
 
 from django.template import loader
 
@@ -34,15 +37,15 @@ def index(request):
     return render(request,'announcements/index.html',context)
 
 
-
-
 def submit(request):
-   if request.method == "POST":
-       form = SubmitAnnounceForm(request.POST)
-       if form.is_valid():
-           new_announce = form.save(commit=False)
-		   new_announce.save()
-       	return redirect('/')
-   else:
-       form = SubmitAnnounceForm()
-   return render(request, 'announcements/submit.html', {'form': form})
+	if request.method == "POST":
+		form = SubmitAnnounceForm(request.POST)
+		if form.is_valid():
+			new_announce = form.save(commit=False)
+			new_announce.submit_date = timezone.now()
+			new_announce.approve_status = False
+			new_announce.save()
+			return redirect('/announcements/')
+	else:
+		form = SubmitAnnounceForm()
+	return render(request, 'announcements/submit.html', {'form':form})
