@@ -25,7 +25,7 @@ SECRET_KEY = ')-9#g)fp%l*sg*dv-+*44xrj6e3d^(^#2+6rv_4#e+p#@rm0dl'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [‘0.0.0.0’, ‘localhost’]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -78,8 +78,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'chirps',
-        'USER': 'root',
-        'PASSWORD':'chirpchirp',
+        'USER': 'maddiezug',
+        'PASSWORD':'chirp47',
         'HOST': '',
         'PORT': ''
     }
@@ -124,5 +124,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-django_heroku.settings(locals())
+
 

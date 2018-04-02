@@ -38,11 +38,11 @@ def index(request):
 
 def submit(request):
    if request.method == "POST":
-       form = SubmitAnnounceForm(request.POST)
-       if form.is_valid():
-           new_announce = form.save(commit=False)
-		   new_announce.save()
-       	return redirect('/')
+      form = SubmitAnnounceForm(request.POST)
+      if form.is_valid():
+        new_announce = form.save(commit=False)
+      new_announce.save()
+      return redirect('/')
    else:
        form = SubmitAnnounceForm()
    return render(request, 'announcements/submit.html', {'form': form})
