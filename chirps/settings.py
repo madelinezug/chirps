@@ -78,8 +78,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'chirps',
-        'USER': 'root',
-        'PASSWORD':'chirpchirp',
+        'USER': 'maddiezug',
+        'PASSWORD':'chirp47',
         'HOST': '',
         'PORT': ''
     }
@@ -123,3 +123,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+
