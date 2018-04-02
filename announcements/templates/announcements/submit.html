@@ -1,0 +1,9 @@
+<h1> Submit an Announcement! </h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'submit' %}" method="post">
+  {{form.as_p}}
+  {% csrf_token %}
+  <input type="submit" value="Submit"/>
+</form>
