@@ -4,5 +4,16 @@
 
 <ul>
   <p>Submitted on: </p>
-<li>{{ announcement.submit_date }}</li>
-</ul>
+<li>{{ announcement.submit_date }}</li><br>
+  <p>Approval status:</p>
+  {% if announcement.approve_status%}
+    <p>Approved</p>
+  {% else %}
+      <p>Not approved</p>
+    {% endif %}
+
+    <form method="post">
+      <input type="submit" value="Approve" name = "approve"/>
+      <input type="submit" value="Deny" name="deny"/>
+      {% csrf_token %}
+    </form>

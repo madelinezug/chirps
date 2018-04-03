@@ -27,7 +27,16 @@ from .models import Save
 
 def detail(request, announcement_id):
 	announcement = get_object_or_404(Announcement,pk=announcement_id)
-	return render(request,"announcements/detail.html",{'announcement': announcement})
+	if ("approve" in request.POST):
+		announcement.approve_status = True
+		announcement.save()
+	elif ("deny" in request.POST):
+		announcement.delete()
+		return redirect('/announcements/')
+	context = {
+		'announcement': announcement,
+	}
+	return render(request, 'announcements/detail.html', context)
 
 def index(request):
     latest_announcement_list = Announcement.objects.all()
@@ -35,6 +44,8 @@ def index(request):
         'latest_announcement_list': latest_announcement_list,
     }
     return render(request,'announcements/index.html',context)
+
+
 
 
 def submit(request):
