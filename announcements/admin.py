@@ -7,7 +7,6 @@ from .models import Affiliation
 from .models import Announcement
 from .models import Tags
 from .models import AnnounceTags
-from .models import SubmitAnnouncement
 from .models import SubmitTag
 from .models import UserSearch
 from .models import TagSearch
@@ -20,9 +19,7 @@ admin.site.register(Affiliation)
 admin.site.register(Announcement)
 admin.site.register(Tags)
 admin.site.register(AnnounceTags)
-admin.site.register(SubmitAnnouncement)
 admin.site.register(SubmitTag)
 admin.site.register(UserSearch)
 admin.site.register(TagSearch)
 admin.site.register(Save)
-
