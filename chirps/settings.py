@@ -55,7 +55,7 @@ ROOT_URLCONF = 'chirps.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['./templates',],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,10 +79,10 @@ WSGI_APPLICATION = 'chirps.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'heroku_e56585b75830c2e',
-        'USER': 'b98ba5f7708134',
-        'PASSWORD':'05005063',
-        'HOST': 'us-cdbr-iron-east-05.cleardb.net',
+        'NAME': 'chirps',
+        'USER': 'maddiezug',
+        'PASSWORD':'chirp47',
+        'HOST': '',
         'PORT': ''
     }
 }
@@ -126,5 +126,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
-
+# Redirect to home URL after login (Default redirects to /accounts/profile/)
+LOGIN_REDIRECT_URL = '/announcements'
