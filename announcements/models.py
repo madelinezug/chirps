@@ -2,8 +2,11 @@ from django.db import models
 from datetime import date
 
 class Individual(models.Model):
-    email = models.CharField(max_length=250, primary_key=True)
-    password = models.CharField(max_length=50)
+    email = models.CharField(max_length=100, primary_key=True)
+    password = models.CharField(max_length=50,default='')
+    username = models.CharField(max_length=20,default='')
+    first_name = models.CharField(max_length=20,default='')
+    last_name = models.CharField(max_length=30,default='')
     admin_status = models.BooleanField()
 
     def __str__(self):

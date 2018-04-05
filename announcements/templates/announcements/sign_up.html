@@ -1,0 +1,10 @@
+<h1> Sign up for an account:</h1>
+
+<form action = "{% url 'sign_up' %}" method = "post"/>
+  Username:<input type="text" name="username"/><br>
+  Password:<input type="password" name="password"/>
+  {{form.as_p}}
+  {% csrf_token %}
+  <input type="submit" value="Sign up" name="sign_up"/>
+
+</form>

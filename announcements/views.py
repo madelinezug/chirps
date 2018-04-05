@@ -3,8 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 from django.http import Http404
 
+from django.contrib.auth.models import User
+
 from django.http import HttpResponse
-from announcements.models import *
 
 from django.shortcuts import redirect
 
@@ -12,7 +13,9 @@ from django.utils import timezone
 
 from django.template import loader
 
+# include forms
 from .forms import SubmitAnnounceForm
+from .forms import UserForm
 
 # Register your models here.
 from .models import Individual
@@ -25,6 +28,24 @@ from .models import SubmitTag
 from .models import UserSearch
 from .models import TagSearch
 from .models import Save
+
+def sign_up(request):
+	if request.method == "POST":
+		form = UserForm(request.POST)
+		if form.is_valid():
+			new_individual = form.save(commit=False)
+			new_individual.admin_status = False
+			new_individual.save()
+			user = User.objects.create_user(request.POST['username'],request.POST['email'],
+				request.POST['password'])
+			user.first_name = request.POST['first_name']
+			user.last_name = request.POST['last_name']
+			user.save()
+			return redirect('/accounts/login')
+	else:
+		form = UserForm()
+	return render(request,'announcements/sign_up.html',{'form':form})
+
 
 @login_required
 def detail(request, announcement_id):
