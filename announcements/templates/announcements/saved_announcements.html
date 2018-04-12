@@ -1,0 +1,11 @@
+<h1> My Saved Announcements </h1><br>
+
+<p> Current User: </p> {{ user }} <br>
+<p> Saved Announcements: </p>
+{% if saved_announcements_list != None %}
+  {% for saved in saved_announcements_list %}
+    <p> {{ saved.saved_announce }} </p> <br>
+  {% endfor %}
+{% else %}
+  <p> No saved announcements </p>
+{% endif %}

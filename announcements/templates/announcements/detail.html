@@ -12,9 +12,16 @@
       <p>Not approved</p>
     {% endif %}
 
-    <form method="post">
+
+
+
+    <form method="post"/>
       <input type="submit" value="Approve" name = "approve"/>
       <input type="submit" value="Deny" name="deny"/>
       <input type="submit" value="Delete" name="delete"/>
+      <input type="submit" value="Save" name="save"/>
+      <input type="submit" value="Unsave" name="unsave"/><br>
+      {{ worked }}
+      {{saved_announcement}}
       {% csrf_token %}
     </form>

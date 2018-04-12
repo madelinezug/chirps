@@ -25,7 +25,8 @@ SECRET_KEY = ')-9#g)fp%l*sg*dv-+*44xrj6e3d^(^#2+6rv_4#e+p#@rm0dl'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [chirpitychirpchirp.herokuapp.com]
+#ALLOWED_HOSTS = [chirpitychirpchirp.herokuapp.com]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -80,8 +81,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'chirps',
-        'USER': 'maddiezug',
-        'PASSWORD':'chirp47',
+        'USER': 'root',
+        'PASSWORD':'chirpchirp',
         'HOST': '',
         'PORT': ''
     }

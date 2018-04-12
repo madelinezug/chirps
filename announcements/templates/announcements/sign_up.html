@@ -1,8 +1,11 @@
 <h1> Sign up for an account:</h1>
 
+<p>{{no_match}}</p>
+
 <form action = "{% url 'sign_up' %}" method = "post"/>
-  Username:<input type="text" name="username"/><br>
-  Password:<input type="password" name="password"/>
+  Email: <input type="text" name="email"/><br>
+  Password: <input type="password" name="password"/>
+  Re-enter Password: <input type="password" name="redo_password"/>
   {{form.as_p}}
   {% csrf_token %}
   <input type="submit" value="Sign up" name="sign_up"/>

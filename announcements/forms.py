@@ -2,6 +2,7 @@ from django import forms
 
 from .models import Announcement
 from .models import Individual
+from .models import Save
 
 class SubmitAnnounceForm(forms.ModelForm):
 
@@ -13,4 +14,10 @@ class UserForm(forms.ModelForm):
 
     class Meta:
         model = Individual
-        fields = ['email','first_name','last_name']
+        fields = ['first_name','last_name']
+
+class SaveAnnounceForm(forms.ModelForm):
+
+    class Meta:
+        model = Save
+        fields = ['saver','saved_announce']
