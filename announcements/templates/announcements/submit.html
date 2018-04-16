@@ -3,7 +3,10 @@
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 <form action="{% url 'submit' %}" method="post">
-  {{form.as_p}}
+  Announcement: <input type="text" name="announce_text"/><br>
+  ID: <input type="number" name="announce_ID"/><br>
+  Desired Expiration Date: <input type="date" name="expire_date"/><br>
+  Tags (separated by commas): <input type="text" name="tag_text"/><br>
   {% csrf_token %}
   <input type="submit" value="Submit"/>
 </form>

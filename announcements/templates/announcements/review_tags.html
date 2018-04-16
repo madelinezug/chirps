@@ -1,0 +1,19 @@
+<h1> Review Tags! </h1>
+
+<form method = "post">
+  {% csrf_token %}
+  <div>
+  {% if unapproved_tags %}
+    {% if num_unapproved > 0 %}
+      {% for tag in unapproved_tags %}
+        <input type="checkbox" name="checks" value="{{tag}}"/>
+        <label for="{{tag}}">{{tag}}</label>
+      {% endfor %}
+    {% endif %}
+  {% else %}
+    <p> All tags are approved </p>
+  {% endif %}
+</div>
+<div>
+  <input type="submit" name="approve" value = "Approve" />
+</form>

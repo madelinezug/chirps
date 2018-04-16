@@ -25,3 +25,18 @@
       {{saved_announcement}}
       {% csrf_token %}
     </form>
+
+    <h3> Tags: </h3> <br>
+      {% if announce_tags %}
+        {% if num_tags > 0 %}
+          {% for tag in announce_tags %}
+            - {{ tag }} {{ tag.is_approved }} <br>
+          {% endfor %}
+        {% else %}
+          <p> No tags on this post </p> <br>
+        {% endif %}
+      {% endif %}
+
+      <form action = "http://127.0.0.1:8000/announcements/review_tags/">
+        <input type="submit" value="Approve Tags"/>
+      </form>

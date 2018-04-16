@@ -17,6 +17,7 @@ from django.template import loader
 from .forms import SubmitAnnounceForm
 from .forms import UserForm
 from .forms import SaveAnnounceForm
+from .forms import SubmitTagForm
 
 # Register your models here.
 from .models import Individual
@@ -59,8 +60,11 @@ def detail(request, announcement_id):
 	announcement = get_object_or_404(Announcement,pk=announcement_id)
 	user = get_object_or_404(Individual,pk=request.user.username)
 	form = SaveAnnounceForm(request.POST)
-	saved_announcement = "He we are"
+	saved_announcement = ""
 	save_announcements_list = Save.objects.all()
+	announce_tags = AnnounceTags.objects.filter(the_announcement=announcement)
+	num_tags = len(announce_tags)
+
 	if ("approve" in request.POST):
 		if (~announcement.is_approved()):
 			announcement.approve_status = True
@@ -95,7 +99,9 @@ def detail(request, announcement_id):
 	context = {
 		'announcement': announcement,
 		'save_announcements_list': save_announcements_list,
-		'saved_announcement':saved_announcement
+		'saved_announcement':saved_announcement,
+		'announce_tags':announce_tags,
+		'num_tags':num_tags,
 	}
 	return render(request, 'announcements/detail.html', context)
 
@@ -108,19 +114,51 @@ def index(request):
 	return render(request,'announcements/index.html',context)
 
 @login_required
+def approve_tag(request):
+	unapproved_tags = Tags.objects.filter(approved=False)
+	num_unapproved = len(unapproved_tags)
+	tags_to_approve = None
+	if request.method == "POST":
+		tags_to_approve = request.POST.getlist('checks')
+		if len(tags_to_approve) > 0:
+			for tag in tags_to_approve:
+				approve_tag = get_object_or_404(Tags,pk=tag)
+				approve_tag.approved = True
+				approve_tag.save()
+				return redirect('/announcements/review_tags')
+	context = {
+		'unapproved_tags': unapproved_tags,
+		'num_unapproved': num_unapproved
+	}
+	return render(request,'announcements/review_tags.html',context)
+
+@login_required
 def submit(request):
 	if request.method == "POST":
-		form = SubmitAnnounceForm(request.POST)
-		if form.is_valid():
-			new_announce = form.save(commit=False)
+		ann_form = SubmitAnnounceForm(request.POST)
+		#tag_form = SubmitTagForm(request.POST)
+		if ann_form.is_valid() :
+			# save the announcement
+			new_announce = ann_form.save(commit=False)
 			new_announce.submit_date = timezone.now()
 			new_announce.approve_status = False
 			new_announce.submitter = Individual.objects.get(pk=request.user.username)
 			new_announce.save()
+
+			# save the tag and associate it with the announcement
+			current_user = Individual.objects.get(pk=request.user.username)
+			tag_list = request.POST['tag_text'].split(",")
+			for tag in tag_list:
+				tag = tag.strip()
+				if not Tags.objects.filter(pk=tag).exists():
+					new_tag = Tags(tag_text=tag,approved=False)
+					new_tag.save()
+				announce_tag_pair = AnnounceTags(the_announcement=new_announce,the_tag=Tags.objects.get(pk=tag))
+				announce_tag_pair.save()
 			return redirect('/announcements/')
-	else:
-		form = SubmitAnnounceForm()
-	return render(request, 'announcements/submit.html', {'form':form})
+		else:
+			form = SubmitAnnounceForm()
+	return render(request, 'announcements/submit.html', {})
 
 @login_required
 def saved(request):

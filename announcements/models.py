@@ -78,6 +78,12 @@ class Tags(models.Model):
     def approve(self):
         self.approved = True
 
+    def is_approved(self):
+        if self.approved:
+            return "approved"
+        else:
+            return "unapproved"
+
 class AnnounceTags(models.Model):
     the_announcement = models.ForeignKey(Announcement, on_delete=models.PROTECT)
     the_tag = models.ForeignKey(Tags, on_delete=models.PROTECT)
@@ -86,7 +92,7 @@ class AnnounceTags(models.Model):
         unique_together = (('the_announcement','the_tag'),)
 
     def __str__(self):
-        return self.the_announcement + ' , ' + self.the_tag
+        return str(self.the_tag)
 
 class SubmitTag(models.Model):
     tag_submitter = models.ForeignKey(Individual, on_delete=models.PROTECT)
@@ -127,7 +133,7 @@ class Save(models.Model):
         unique_together = (('saver','saved_announce'),)
 
     def __str__(self):
-        return str(saver) + ' saved ' + str(saved_announce)
+        return str(self.saver) + ' saved ' + str(self.saved_announce)
 
     @classmethod
     def create(cls, user, announcement):
