@@ -1,0 +1,14 @@
+<h1> Search by a tag! </h1>
+
+<form method = "post">
+  {% csrf_token %}
+  <input type="text" name="search_key" value="Enter tag here"/>
+  <input type="submit" name="search" value="Search"/>
+</form>
+
+{{ no_tag }} <br>
+{% if matching_announces %}
+  {% for announce in matching_announces %}
+    - {{ announce.the_announcement }}<br>
+  {% endfor %}
+{% endif %}

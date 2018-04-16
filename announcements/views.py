@@ -150,6 +150,7 @@ def submit(request):
 			tag_list = request.POST['tag_text'].split(",")
 			for tag in tag_list:
 				tag = tag.strip()
+				tag = tag.lower()
 				if not Tags.objects.filter(pk=tag).exists():
 					new_tag = Tags(tag_text=tag,approved=False)
 					new_tag.save()
@@ -171,3 +172,30 @@ def saved(request):
 		'user': user
 	}
 	return render(request, 'announcements/saved_announcements.html', context)
+
+@login_required
+def tag_search(request):
+	no_tag = ""
+	matching_announces = None
+	if request.method == "POST":
+		searched_tag = request.POST['search_key']
+		searched_tag = searched_tag.strip()
+		searched_tag = searched_tag.lower()
+		if (Tags.objects.filter(pk=searched_tag).exists()):
+			if (AnnounceTags.objects.filter(the_tag=searched_tag).exists()):
+				matching_announces = list(AnnounceTags.objects.filter(the_tag=searched_tag))
+				for object in matching_announces:
+					announce_o_i = object.the_announcement
+					if announce_o_i.expired():
+						matching_announces.remove(AnnounceTags.objects.get(the_announcement=announce_o_i))
+				if len(matching_announces) == 0:
+					no_tag = "No Chirps are currently active with this tag"
+			else:
+				no_tag = "No Chirps have used this tag"
+		else:
+			no_tag = "This tag does not exist"
+	context = {
+		'no_tag': no_tag,
+		'matching_announces':matching_announces,
+	}
+	return render(request, 'announcements/tag_search.html',context)

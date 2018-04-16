@@ -62,7 +62,7 @@ class Announcement(models.Model):
     def is_approved(self):
         return self.approve_status
 
-    def is_expired(self):
+    def expired(self):
         return date.today() > self.expire_date
 
 
