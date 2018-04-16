@@ -6,9 +6,9 @@
   <input type="submit" name="search" value="Search"/>
 </form>
 
-{{ no_tag }} <br>
+{{ no_match }} <br>
 {% if matching_announces %}
   {% for announce in matching_announces %}
-    - {{ announce.the_announcement }}<br>
+    - {{ announce }}<br>
   {% endfor %}
 {% endif %}

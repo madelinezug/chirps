@@ -2,15 +2,24 @@
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<ul>
-  <p>Submitted on: </p>
-<li>{{ announcement.submit_date }}</li><br>
-  <p>Approval status:</p>
+
+<b>Submitted on: </b>
+  <li>{{ announcement.submit_date }}</li><br>
+<b> Expires on: </b>
+  <li> {{ announcement.expire_date }} </li><br>
+<b>Approval status:</b>
   {% if announcement.approve_status%}
-    <p>Approved</p>
+    <li>Approved</li> <br>
   {% else %}
-      <p>Not approved</p>
-    {% endif %}
+      <li>Not approved</li> <br>
+  {% endif %}
+<b> Submitted by: </b>
+    <li> {{ announcement.submitter }} </li><br>
+
+
+
+
+
 
 
 

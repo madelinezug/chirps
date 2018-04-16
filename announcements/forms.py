@@ -22,9 +22,3 @@ class SaveAnnounceForm(forms.ModelForm):
     class Meta:
         model = Save
         fields = ['saver','saved_announce']
-
-class SubmitTagForm(forms.ModelForm):
-
-    class Meta:
-        model = Tags
-        fields = ['tag_text']

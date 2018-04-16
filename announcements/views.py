@@ -17,7 +17,6 @@ from django.template import loader
 from .forms import SubmitAnnounceForm
 from .forms import UserForm
 from .forms import SaveAnnounceForm
-from .forms import SubmitTagForm
 
 # Register your models here.
 from .models import Individual
@@ -90,7 +89,10 @@ def detail(request, announcement_id):
 				saved_announcement = "it worked!"
 	elif ("unsave" in request.POST):
 		saved_announcement = "we tried to unsave"
-		prev_save_announce = get_object_or_404(Save,saver=user,saved_announce=announcement)
+		try:
+			prev_save_announce = get_object_or_404(Save,saver=user,saved_announce=announcement)
+		except:
+			raise Http404("You have not saved this announcement")
 		prev_save_announce.delete()
 		if (Save.objects.filter(saver=user,saved_announce=announcement).exists()):
 			saved_announcement = "didn't unsave"
@@ -136,7 +138,6 @@ def approve_tag(request):
 def submit(request):
 	if request.method == "POST":
 		ann_form = SubmitAnnounceForm(request.POST)
-		#tag_form = SubmitTagForm(request.POST)
 		if ann_form.is_valid() :
 			# save the announcement
 			new_announce = ann_form.save(commit=False)
@@ -156,6 +157,7 @@ def submit(request):
 					new_tag.save()
 				announce_tag_pair = AnnounceTags(the_announcement=new_announce,the_tag=Tags.objects.get(pk=tag))
 				announce_tag_pair.save()
+
 			return redirect('/announcements/')
 		else:
 			form = SubmitAnnounceForm()
@@ -174,28 +176,38 @@ def saved(request):
 	return render(request, 'announcements/saved_announcements.html', context)
 
 @login_required
-def tag_search(request):
-	no_tag = ""
-	matching_announces = None
+def search(request):
+	no_match = ""
+	matching_announces = []
 	if request.method == "POST":
-		searched_tag = request.POST['search_key']
-		searched_tag = searched_tag.strip()
-		searched_tag = searched_tag.lower()
-		if (Tags.objects.filter(pk=searched_tag).exists()):
-			if (AnnounceTags.objects.filter(the_tag=searched_tag).exists()):
-				matching_announces = list(AnnounceTags.objects.filter(the_tag=searched_tag))
-				for object in matching_announces:
+		search_key = request.POST['search_key']
+		search_key = search_key.strip()
+		search_key = search_key.lower()
+		if (Tags.objects.filter(pk=search_key).exists()):
+			if (AnnounceTags.objects.filter(the_tag=search_key).exists()):
+				matching_announce_assocs = list(AnnounceTags.objects.filter(the_tag=search_key))
+				for object in matching_announce_assocs:
 					announce_o_i = object.the_announcement
 					if announce_o_i.expired():
-						matching_announces.remove(AnnounceTags.objects.get(the_announcement=announce_o_i))
+						matching_announce_assocs.remove(AnnounceTags.objects.get(the_announcement=announce_o_i))
+					else:
+						matching_announces.append(announce_o_i)
 				if len(matching_announces) == 0:
-					no_tag = "No Chirps are currently active with this tag"
+					no_match = "No Chirps are currently active with this tag"
 			else:
-				no_tag = "No Chirps have used this tag"
+				no_match = "No Chirps have used this tag"
+		elif (Individual.objects.filter(pk=search_key).exists()):
+			if (Announcement.objects.filter(submitter=Individual.objects.get(pk=search_key)).exists()):
+				matching_announces = list(Announcement.objects.filter(submitter=Individual.objects.get(pk=search_key)))
+				for announce_o_i in matching_announces:
+					if announce_o_i.expired():
+						matching_announces.remove(Announcement.objects.get(pk=announce_o_i.announce_ID))
+				if len(matching_announces) == 0:
+					no_match = "No Chirps submitted by this user are currently active"
 		else:
-			no_tag = "This tag does not exist"
+			no_match = "No tags or individuals match your search"
 	context = {
-		'no_tag': no_tag,
+		'no_match': no_match,
 		'matching_announces':matching_announces,
 	}
-	return render(request, 'announcements/tag_search.html',context)
+	return render(request, 'announcements/search.html',context)
