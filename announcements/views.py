@@ -56,8 +56,14 @@ def sign_up(request):
 
 @login_required
 def detail(request, announcement_id):
-	announcement = get_object_or_404(Announcement,pk=announcement_id)
-	user = get_object_or_404(Individual,pk=request.user.username)
+	try:
+		announcement = get_object_or_404(Announcement,pk=announcement_id)
+	except:
+		return render(request,'error.html',{'error':"No announcement with this ID number"})
+	try:
+		user = get_object_or_404(Individual,pk=request.user.username)
+	except:
+		return redirect('/accounts/login')
 	form = SaveAnnounceForm(request.POST)
 	saved_announcement = ""
 	save_announcements_list = Save.objects.all()
@@ -92,7 +98,7 @@ def detail(request, announcement_id):
 		try:
 			prev_save_announce = get_object_or_404(Save,saver=user,saved_announce=announcement)
 		except:
-			raise Http404("You have not saved this announcement")
+			return render(request,'announcements/error.html',{'error':"You have not saved this announcement"})
 		prev_save_announce.delete()
 		if (Save.objects.filter(saver=user,saved_announce=announcement).exists()):
 			saved_announcement = "didn't unsave"
@@ -124,7 +130,10 @@ def approve_tag(request):
 		tags_to_approve = request.POST.getlist('checks')
 		if len(tags_to_approve) > 0:
 			for tag in tags_to_approve:
-				approve_tag = get_object_or_404(Tags,pk=tag)
+				try:
+					approve_tag = get_object_or_404(Tags,pk=tag)
+				except:
+					return render(request,'error.html',{'error':"One of your selected tags does not exist"})
 				approve_tag.approved = True
 				approve_tag.save()
 				return redirect('/announcements/review_tags')
@@ -165,7 +174,10 @@ def submit(request):
 
 @login_required
 def saved(request):
-	user = get_object_or_404(Individual,pk=request.user.username)
+	try:
+		user = get_object_or_404(Individual,pk=request.user.username)
+	except:
+		return redirect('/acccounts/login')
 	saved_announcements_list = None
 	if (Save.objects.filter(saver=user).exists()):
 		saved_announcements_list = Save.objects.filter(saver=user)
@@ -183,6 +195,8 @@ def search(request):
 		search_key = request.POST['search_key']
 		search_key = search_key.strip()
 		search_key = search_key.lower()
+
+		# search for tags that match the input
 		if (Tags.objects.filter(pk=search_key).exists()):
 			if (AnnounceTags.objects.filter(the_tag=search_key).exists()):
 				matching_announce_assocs = list(AnnounceTags.objects.filter(the_tag=search_key))
@@ -196,6 +210,8 @@ def search(request):
 					no_match = "No Chirps are currently active with this tag"
 			else:
 				no_match = "No Chirps have used this tag"
+
+		# search for users which match the input
 		elif (Individual.objects.filter(pk=search_key).exists()):
 			if (Announcement.objects.filter(submitter=Individual.objects.get(pk=search_key)).exists()):
 				matching_announces = list(Announcement.objects.filter(submitter=Individual.objects.get(pk=search_key)))
