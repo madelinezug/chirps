@@ -33,24 +33,19 @@ from .models import Save
 def sign_up(request):
 	no_match = ""
 	if request.method == "POST":
-		form = UserForm(request.POST)
-		if form.is_valid():
-			if (request.POST['password'] == request.POST['redo_password']):
-				new_individual = form.save(commit=False)
-				new_individual.email = request.POST['email']
-				new_individual.password = request.POST['password']
-				new_individual.admin_status = False
-				new_individual.save()
-				user = User.objects.create_user(request.POST['email'],request.POST['email'],
-					request.POST['password'])
-				user.first_name = request.POST['first_name']
-				user.last_name = request.POST['last_name']
-				user.save()
-				return redirect('/accounts/login')
-			else:
-				no_match = "Passwords did not match. Please try again."
-	else:
-		form = UserForm()
+		if (request.POST['password'] == request.POST['redo_password']):
+			new_individual = Individual(request.POST['email'],request.POST['password'],
+				request.POST['first_name'],request.POST['last_name'],False)
+			new_individual.save()
+			user = User.objects.create_user(request.POST['email'],request.POST['email'],
+				request.POST['password'])
+			user.first_name = request.POST['first_name']
+			user.last_name = request.POST['last_name']
+			user.save()
+			return redirect('/accounts/login')
+		else:
+			no_match = "Passwords did not match. Please try again."
+
 	return render(request,'announcements/sign_up.html',{'form':form, 'no_match': no_match})
 
 
