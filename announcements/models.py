@@ -4,8 +4,8 @@ from datetime import date
 class Individual(models.Model):
     email = models.CharField(max_length=100, primary_key=True)
     password = models.CharField(max_length=50,default='')
-    first_name = models.CharField(max_length=20,default='')
-    last_name = models.CharField(max_length=30,default='')
+    first = models.CharField(max_length=20,default='')
+    last = models.CharField(max_length=30,default='')
     admin_status = models.BooleanField()
 
     def __str__(self):
@@ -69,7 +69,7 @@ class Announcement(models.Model):
 
 
 class Tags(models.Model):
-    tag_text = models.CharField(max_length=10, primary_key=True)
+    tag_text = models.CharField(max_length=40, primary_key=True)
     approved = models.BooleanField()
 
     def __str__(self):

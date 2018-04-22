@@ -11,11 +11,6 @@ class SubmitAnnounceForm(forms.ModelForm):
         model = Announcement
         fields = ['announce_text','announce_ID','expire_date',]
 
-class UserForm(forms.ModelForm):
-
-    class Meta:
-        model = Individual
-        fields = ['first_name','last_name']
 
 class SaveAnnounceForm(forms.ModelForm):
 

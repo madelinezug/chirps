@@ -4,7 +4,7 @@
 <p> Saved Announcements: </p>
 {% if saved_announcements_list != None %}
   {% for saved in saved_announcements_list %}
-    <p> {{ saved.saved_announce }} </p> <br>
+    <li><a href="{% url 'detail' saved.saved_announce.announce_ID %}">{{ saved.saved_announce}}</a></li>
   {% endfor %}
 {% else %}
   <p> No saved announcements </p>

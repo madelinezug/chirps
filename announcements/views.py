@@ -15,7 +15,6 @@ from django.template import loader
 
 # include forms
 from .forms import SubmitAnnounceForm
-from .forms import UserForm
 from .forms import SaveAnnounceForm
 
 # Register your models here.
@@ -34,19 +33,18 @@ def sign_up(request):
 	no_match = ""
 	if request.method == "POST":
 		if (request.POST['password'] == request.POST['redo_password']):
-			new_individual = Individual(request.POST['email'],request.POST['password'],
-				request.POST['first_name'],request.POST['last_name'],False)
+			new_individual = Individual(email=request.POST['email'],password =request.POST['password'],first=request.POST['first'],last=request.POST['last'],admin_status=False)
 			new_individual.save()
 			user = User.objects.create_user(request.POST['email'],request.POST['email'],
 				request.POST['password'])
-			user.first_name = request.POST['first_name']
-			user.last_name = request.POST['last_name']
+			user.first_name = request.POST['first']
+			user.last_name = request.POST['last']
 			user.save()
 			return redirect('/accounts/login')
 		else:
 			no_match = "Passwords did not match. Please try again."
 
-	return render(request,'announcements/sign_up.html',{'form':form, 'no_match': no_match})
+	return render(request,'announcements/sign_up.html',{ 'no_match': no_match})
 
 
 @login_required
@@ -74,35 +72,35 @@ def detail(request, announcement_id):
 			announcement.approve_status = False
 			announcement.save()
 	elif ("delete" in request.POST):
+		# remove saved instances
 		if (Save.objects.filter(saved_announce = announcement).exists()):
 			save_delete_list = Save.objects.filter(saved_announce = announcement)
 			for saved in save_delete_list :
 				saved.delete()
+		# remove tag associations
+		if (AnnounceTags.objects.filter(the_announcement = announcement).exists()):
+			assoc_delete_list = AnnounceTags.objects.filter(the_announcement = announcement)
+			for assoc in assoc_delete_list :
+				assoc.delete()
+		# remove announcement
 		announcement.delete()
 		return redirect('/announcements/')
 	elif (("save" in request.POST) and (request.method == "POST")):
 		if (Save.objects.filter(saver=user,saved_announce=announcement).exists()):
-			saved_announcement = "we already saved this"
+			return render(request,'announcements/error.html',{'error':"You have already saved this announcement"})
 		else:
 			save_announce = Save(saver = user, saved_announce = announcement)
 			save_announce.save()
-			if (Save.objects.filter(saver=user,saved_announce=announcement).exists()):
-				saved_announcement = "it worked!"
+			return redirect('/announcements/saved')
 	elif ("unsave" in request.POST):
-		saved_announcement = "we tried to unsave"
 		try:
 			prev_save_announce = get_object_or_404(Save,saver=user,saved_announce=announcement)
 		except:
 			return render(request,'announcements/error.html',{'error':"You have not saved this announcement"})
 		prev_save_announce.delete()
-		if (Save.objects.filter(saver=user,saved_announce=announcement).exists()):
-			saved_announcement = "didn't unsave"
-		else:
-			saved_announcement = "it unsaved!"
 	context = {
 		'announcement': announcement,
 		'save_announcements_list': save_announcements_list,
-		'saved_announcement':saved_announcement,
 		'announce_tags':announce_tags,
 		'num_tags':num_tags,
 	}
@@ -122,16 +120,24 @@ def approve_tag(request):
 	num_unapproved = len(unapproved_tags)
 	tags_to_approve = None
 	if request.method == "POST":
-		tags_to_approve = request.POST.getlist('checks')
-		if len(tags_to_approve) > 0:
-			for tag in tags_to_approve:
+		tags_selected = request.POST.getlist('checks')
+		if len(tags_selected) > 0:
+			for tag in tags_selected:
 				try:
-					approve_tag = get_object_or_404(Tags,pk=tag)
+					sel_tag = get_object_or_404(Tags,pk=tag)
 				except:
 					return render(request,'error.html',{'error':"One of your selected tags does not exist"})
-				approve_tag.approved = True
-				approve_tag.save()
-				return redirect('/announcements/review_tags')
+				if "approve" in request.POST:
+					sel_tag.approved = True
+					sel_tag.save()
+				elif "delete" in request.POST:
+					# delete associations with chirps using this tag
+					if AnnounceTags.objects.filter(the_tag=sel_tag).exists():
+						announce_assocs = AnnounceTags.objects.filter(the_tag=sel_tag)
+						for assoc in announce_assocs:
+							assoc.delete()
+					sel_tag.delete()
+			return redirect('/announcements/review_tags')
 	context = {
 		'unapproved_tags': unapproved_tags,
 		'num_unapproved': num_unapproved

@@ -7,7 +7,7 @@
     {% if num_unapproved > 0 %}
       {% for tag in unapproved_tags %}
         <input type="checkbox" name="checks" value="{{tag}}"/>
-        <label for="{{tag}}">{{tag}}</label>
+        <label for="{{tag}}">{{tag}}</label> <br>
       {% endfor %}
     {% endif %}
   {% else %}
@@ -16,4 +16,5 @@
 </div>
 <div>
   <input type="submit" name="approve" value = "Approve" />
+  <input type="submit" name="delete" value="Delete"/>
 </form>
