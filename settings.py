@@ -25,7 +25,8 @@ SECRET_KEY = ')-9#g)fp%l*sg*dv-+*44xrj6e3d^(^#2+6rv_4#e+p#@rm0dl'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['chirpitychirpchirp.herokuapp.com']
+#ALLOWED_HOSTS = [chirpitychirpchirp.herokuapp.com]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -79,10 +80,10 @@ WSGI_APPLICATION = 'chirps.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'heroku_e56585b75830c2e',
-        'USER': 'b98ba5f7708134',
-        'PASSWORD':'05005063',
-        'HOST': 'us-cdbr-iron-east-05.cleardb.net',
+        'NAME': 'chirps',
+        'USER': 'root',
+        'PASSWORD':'chirpchirp',
+        'HOST': '',
         'PORT': ''
     }
 }
