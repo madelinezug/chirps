@@ -17,33 +17,6 @@ class Individual(models.Model):
     def is_admin(self):
         return self.admin_status
 
-class Organization(models.Model):
-    name = models.CharField(max_length=50, primary_key=True)
-    description_text = models.CharField(max_length=500)
-    admin_user = models.ForeignKey(Individual, on_delete=models.PROTECT)
-
-    def __str__(self):
-        return self.name
-
-    def set_admin(self, new_admin):
-        self.admin_user = new_admin
-
-    def is_admin(self, person):
-        return person == self.admin_user
-
-    def get_text(self, desc):
-        return self.description_text
-
-class Affiliation(models.Model):
-    org = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    user = models.ForeignKey(Individual, on_delete=models.PROTECT)
-
-    class Meta:
-        unique_together = (('org','user'),)
-
-    def __str__(self):
-        return self.org + ' , ' + self.admin
-
 class Announcement(models.Model):
     announce_ID = models.IntegerField(primary_key=True)
     announce_text = models.TextField()

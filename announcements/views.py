@@ -19,8 +19,6 @@ from .forms import SaveAnnounceForm
 
 # Register your models here.
 from .models import Individual
-from .models import Organization
-from .models import Affiliation
 from .models import Announcement
 from .models import Tags
 from .models import AnnounceTags
