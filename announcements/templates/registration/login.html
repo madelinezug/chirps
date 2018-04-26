@@ -1,38 +1,66 @@
+{% load static %}
 
-{% block content %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
+    <title>Chirps!</title>
 
-{% if next %}
-    {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-    {% else %}
-    <p>Please login to see this page.</p>
-    {% endif %}
-{% endif %}
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'announcements/bootstrap-3.3.7/css/bootstrap.min.css' %}" rel="stylesheet">
 
-<form method="post" action="{% url 'login' %}">
-{% csrf_token %}
+    <!-- Custom styles for this template -->
+    <link href="{% static 'announcements/css/signin.css' %}" rel="stylesheet">
+    <link href="{% static 'announcements/css/styles.css' %}" rel="stylesheet">
+  </head>
 
-<div>
-  <td>{{ form.username.label_tag }}</td>
-  <td>{{ form.username }}</td>
-</div>
-<div>
-  <td>{{ form.password.label_tag }}</td>
-  <td>{{ form.password }}</td>
-</div>
+  <body>
 
-<div>
-  <input type="submit" value="login" />
-  <input type="hidden" name="next" value="{{ next }}" />
-</div>
-</form>
+    <nav class="navbar navbar-inverse navbar-fixed-top navbar-chirp">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand navbar-text" href="#">Chirps!</a>
+        </div>
+      </div>
+    </nav>
 
-{# Assumes you setup the password_reset view in your URLconf #}
-<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+    <div class="text-center form-signin">
+      {% csrf_token %}
+      <img class="mb-4" src="https://seeklogo.com/images/P/pomona-college-logo-F6F21BDA4F-seeklogo.com.png" alt="" width="200" height="80">
+      <h1 class="h4 mb-3 font-weight-normal font-default">Please log in to view this page</h1>
+      {% if form.errors %}
+      <p>Your username and password didn't match. Please try again.</p>
+      {% endif %}
 
-{% endblock %}
+      {% if next %}
+          {% if user.is_authenticated %}
+          <p>Your account doesn't have access to this page. To proceed,
+          please login with an account that has access.</p>
+          {% else %}
+          <p>Please login to see this page.</p>
+          {% endif %}
+      {% endif %}
+
+      <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+      <label for="inputEmail" class="sr-only">Email address</label>
+      {{ form.username }}
+      <!-- <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus> -->
+      <label for="inputPassword" class="sr-only">Password</label>
+      {{ form.password }}
+      <!-- <input type="password" id="inputPassword" class="form-control" placeholder="Password" required> -->
+      
+      <div>
+        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign in" />
+        <input type="hidden" name="next" value="{{ next }}" />
+      </div>
+      <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+      <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+    </form>
+    </div>
+  </body>
+</html>
