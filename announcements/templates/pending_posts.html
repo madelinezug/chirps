@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Chirps Home</title>
+    <title>Pending Posts</title>
 
     <!-- Bootstrap core CSS -->
     <!-- <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
@@ -30,7 +30,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-chirp">
       <div class="container">
-        <a class="navbar-brand navbar-text" href="user_home.html">Chirps!</a>
+        <a class="navbar-brand navbar-text" href="#">Chirps!</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -38,7 +38,7 @@
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
               <a class="nav-link" href="#">Settings
-                <span class="sr-only">(current)</span>
+                <!-- <span class="sr-only">(current)</span> -->
               </a>
             </li>
             <li class="nav-item">
@@ -64,34 +64,35 @@
           <div class="sidebar-sticky">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a class="nav-link active" href="#">
+                <a class="nav-link active" href="admin_home.html">
                   <span data-feather="home"></span>
-                  Home <span class="sr-only">(current)</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="my_chirps.html">
-                  <span data-feather="file"></span>
-                  My Chirps
+                  Home
+                   <!-- <span class="sr-only">(current)</span> -->
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">
                   <span data-feather="shopping-cart"></span>
-                  Saved Chirps
+                  Pending Posts
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">
                   <span data-feather="users"></span>
-                  Favorite Tags
+                  Pending Tags
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="users"></span>
+                  Denied
                 </a>
               </li>
           </div>
         </nav>
 
         <!-- Blog Entries Column -->
-        <div class="col-md-6">
+        <div class="col-md-6 main-wrapper">
 
           <!-- <h1 class="my-4">Page Heading
             <small>Secondary Text</small>
@@ -112,45 +113,19 @@
                   <a class="dropdown-item" href="#">Separated link</a> -->
               </div>
             </div>
-
-              <!-- <div class="btn-group">
-                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Sort By
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#">Most Recent</a>
-                  <a class="dropdown-item" href="#">Most Popular</a>
-                  <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-            </div> -->
-
-              <div class="form-check homepg-checkbox">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Favorite Tags Only</label>
-              </div>
-
-          </div>
-
-
-          <!-- Blog Post -->
-         <div class="card mb-4">
-            <!-- <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap"> -->
-            <div class="card-body">
-              <h2 class="card-title">Post Title</h2>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
-              <a href="post_info.html" class="btn btn-primary">Read More &rarr;</a>
-            </div>
-            <div class="card-footer text-muted">
-              Posted on January 1, 2017 by
-              <a href="#">Sarah</a>
-            </div>
           </div>
 
           <!-- Blog Post -->
           <div class="card mb-4">
             <!-- <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap"> -->
             <div class="card-body">
-              <h2 class="card-title">Post Title</h2>
+              <h2 class="card-title">Post Title
+                <div class="btn-group-sm float-right" role="group" aria-label="Approve Deny Posts">
+                  <button type="button" class="btn btn-outline-success">Approve</button>
+                  <button type="button" class="btn btn-outline-danger">Deny</button>
+                </div>
+              </h2>
+
               <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
               <a href="post_info.html" class="btn btn-primary">Read More &rarr;</a>
             </div>
@@ -160,29 +135,16 @@
             </div>
           </div>
 
-          <!-- Blog Post -->
-          <div class="card mb-4">
-           <!--  <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap"> -->
-            <div class="card-body">
-              <h2 class="card-title">Post Title</h2>
-              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
-              <a href="post_info.html" class="btn btn-primary">Read More &rarr;</a>
-            </div>
-            <div class="card-footer text-muted">
-              Posted on January 1, 2017 by
-              <a href="#">Mark<a>
-            </div>
-          </div>
 
           <!-- Pagination -->
-          <ul class="pagination justify-content-center mb-4">
+          <!-- <ul class="pagination justify-content-center mb-4">
             <li class="page-item">
               <a class="page-link" href="#">&larr; Older</a>
             </li>
             <li class="page-item disabled">
               <a class="page-link" href="#">Newer &rarr;</a>
             </li>
-          </ul>
+          </ul> -->
 
         </div>
 
@@ -191,7 +153,7 @@
 
         <a href="submit.html">
           <div class="card my-4">
-            <button class="btn btn-primary" type="submit">Submit a Chirp!</button>
+            <button class="btn btn-primary" type="submit">E-mail Today's Chirps</button>
           </div>
         </a>
 
