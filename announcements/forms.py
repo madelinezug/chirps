@@ -9,7 +9,7 @@ class SubmitAnnounceForm(forms.ModelForm):
 
     class Meta:
         model = Announcement
-        fields = ['announce_text','announce_ID','expire_date',]
+        fields = ['announce_title','announce_text','announce_ID','expire_date',]
 
 
 class SaveAnnounceForm(forms.ModelForm):

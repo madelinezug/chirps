@@ -20,6 +20,7 @@ class Individual(models.Model):
 class Announcement(models.Model):
     announce_ID = models.IntegerField(primary_key=True)
     announce_text = models.TextField()
+    announce_title = models.CharField(max_length=20)
     submit_date = models.DateField()
     expire_date = models.DateField()
     approve_status = models.BooleanField()

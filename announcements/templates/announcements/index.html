@@ -140,8 +140,8 @@
  <div class="card mb-4">
     <!-- <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap"> -->
     <div class="card-body">
-      <h2 class="card-title">Post Title</h2>
-      <p class="card-text">{{announcement}}</p>
+      <h2 class="card-title">{{ announcement.announce_title }}</h2>
+      <p class="card-text">{{announcement.announce_text}}</p>
       <a href="{% url 'detail' announcement.announce_ID %}" class="btn btn-primary">Read More &rarr;</a>
     </div>
     <div class="card-footer text-muted">

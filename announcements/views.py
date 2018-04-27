@@ -145,13 +145,15 @@ def approve_tag(request):
 @login_required
 def submit(request):
 	if request.method == "POST":
-		ann_form = SubmitAnnounceForm(request.POST)
-		if ann_form.is_valid() :
+		# ann_form = SubmitAnnounceForm(request.POST)
+		# if ann_form.is_valid() :
 			# save the announcement
-			new_announce = ann_form.save(commit=False)
-			new_announce.submit_date = timezone.now()
-			new_announce.approve_status = False
-			new_announce.submitter = Individual.objects.get(pk=request.user.username)
+			# new_announce = ann_form.save(commit=False)
+			new_announce = Announcement(announce_ID=request.POST["announce_ID"],announce_text=request.POST["announce_text"],announce_title=request.POST["announce_title"],
+			submit_date=timezone.now(),expire_date=request.POST["expire_date"],approve_status=False,submitter=Individual.objects.get(pk=request.user.username))
+			# new_announce.submit_date = timezone.now()
+			# new_announce.approve_status = False
+			# new_announce.submitter = Individual.objects.get(pk=request.user.username)
 			new_announce.save()
 
 			# save the tag and associate it with the announcement
@@ -167,8 +169,8 @@ def submit(request):
 				announce_tag_pair.save()
 
 			return redirect('/announcements/')
-		else:
-			form = SubmitAnnounceForm()
+		# else:
+			# form = SubmitAnnounceForm()
 	return render(request, 'announcements/submit.html', {})
 
 @login_required

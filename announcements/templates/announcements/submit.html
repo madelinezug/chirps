@@ -1,12 +1,165 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Submit Chirps</title>
+
+    <!-- Bootstrap core CSS -->
+    <!-- <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="{% static 'announcements/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- angularJS and jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link href="{% static 'http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css' %}" rel="stylesheet">
+    <script src="js/app.js"></script>
+
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'announcements/css/submit.css' %}" rel="stylesheet">
+    <link href="[% 'announcements/css/styles.css' %}" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-chirp">
+      <div class="container">
+        <a class="navbar-brand navbar-text" href="index.html">Chirps!</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Settings
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="login.html">Log Out</a>
+            </li>
+          </ul>
+        </div>
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <div class="row">
+
+      <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link active" href="index.html">
+                  <span data-feather="home"></span>
+                  Home <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="mychirps"></span>
+                  My Chirps
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="savedchirps"></span>
+                  Saved Chirps
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="favtags"></span>
+                  Favorite Tags
+                </a>
+              </li>
+          </div>
+        </nav>
+
+        <!-- Blog Entries Column -->
+        <div class="col-md-6 main-wrapper">
+
+          <h1 class="my-4 font-default">Submit a Chirp
+          </h1>
+
+          <form action="{% url 'submit' %}" method="post" class = "form-group text-center">
+            {% csrf_token %}
+              <div class="col form-padding">
+                <input type="text" class="form-control"  id="announce_title" name="announce_title" placeholder="Title">
+              </div>
+              <div class="col">
+                <textarea class="form-control" name="announce_text" id="exampleFormControlTextarea1" rows="6" placeholder="Text..."></textarea>
+            </div>
+              <!-- Announcement: <input type="text" name="announce_text"/><br> -->
+              ID: <input type="number" name="announce_ID"/><br>
+              Desired Expiration Date: <input type="date" name="expire_date"/><br>
+              Tags (separated by commas): <input type="text" name="tag_text"/><br>
+              <div class="col-md-4">
+
+                <!-- <form class="img-padding">
+                  <div class="form-group form-padding">
+                    <label for="exampleFormControlFile1">Example file input</label>
+                    <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                  </div>
+                </form> -->
+                <!-- Adding Tags -->
+                 <div class="container" ng-app="myApp" ng-controller="tagsCtrl">
+                   <hr>
+                    <h6>Tags</h6>
+                    <tag-manager tags="tags" autocomplete="allTags"></tag-manager>
+                  </div>
+                  
+                <input type="submit" value="Submit" class="btn btn-primary btn-sm btn-block"/>
+
+              </div>
+
+          </form>
+
+
+        </div>
+
+      </div>
+      <!-- /.row -->
+
+    <!-- Footer -->
+    <!-- <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2018</p>
+      </div>
+    </footer> -->
+
+    </div>
+  </div>
+</div>
+
+
+<!--     Bootstrap core JavaScript
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script> -->
+
+   </body>
+
+</html>
+
+
 <h1> Submit an Announcement! </h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-
-<form action="{% url 'submit' %}" method="post">
-  Announcement: <input type="text" name="announce_text"/><br>
-  ID: <input type="number" name="announce_ID"/><br>
-  Desired Expiration Date: <input type="date" name="expire_date"/><br>
-  Tags (separated by commas): <input type="text" name="tag_text"/><br>
-  {% csrf_token %}
-  <input type="submit" value="Submit"/>
-</form>
