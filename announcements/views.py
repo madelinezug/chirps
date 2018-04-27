@@ -144,6 +144,7 @@ def approve_tag(request):
 
 @login_required
 def submit(request):
+	all_tags = Tags.objects.all();
 	if request.method == "POST":
 		# ann_form = SubmitAnnounceForm(request.POST)
 		# if ann_form.is_valid() :
@@ -158,7 +159,7 @@ def submit(request):
 
 			# save the tag and associate it with the announcement
 			current_user = Individual.objects.get(pk=request.user.username)
-			tag_list = request.POST['tag_text'].split(",")
+			submit_tag_list = request.POST['tag_text'].split(",")
 			for tag in tag_list:
 				tag = tag.strip()
 				tag = tag.lower()
@@ -171,7 +172,7 @@ def submit(request):
 			return redirect('/announcements/')
 		# else:
 			# form = SubmitAnnounceForm()
-	return render(request, 'announcements/submit.html', {})
+	return render(request, 'announcements/submit.html', {'all_tags':all_tags})
 
 @login_required
 def saved(request):

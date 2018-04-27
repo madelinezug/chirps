@@ -80,7 +80,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{% url 'saved' %}">
                   <span data-feather="savedchirps"></span>
                   Saved Chirps
                 </a>
@@ -148,7 +148,7 @@
                   </div>
 
                   <input type="submit" value="Submit" class="btn btn-primary float-right"/>
-                  </form>
+                </form>
               </div>
 
               <!-- Sidebar Widgets Column -->
@@ -171,5 +171,3 @@
    </body>
 
 </html>
-
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
