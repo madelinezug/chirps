@@ -144,7 +144,10 @@ def approve_tag(request):
 
 @login_required
 def submit(request):
-	all_tags = Tags.objects.get(approve_status=True);
+	try:
+		all_tags = get_object_or_404(Tags,approved=True)
+	except:
+		all_tags = []
 	if request.method == "POST":
 		# ann_form = SubmitAnnounceForm(request.POST)
 		# if ann_form.is_valid() :
