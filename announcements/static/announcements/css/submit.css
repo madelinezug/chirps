@@ -38,4 +38,9 @@ body {
    margin-left: 5px;
 }
 
+.title-margin{
+  margin-left:15px;
+}
+
+
 .ui-helper-hidden-accessible { display:none; }

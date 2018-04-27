@@ -20,13 +20,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <link href="{% static 'http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css' %}" rel="stylesheet">
+      <link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
     <script src="{% static 'announcements/js/app.js' %}"></script>
 
 
     <!-- Custom styles for this template -->
     <link href="{% static 'announcements/css/submit.css' %}" rel="stylesheet">
-    <link href="[% 'announcements/css/styles.css' %}" rel="stylesheet">
+    <link href="{% static 'announcements/css/styles.css' %}" rel="stylesheet">
   </head>
 
   <body>
@@ -94,32 +94,52 @@
           </div>
         </nav>
 
-        <!-- Blog Entries Column -->
-        <div class="col-md-6 main-wrapper">
+        <!--submission column-->
+        <!-- <div class="col-md-6 main-wrapper"> -->
 
-          <h1 class="my-4 font-default">Submit a Chirp
-          </h1>
+            <div class="col-md-7 main-wrapper">
 
-          <form action="{% url 'submit' %}" method="post" class = "form-group text-center">
-            {% csrf_token %}
-              <div class="col form-padding">
-                <input type="text" class="form-control"  id="announce_title" name="announce_title" placeholder="Title">
+              <form action="{% url 'submit' %}" method="post" class = "form-group">
+                {% csrf_token %}
+
+              <h1 class="my-4 font-default title-margin">Submit a Chirp</h1>
+              <div class="form-group text-center">
+                <div class="col form-padding">
+                  <input type="text" class="form-control"  id="announce_title" name="announce_title" placeholder="Title">
+                </div>
+                <div class="col">
+                    <textarea class="form-control" name="announce_text" id="exampleFormControlTextarea1" rows="6" placeholder="Text..."></textarea>
+                </div>
               </div>
-              <div class="col">
-                <textarea class="form-control" name="announce_text" id="exampleFormControlTextarea1" rows="6" placeholder="Text..."></textarea>
-            </div>
-             <!-- Announcement: <input type="text" name="announce_text"/><br> -->
-              ID: <input type="number" name="announce_ID"/><br>
-              Desired Expiration Date: <input type="date" name="expire_date"/><br>
-              Tags (separated by commas): <input type="text" name="tag_text"/><br>
-              <div class="col-md-4">
 
-                <!-- <form class="img-padding">
-                  <div class="form-group form-padding">
-                    <label for="exampleFormControlFile1">Example file input</label>
-                    <input type="file" class="form-control-file" id="exampleFormControlFile1">
-                  </div>
-                </form> -->
+              <div class="title-margin">
+               <!-- Announcement: <input type="text" name="announce_text"/><br> -->
+                ID: <input type="number" name="announce_ID"/><br>
+                Desired Expiration Date: <input type="date" name="expire_date"/><br>
+                Tags (separated by commas): <input type="text" name="tag_text"/><br>
+
+
+                <div class="form-group"> <!-- Date input -->
+                    <label class="control-label" for="date">Expiration Date</label>
+                    <input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" type="text"/>
+
+                <script>
+                  $(document).ready(function(){
+                    var date_input=$('input[name="date"]'); //our date input has the name "date"
+                    var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+                    var options={
+                      format: 'mm/dd/yyyy',
+                      container: container,
+                      todayHighlight: true,
+                      autoclose: true,
+                    };
+                    date_input.datepicker(options);
+                  })
+                </script>
+                </div>
+
+              </div>
+
                 <!-- Adding Tags -->
                  <div class="container" ng-app="myApp" ng-controller="tagsCtrl">
                    <hr>
@@ -127,24 +147,17 @@
                     <tag-manager tags="tags" autocomplete="allTags"></tag-manager>
                   </div>
 
-                <input type="submit" value="Submit" class="btn btn-primary btn-sm btn-block"/>
-
+                  <input type="submit" value="Submit" class="btn btn-primary float-right"/>
+                  </form>
               </div>
 
-          </form>
-
-
-        </div>
+              <!-- Sidebar Widgets Column -->
+              <!-- <div class="col-md-4">
+                <input type="submit" value="Submit" class="btn btn-primary btn-sm btn-block"/>
+              </div> -->
 
       </div>
       <!-- /.row -->
-
-    <!-- Footer -->
-    <!-- <footer class="py-5 bg-dark">
-      <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2018</p>
-      </div>
-    </footer> -->
 
     </div>
   </div>
@@ -158,8 +171,5 @@
    </body>
 
 </html>
-
-
-<h1> Submit an Announcement! </h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
