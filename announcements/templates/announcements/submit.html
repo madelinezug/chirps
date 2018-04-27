@@ -21,7 +21,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link href="{% static 'http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css' %}" rel="stylesheet">
-    <script src="js/app.js"></script>
+    <script src="{% static 'announcements/js/app.js' %}"></script>
 
 
     <!-- Custom styles for this template -->
@@ -108,7 +108,7 @@
               <div class="col">
                 <textarea class="form-control" name="announce_text" id="exampleFormControlTextarea1" rows="6" placeholder="Text..."></textarea>
             </div>
-              <!-- Announcement: <input type="text" name="announce_text"/><br> -->
+             <!-- Announcement: <input type="text" name="announce_text"/><br> -->
               ID: <input type="number" name="announce_ID"/><br>
               Desired Expiration Date: <input type="date" name="expire_date"/><br>
               Tags (separated by commas): <input type="text" name="tag_text"/><br>
@@ -126,7 +126,7 @@
                     <h6>Tags</h6>
                     <tag-manager tags="tags" autocomplete="allTags"></tag-manager>
                   </div>
-                  
+
                 <input type="submit" value="Submit" class="btn btn-primary btn-sm btn-block"/>
 
               </div>
