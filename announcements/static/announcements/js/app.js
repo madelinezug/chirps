@@ -115,6 +115,12 @@ var myApp = angular.module('myApp', [])
     $scope.tags = [ 'bootstrap', 'list', 'angular' ];
     $scope.allTags = [ 'bootstrap', 'list', 'angular', 'directive', 'edit', 'label', 'modal', 'close', 'button', 'grid', 'javascript', 'html', 'badge', 'dropdown'];
        // $scope.allTags = {{ all_tags }};
+    // $http.get("welcome.htm")
+    //   .then(function(response) {
+    //     $scope.content = response.data;
+    //     $scope.statuscode = response.status;
+    //     $scope.statustext = response.statusText;
+    // });
 }]);
 
 
