@@ -163,7 +163,7 @@ def submit(request):
 			# save the tag and associate it with the announcement
 			current_user = Individual.objects.get(pk=request.user.username)
 			submit_tag_list = request.POST['tag_text'].split(",")
-			for tag in tag_list:
+			for tag in submit_tag_list:
 				tag = tag.strip()
 				tag = tag.lower()
 				if not Tags.objects.filter(pk=tag).exists():

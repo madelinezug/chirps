@@ -18,7 +18,7 @@ class Individual(models.Model):
         return self.admin_status
 
 class Announcement(models.Model):
-    announce_ID = models.IntegerField(primary_key=True)
+    announce_ID = models.AutoField(primary_key=True)
     announce_text = models.TextField()
     announce_title = models.CharField(max_length=20)
     submit_date = models.DateField()
