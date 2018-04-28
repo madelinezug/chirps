@@ -23,6 +23,7 @@
     <!-- Custom styles for this template -->
     <link href="css/posts.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
+    <link href="css/tags.css" rel="stylesheet">
   </head>
 
   <body>
@@ -84,7 +85,7 @@
               <li class="nav-item">
                 <a class="nav-link" href="#">
                   <span data-feather="users"></span>
-                  Denied
+                  Denied Posts
                 </a>
               </li>
 
@@ -124,37 +125,24 @@
         </nav>
 
         <!-- Blog Entries Column -->
-        <div class="col-md-6">
-
-          <!-- <h1 class="my-4">Page Heading
-            <small>Secondary Text</small>
-          </h1> -->
-
-          <!-- sort by button, checkbox -->
-          <div class="row">
-
-            <div class="btn-group homepg-bar">
-              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Sort By
-              </button>
-              <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">Most Recent</a>
-                  <a class="dropdown-item" href="#">Favorite Tags</a>
-                  <a class="dropdown-item" href="#">Something else here</a>
-                  <!-- <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Separated link</a> -->
-              </div>
-            </div>
-          </div>
-
+        <div class="col-md-6 post-padding-top">
 
           <!-- Blog Post -->
          <div class="card mb-4">
             <!-- <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap"> -->
             <div class="card-body">
-              <h2 class="card-title">Post Title</h2>
+              <h2 class="card-title">Post Title
+              <button class="btn btn-sm btn-outline-danger float-right">Remove Approval</button>
+            </h2>
               <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
-              <a href="#" class="btn btn-primary">Read More &rarr;</a>
+              <a href="#" class="btn btn-outline-primary">Read More &rarr;</a>
+              <!-- tags preview on post -->
+              <div class="padding-post-tag row">
+                <span class="tag badge badge-pill badge-secondary">party</span>
+                <span class="tag badge badge-pill badge-secondary">food</span>
+                <span class="tag badge badge-pill badge-secondary">aspc</span>
+              </div>
+
             </div>
             <div class="card-footer text-muted">
               Posted on January 1, 2017 by
@@ -166,13 +154,22 @@
           <div class="card mb-4">
             <!-- <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap"> -->
             <div class="card-body">
-              <h2 class="card-title">Post Title</h2>
+              <h2 class="card-title">Post Title
+              <button class="btn btn-sm btn-outline-danger float-right">Remove Approval</button>
+            </h2>
               <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
-              <a href="#" class="btn btn-primary">Read More &rarr;</a>
+              <a href="#" class="btn btn-outline-primary">Read More &rarr;</a>
+
+              <!-- tags preview on post -->
+              <div class="padding-post-tag row">
+                <span class="tag badge badge-pill badge-secondary">party</span>
+                <span class="tag badge badge-pill badge-secondary">food</span>
+                <span class="tag badge badge-pill badge-secondary">aspc</span>
+              </div>
+
             </div>
             <div class="card-footer text-muted">
-              Posted on January 1, 2017 by
-              <a href="#">Maddie</a>
+              Posted on January 1, 2017 by Maddie
             </div>
           </div>
 
@@ -180,9 +177,18 @@
           <div class="card mb-4">
            <!--  <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap"> -->
             <div class="card-body">
-              <h2 class="card-title">Post Title</h2>
+              <h2 class="card-title">Post Title
+              <button class="btn btn-sm btn-outline-danger float-right">Remove Approval</button>
+            </h2>
               <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
-              <a href="#" class="btn btn-primary">Read More &rarr;</a>
+              <a href="#" class="btn btn-outline-primary">Read More &rarr;</a>
+              <!-- tags preview on post -->
+              <div class="padding-post-tag row">
+                <span class="tag badge badge-pill badge-secondary">party</span>
+                <span class="tag badge badge-pill badge-secondary">food</span>
+                <span class="tag badge badge-pill badge-secondary">aspc</span>
+              </div>
+
             </div>
             <div class="card-footer text-muted">
               Posted on January 1, 2017 by

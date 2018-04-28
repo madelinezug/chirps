@@ -26,6 +26,7 @@
     <!-- Custom styles for this template -->
     <link href="{% static 'announcements/css/posts.css' %}" rel="stylesheet">
     <link href="{% static 'announcements/css/styles.css' %}" rel="stylesheet">
+    <link href="{% static 'announcements/css/tags.css' %}" rel="stylesheet">
   </head>
 
   <body>
@@ -99,19 +100,20 @@
           <!-- sort by button, checkbox -->
           <div class="row">
 
-            <div class="btn-group homepg-bar">
-              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <!-- <div class="btn-group homepg-bar"> -->
+
+              <!-- <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Sort By
-              </button>
-              <div class="dropdown-menu">
+              </button> -->
+              <!-- <div class="dropdown-menu">
                   <a class="dropdown-item" href="#">Most Recent</a>
                   <a class="dropdown-item" href="#">Favorite Tags</a>
                   <a class="dropdown-item" href="#">Something else here</a>
               </div>
-            </div>
+            </div> -->
 
-              <div class="form-check homepg-checkbox">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+              <div class="form-check homepg-bar">
+                <input type="checkbox" id="exampleCheck1">
                 <label class="form-check-label" for="exampleCheck1">Favorite Tags Only</label>
               </div>
 
@@ -123,9 +125,19 @@
  <div class="card mb-4">
     <!-- <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap"> -->
     <div class="card-body">
-      <h2 class="card-title">{{ announcement.announce_title }}</h2>
+      <h2 class="card-title">{{ announcement.announce_title }}
+      <a href="#" class="btn btn-sm btn-outline-secondary float-right">Save</a>
+    </h2>
       <p class="card-text">{{announcement.announce_text}}</p>
-      <a href="{% url 'detail' announcement.announce_ID %}" class="btn btn-primary">Read More &rarr;</a>
+      <a href="{% url 'detail' announcement.announce_ID %}" class="btn btn-outline-primary">Read More &rarr;</a>
+
+      <!-- tags preview on post -->
+      <div class="padding-post-tag row">
+        <span class="tag badge badge-pill badge-secondary">party</span>
+        <span class="tag badge badge-pill badge-secondary">food</span>
+        <span class="tag badge badge-pill badge-secondary">aspc</span>
+      </div>
+
     </div>
     <div class="card-footer text-muted">
       {{ announcement.submit_date }} by

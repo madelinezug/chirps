@@ -114,6 +114,7 @@ var myApp = angular.module('myApp', [])
 .controller('tagsCtrl', ['$scope', function ( $scope ) {
     $scope.tags = [ 'bootstrap', 'list', 'angular' ];
     $scope.allTags = [ 'bootstrap', 'list', 'angular', 'directive', 'edit', 'label', 'modal', 'close', 'button', 'grid', 'javascript', 'html', 'badge', 'dropdown'];
+       // $scope.allTags = {{ all_tags }};
 }]);
 
 
