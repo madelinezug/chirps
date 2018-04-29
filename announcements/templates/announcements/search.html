@@ -118,15 +118,18 @@
               <div class="card-body">
                   <h2 class="card-title">{{ match.announce_title }}</h2>
 
-                <p class="card-text">{{match.announce_text}}</p>
+                <p class="card-text preview-text">{{match.announce_text}}</p>
                 <a href="{% url 'detail' match.announce_ID %}" class="btn btn-sm btn-outline-primary">See More &rarr;</a>
 
                 <!-- tags preview on post -->
                 <div class="padding-post-tag row">
                   {% if match.has_tags %}
-                    {% for tag_assoc in match.get_tags %}
+                    {% for tag_assoc in match.get_tags|slice:"4" %}
                       <span class="tag badge badge-pill badge-secondary">{{ tag_assoc.the_tag }}</span>
                     {% endfor %}
+                    {% if match.num_tags > 4 %}
+                        <small class="text-muted"> ... </small>
+                    {% endif %}
                   {% endif %}
                 </div>
               </div>
