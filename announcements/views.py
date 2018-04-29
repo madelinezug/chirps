@@ -243,7 +243,7 @@ def submit(request):
 			html_template = get_template("emails/submit_chirp_email.html").render()
 			message.attach_alternative(html_template, "text/html")
 			message.send()
-			
+
 			return redirect('/announcements/')
 		# else:
 			# form = SubmitAnnounceForm()
@@ -322,18 +322,22 @@ def search(request, search_key):
 
 	# search for tags that match the input
 	if (Tags.objects.filter(pk=search_key).exists()):
-		if (AnnounceTags.objects.filter(the_tag=search_key).exists()):
-			matching_announce_assocs = list(AnnounceTags.objects.filter(the_tag=search_key).order_by('-the_announcement__submit_date'))
-			for object in matching_announce_assocs:
-				announce_o_i = object.the_announcement
-				if announce_o_i.expired():
-					matching_announce_assocs.remove(AnnounceTags.objects.get(the_announcement=announce_o_i))
-				else:
-					matching_announces.append(announce_o_i)
-			if len(matching_announces) == 0:
-				no_match = "No Chirps are currently active with this tag"
+		tag = Tags.objects.get(pk=search_key)
+		if (tag.approved):
+			if (AnnounceTags.objects.filter(the_tag=search_key).exists()):
+				matching_announce_assocs = list(AnnounceTags.objects.filter(the_tag=search_key).order_by('-the_announcement__submit_date'))
+				for object in matching_announce_assocs:
+					announce_o_i = object.the_announcement
+					if announce_o_i.expired():
+						matching_announce_assocs.remove(AnnounceTags.objects.get(the_announcement=announce_o_i))
+					else:
+						matching_announces.append(announce_o_i)
+				if len(matching_announces) == 0:
+					no_match = "No Chirps are currently active with this tag"
+			else:
+				no_match = "No Chirps have used this tag"
 		else:
-			no_match = "No Chirps have used this tag"
+			no_match = "You may only search using approved tags"
 
 	# search for users which match the input
 	elif (is_first or is_last):

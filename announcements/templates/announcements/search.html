@@ -111,11 +111,11 @@
               </div>
 
           </div>
-
-          {% if matching_announces != None %}
+          <p> {{ no_match }} </p>
+          {% if matching_announces %}
             {% for match in matching_announces %}
             <!-- Blog Post -->
-           <div class="card mb-4">
+            <div class="card mb-4">
               <div class="card-body">
                   <h2 class="card-title">{{ match.announce_title }}</h2>
 
@@ -164,9 +164,6 @@
                   {% endif %}
               </span>
             </ul>
-
-          {% else %}
-            <p> {{ no_match }} </p>
           {% endif %}
         </div>
 
