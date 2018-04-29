@@ -11,7 +11,12 @@ from django.shortcuts import redirect
 
 from django.utils import timezone
 
-from django.template import loader
+from django.template.loader import get_template
+
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.template.loader import get_template
+
+from django.conf import settings
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -28,6 +33,8 @@ from .models import SubmitTag
 from .models import UserSearch
 from .models import TagSearch
 from .models import Save
+
+
 
 def sign_up(request):
 	no_match = ""
@@ -75,14 +82,23 @@ def detail(request, announcement_id):
 			if (~announcement.is_approved()):
 				announcement.approve_status = True
 				announcement.save()
-		tags_for_this_announce = announcement.get_tags()
-		for tag_assoc in tags_for_this_announce:
-			tag = tag_assoc.the_tag
-			if not tag.approved:
-				tag.approved = True
-				tag.save()
-		tag.approved = True
-		tag.save()
+				subject = "Your chirp was approved!"
+				from_email = settings.EMAIL_HOST_USER
+				to_email = [current_user.email]
+				with open(settings.BASE_DIR + "/announcements/templates/emails/approved_chirp_email.txt") as f:
+					signup_message = f.read()
+				message = EmailMultiAlternatives(subject=subject, body=signup_message, from_email=from_email, to=to_email)
+				html_template = get_template("emails/approved_chirp_email.html").render()
+				message.attach_alternative(html_template, "text/html")
+				message.send()
+			tags_for_this_announce = announcement.get_tags()
+			for tag_assoc in tags_for_this_announce:
+				tag = tag_assoc.the_tag
+				if not tag.approved:
+					tag.approved = True
+					tag.save()
+			tag.approved = True
+			tag.save()
 	elif ("deny" in request.POST):
 		if(user.admin_status):
 			if (announcement.is_approved()):
@@ -218,6 +234,16 @@ def submit(request):
 					announce_tag_pair = AnnounceTags(the_announcement=new_announce,the_tag=Tags.objects.get(pk=tag))
 					announce_tag_pair.save()
 
+			subject = "You submitted a chirp!"
+			from_email = settings.EMAIL_HOST_USER
+			to_email = [current_user.email]
+			with open(settings.BASE_DIR + "/announcements/templates/emails/submit_chirp_email.txt") as f:
+				signup_message = f.read()
+			message = EmailMultiAlternatives(subject=subject, body=signup_message, from_email=from_email, to=to_email)
+			html_template = get_template("emails/submit_chirp_email.html").render()
+			message.attach_alternative(html_template, "text/html")
+			message.send()
+			
 			return redirect('/announcements/')
 		# else:
 			# form = SubmitAnnounceForm()
