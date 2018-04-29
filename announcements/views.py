@@ -64,11 +64,24 @@ def detail(request, announcement_id):
 	announce_tags = AnnounceTags.objects.filter(the_announcement=announcement)
 	num_tags = len(announce_tags)
 
+	if Save.objects.filter(saver=user).exists():
+		already_saved = True
+	else:
+		already_saved = False
+
 	if ("approve" in request.POST):
 		if(user.admin_status):
 			if (~announcement.is_approved()):
 				announcement.approve_status = True
 				announcement.save()
+		tags_for_this_announce = announcement.get_tags()
+		for tag_assoc in tags_for_this_announce:
+			tag = tag_assoc.the_tag
+			if not tag.approved:
+				tag.approved = True
+				tag.save()
+		tag.approved = True
+		tag.save()
 	elif ("deny" in request.POST):
 		if(user.admin_status):
 			if (announcement.is_approved()):
@@ -111,6 +124,7 @@ def detail(request, announcement_id):
 		'save_announcements_list': save_announcements_list,
 		'announce_tags':announce_tags,
 		'num_tags':num_tags,
+		'already_saved':already_saved,
 	}
 	return render(request, 'announcements/detail.html', context)
 

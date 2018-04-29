@@ -49,7 +49,7 @@
             </div>
             <form class="form-inline my-2 my-lg-0" method="post">
               {% csrf_token %}
-              <input class="form-control mr-sm-2" type="text" name = "search_key" placeholder="Search..." >
+              <input class="form-control mr-sm-2" type="text" name = "search_key" placeholder="Search..." required>
               <input class="btn btn-outline-success my-2 my-sm-0" name = "search" value = "Search" type="submit">
             </form>
           </div>
@@ -99,7 +99,11 @@
               <form method="post"/>
               <!-- Title -->
               <h1 class="mt-4">{{ announcement.announce_title }}
+                {% if already_saved %}
+                <input type="submit" class="btn btn-md btn-outline-primary float-right" value="Unsave" name="unsave"/>
+                {% else %}
                 <input type="submit" class="btn btn-md btn-outline-primary float-right" value="Save" name="save"/>
+                {% endif %}
                 <!-- <a href="#" class="btn btn-md btn-outline-primary float-right">Save</a> -->
               </h1>
 
@@ -142,15 +146,11 @@
                 <input type="submit" value="Deny" name="deny"/>
 
                 <input type="submit" value="Delete" name="delete"/>
-                <input type="submit" value="Unsave" name="unsave"/><br>
                 {{ worked }}
                 {{saved_announcement}}
                 {% csrf_token %}
               </form>
 
-                <form action = "http://127.0.0.1:8000/announcements/review_tags/">
-                  <input type="submit" value="Approve Tags"/>
-                </form>
 
               <!-- Categories Widget -->
               <div class="card my-4">
@@ -163,7 +163,12 @@
                             <ul class="list-unstyled mb-0">
                             {% for tag in announce_tags %}
                               <li>
-                                <a href="#">{{ tag }} {{ tag.is_approved }}</a>
+                                <a href="http://127.0.0.1:8000/announcements/search/{{ tag }}">{{ tag }}</a>
+                                {% if tag.is_approved %}
+                                  <p> A </p>
+                                  {% else %}
+                                  <p> U </p>
+                                  {% endif %}
                               </li>
                             {% endfor %}
                             </ul>
