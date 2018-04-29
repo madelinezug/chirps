@@ -33,14 +33,14 @@ def sign_up(request):
 	no_match = ""
 	if request.method == "POST":
 		if (request.POST['password'] == request.POST['redo_password']):
-			new_individual = Individual(email=request.POST['email'],password =request.POST['password'],first=request.POST['first'],last=request.POST['last'],admin_status=False)
+			admin_stat = len(request.POST.getlist('admin')) > 0
+			new_individual = Individual(email=request.POST['email'],password =request.POST['password'],first=request.POST['first'],last=request.POST['last'],admin_status=admin_stat)
 			new_individual.save()
 			user = User.objects.create_user(request.POST['email'],request.POST['email'],
 				request.POST['password'])
 			user.first_name = request.POST['first']
 			user.last_name = request.POST['last']
-			admin_stat = request.POST.getlist('admin')
-			user.admin_status = len(admin_stat) > 0
+			user.admin_status = admin_stat
 			user.save()
 			return redirect('/accounts/login')
 		else:
