@@ -8,8 +8,8 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="user home page for chirps">
+    <meta name="author" content="Sarah Jin, Mark Penrod, Maddie Zug">
 
     <title>Chirps Home</title>
 
@@ -30,11 +30,10 @@
   </head>
 
   <body>
-
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-chirp">
       <div class="container">
-        <a class="navbar-brand navbar-text" href="index.html">Chirps!</a>
+        <a class="navbar-brand navbar-text" href="{% url 'index' %}">Chirps!</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -46,142 +45,138 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="login.html">Log Out</a>
+              <a class="nav-link" href="{% url 'logout'%}">Log Out</a>
             </li>
           </ul>
         </div>
-          <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-          </form>
+        <form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
       </div>
     </nav>
 
     <!-- Page Content -->
     <div class="container">
-
       <div class="row">
-
-      <div class="container-fluid">
-      <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-          <div class="sidebar-sticky">
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <a class="nav-link active" href="{% url 'index' %}">
-                  <span data-feather="home"></span>
-                  Home <span class="sr-only">(current)</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="my_chirps.html">
-                  <span data-feather="file"></span>
-                  My Chirps
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'saved' %}">
-                  <span data-feather="shopping-cart"></span>
-                  Saved Chirps
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="users"></span>
-                  Favorite Tags
-                </a>
-              </li>
-          </div>
-        </nav>
+        <div class="container-fluid">
+          <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+              <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'index' %}">
+                      <span data-feather="home"></span>
+                      Home <span class="sr-only">(current)</span>
+                    </a>
+                   </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'my_chirps' %}">
+                        <span data-feather="my_chirps"></span>
+                        My Chirps
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'saved' %}">
+                        <span data-feather="saved_chirps"></span>
+                        Saved Chirps
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                        <span data-feather="fav_tags"></span>
+                        Favorite Tags
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </nav>
 
         <!-- Blog Entries Column -->
-        <div class="col-md-6">
-
-          <!-- sort by button, checkbox -->
-          <div class="row">
-
-            <!-- <div class="btn-group homepg-bar"> -->
-
-              <!-- <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Sort By
-              </button> -->
-              <!-- <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">Most Recent</a>
-                  <a class="dropdown-item" href="#">Favorite Tags</a>
-                  <a class="dropdown-item" href="#">Something else here</a>
-              </div>
-            </div> -->
-
+          <div class="col-md-6">
+            <div class="row">
               <div class="form-check homepg-bar">
                 <input type="checkbox" id="exampleCheck1">
                 <label class="form-check-label" for="exampleCheck1">Favorite Tags Only</label>
               </div>
+            </div>
 
-          </div>
+            {% if latest_announcement_list %}
+              {% for announcement in latest_announcement_list %}
+              <!-- Blog Post -->
+             <div class="card mb-4">
+                <!-- <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap"> -->
+                <div class="card-body">
+                    <h2 class="card-title">{{ announcement.announce_title }}
+                    <!-- <a href="#" class="btn btn-sm btn-outline-secondary float-right">Save</a> -->
+                    </h2>
+                    <p class="card-text">{{announcement.announce_text}}</p>
+                    <a href="{% url 'detail' announcement.announce_ID %}" class="btn btn-outline-primary">Read More &rarr;</a>
 
-{% if latest_announcement_list %}
-  {% for announcement in latest_announcement_list %}
-  <!-- Blog Post -->
- <div class="card mb-4">
-    <!-- <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap"> -->
-    <div class="card-body">
-      <h2 class="card-title">{{ announcement.announce_title }}
-      <a href="#" class="btn btn-sm btn-outline-secondary float-right">Save</a>
-    </h2>
-      <p class="card-text">{{announcement.announce_text}}</p>
-      <a href="{% url 'detail' announcement.announce_ID %}" class="btn btn-outline-primary">Read More &rarr;</a>
+                    <!-- tags preview on post -->
+                    <div class="padding-post-tag row">
+                      <span class="tag badge badge-pill badge-secondary">party</span>
+                      <span class="tag badge badge-pill badge-secondary">food</span>
+                      <span class="tag badge badge-pill badge-secondary">aspc</span>
+                    </div>
+                  </div>
 
-      <!-- tags preview on post -->
-      <div class="padding-post-tag row">
-        <span class="tag badge badge-pill badge-secondary">party</span>
-        <span class="tag badge badge-pill badge-secondary">food</span>
-        <span class="tag badge badge-pill badge-secondary">aspc</span>
-      </div>
+                  <div class="card-footer text-muted">
+                    {{ announcement.submit_date }} by
+                    {{ announcement.submitter.first }} {{ announcement.submitter.last }}
+                  </div>
+                </div>
+                {% endfor %}
 
-    </div>
-    <div class="card-footer text-muted">
-      {{ announcement.submit_date }} by
-      {{ announcement.submitter.first }} {{ announcement.submitter.last }}
-    </div>
-    </div>
-    {% endfor %}
-  {% else %}
-      <p>No announcements are available.</p>
-{% endif %}
+                {% if latest_announcements_list|length > 10 %}
+                  <!-- Pagination -->
+                  <ul class="pagination justify-content-center mb-4">
+                    <li class="page-item">
+                      <a class="page-link" href="#">&larr; Older</a>
+                    </li>
+                    <li class="page-item disabled">
+                      <a class="page-link" href="#">Newer &rarr;</a>
+                    </li>
+                  </ul>
+                {% endif %}
 
-          <!-- Pagination -->
-          <ul class="pagination justify-content-center mb-4">
-            <li class="page-item">
-              <a class="page-link" href="#">&larr; Older</a>
-            </li>
-            <li class="page-item disabled">
-              <a class="page-link" href="#">Newer &rarr;</a>
-            </li>
-          </ul>
-
-        </div>
+              {% else %}
+                  <p>No announcements are available.</p>
+            {% endif %}
+            </div>
 
         <!-- Sidebar Widgets Column -->
         <div class="col-md-4">
 
-        <a href="{% url 'submit' %}">
-          <div class="card my-4">
-            <button class="btn btn-primary" type="submit">Submit a Chirp!</button>
-          </div>
-        </a>
+          <a href="{% url 'submit' %}">
+            <div class="card my-4">
+              <button class="btn btn-primary" type="submit">Submit a Chirp!</button>
+            </div>
+          </a>
 
           <!-- Search Widget -->
           <div class="card my-4">
             <h5 class="card-header">Search</h5>
             <div class="card-body">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for...">
-                <span class="input-group-btn">
-                  <button class="btn btn-secondary" type="button">Go!</button>
-                </span>
-              </div>
+
+                <form method = "post">
+                  {% csrf_token %}
+                  <div class="input-group">
+                    <input type="text" class="form-control" name="search_key" placeholder="Search for ..."/>
+                    <span class="input-group-btn">
+                      <input class ="btn btn-secondary" type="submit" name="search" value="Search"/>
+                    </span>
+                  </div>
+                </form>
+
+                <!-- {{ no_match }} <br>
+                {% if matching_announces %}
+                  {% for announce in matching_announces %}
+                    - {{ announce }}<br>
+                  {% endfor %}
+                {% endif %} -->
             </div>
-          </div>
+           </div>
 
           <!-- Categories Widget -->
           <div class="card my-4">
@@ -217,30 +212,14 @@
               </div>
             </div>
           </div>
-
         </div>
-
       </div>
-      <!-- /.row -->
-
     </div>
-    <!-- /.container -->
+  </div>
+</div>
 
-    <!-- Footer -->
-   <!--  <footer class="py-5 bg-dark">
-      <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2018</p>
-      </div>
-      /.container
-    </footer> -->
-
-    <!-- Bootstrap core JavaScript
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  </body>
-
-</html> -->
+</body>
+</html>
 
 
  <!-- <p>Current user:</p>

@@ -31,7 +31,7 @@
     <div class="text-center form-signin">
       {% csrf_token %}
       <img class="mb-4" src="https://seeklogo.com/images/P/pomona-college-logo-F6F21BDA4F-seeklogo.com.png" alt="" width="200" height="80">
-      <h1 class="h4 mb-3 font-weight-normal font-default">Please log in to view this page</h1>
+      <h1 class="h4 mb-3 font-weight-normal font-default">Please log in to use Chirps</h1>
       {% if form.errors %}
       <p>Your username and password didn't match. Please try again.</p>
       {% endif %}
@@ -42,6 +42,7 @@
           please login with an account that has access.</p>
           {% else %}
           <p>Please login to see this page.</p>
+
           {% endif %}
       {% endif %}
 
@@ -49,12 +50,12 @@
       {% csrf_token %}
       <div style="padding-top:5px">
         <label for="inputEmail" class="sr-only">Email address</label>
-        {{ form.username }}
+        <b>Username:</b> {{ form.username }}
       </div>
       <!-- <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus> -->
       <div style="padding-top:5px">
         <label for="inputPassword" class="sr-only">Password</label>
-        {{ form.password }}
+        <b>Password:</b> {{ form.password }}
       </div>
       <!-- <input type="password" id="inputPassword" class="form-control" placeholder="Password" required> -->
 
@@ -62,7 +63,8 @@
         <input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign in" />
         <input type="hidden" name="next" value="{{ next }}" />
       </div>
-      <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+      <p><small><a href="{% url 'sign_up' %}">No account? </a>
+      <a href="{% url 'password_reset' %}">Forgotten password?</a></small></p>
       <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
     </form>
     </div>

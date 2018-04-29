@@ -9,8 +9,8 @@ var myApp = angular.module('myApp', [])
         },
         template:
             '<div class="tags">' +
-      			'<div ng-repeat="(idx, tag) in tags" class="tag badge" ng-class="{\'badge-primary\' : allTags.indexOf(tag) !== -1, \'badge-secondary\' : allTags.indexOf(tag) === -1}">{{tag}}' +
-            // '<div ng-repeat="(idx, tag) in tags" class="tag badge" ng-class="setColor(tag)">{{tag}}' +
+      			// '<div ng-repeat="(idx, tag) in tags" class="tag badge" ng-class="{\'badge-primary\' : allTags.indexOf(tag) !== -1, \'badge-secondary\' : allTags.indexOf(tag) === -1}">{{tag}}' +
+            '<div ng-repeat="(idx, tag) in tags" class="tag badge badge-primary">{{tag}}' +
             '<button type="button" class="close" ng-click="remove(idx)" aria-label="Close"> <span aria-hidden="true">&times;</span></button></div>' +
             '</div>' +
             '<div class="input-group mb-3"><input type="text" class="form-control" placeholder="add a tag..." ng-model="newValue" /> ' +

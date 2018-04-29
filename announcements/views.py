@@ -193,6 +193,21 @@ def saved(request):
 	return render(request, 'announcements/saved_announcements.html', context)
 
 @login_required
+def my_chirps(request):
+	try:
+		user = get_object_or_404(Individual,pk=request.user.username)
+	except:
+		return redirect('/acccounts/login')
+	my_chirps_announcements_list = None
+	if (Announcement.objects.filter(submitter=user).exists()):
+		my_chirps_announcements_list = Announcement.objects.filter(saver=user)
+	context = {
+		'my_chirps_announcements_list': my_chirps_announcements_list,
+		'user': user
+	}
+	return render(request, 'announcements/my_chirps.html', context)
+
+@login_required
 def search(request):
 	no_match = ""
 	matching_announces = []
