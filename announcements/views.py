@@ -39,7 +39,8 @@ def sign_up(request):
 				request.POST['password'])
 			user.first_name = request.POST['first']
 			user.last_name = request.POST['last']
-			user.admin_status = request.POST['admin']
+			admin_stat = request.POST.getlist('admin')
+			user.admin_status = len(admin_stat) > 0
 			user.save()
 			return redirect('/accounts/login')
 		else:
@@ -258,7 +259,7 @@ def search(request, search_key):
 	# search for tags that match the input
 	if (Tags.objects.filter(pk=search_key).exists()):
 		if (AnnounceTags.objects.filter(the_tag=search_key).exists()):
-			matching_announce_assocs = list(AnnounceTags.objects.filter(the_tag=search_key))
+			matching_announce_assocs = list(AnnounceTags.objects.filter(the_tag=search_key).order_by('-the_announcement__submit_date'))
 			for object in matching_announce_assocs:
 				announce_o_i = object.the_announcement
 				if announce_o_i.expired():
@@ -273,7 +274,7 @@ def search(request, search_key):
 	# search for users which match the input
 	elif (is_first or is_last):
 		if (Announcement.objects.filter(submitter=person).exists()):
-			matching_announces = list(Announcement.objects.filter(submitter=person))
+			matching_announces = list(Announcement.objects.filter(submitter=person).order_by('-submit_date'))
 			for announce_o_i in matching_announces:
 				if announce_o_i.expired():
 					matching_announces.remove(Announcement.objects.get(pk=announce_o_i.announce_ID))
