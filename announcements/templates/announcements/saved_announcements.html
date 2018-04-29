@@ -123,9 +123,12 @@
                 <!-- tags preview on post -->
                 <div class="padding-post-tag row">
                   {% if saved.saved_announce.has_tags %}
-                    {% for tag_assoc in saved.saved_announce.get_tags %}
+                    {% for tag_assoc in saved.saved_announce.get_tags|slice:"4" %}
                       <span class="tag badge badge-pill badge-secondary">{{ tag_assoc.the_tag }}</span>
                     {% endfor %}
+                    {% if saved.saved_announce.num_tags > 4 %}
+                        <small class="text-muted"> ... </small>
+                    {% endif %}
                   {% endif %}
                 </div>
               </div>
