@@ -115,6 +115,10 @@ def detail(request, announcement_id):
 def index(request):
 	latest_announcement_list = Announcement.objects.filter(expire_date__gte=timezone.now()).order_by('-submit_date')
 
+	if request.method == "POST":
+		search_key = request.POST["search_key"]
+		return redirect('search/' + search_key)
+
 	#paginator
 	paginator = Paginator(latest_announcement_list, 10)
 	page = request.GET.get('page')
@@ -234,40 +238,53 @@ def my_chirps(request):
 	return render(request, 'announcements/my_chirps.html', context)
 
 @login_required
-def search(request):
+def search(request, search_key):
 	no_match = ""
 	matching_announces = []
-	if request.method == "POST":
-		search_key = request.POST['search_key']
-		search_key = search_key.strip()
-		search_key = search_key.lower()
+	search_key = search_key.strip()
+	search_key = search_key.lower()
 
-		# search for tags that match the input
-		if (Tags.objects.filter(pk=search_key).exists()):
-			if (AnnounceTags.objects.filter(the_tag=search_key).exists()):
-				matching_announce_assocs = list(AnnounceTags.objects.filter(the_tag=search_key))
-				for object in matching_announce_assocs:
-					announce_o_i = object.the_announcement
-					if announce_o_i.expired():
-						matching_announce_assocs.remove(AnnounceTags.objects.get(the_announcement=announce_o_i))
-					else:
-						matching_announces.append(announce_o_i)
-				if len(matching_announces) == 0:
-					no_match = "No Chirps are currently active with this tag"
-			else:
-				no_match = "No Chirps have used this tag"
+	is_first = Individual.objects.filter(first=search_key).exists()
+	is_last = Individual.objects.filter(last=search_key).exists()
 
-		# search for users which match the input
-		elif (Individual.objects.filter(pk=search_key).exists()):
-			if (Announcement.objects.filter(submitter=Individual.objects.get(pk=search_key)).exists()):
-				matching_announces = list(Announcement.objects.filter(submitter=Individual.objects.get(pk=search_key)))
-				for announce_o_i in matching_announces:
-					if announce_o_i.expired():
-						matching_announces.remove(Announcement.objects.get(pk=announce_o_i.announce_ID))
-				if len(matching_announces) == 0:
-					no_match = "No Chirps submitted by this user are currently active"
+	if is_first:
+		person = Individual.objects.get(first=search_key)
+	elif is_last:
+		person = Individual.objects.get(last=search_key)
+	else:
+		person = None
+
+
+	# search for tags that match the input
+	if (Tags.objects.filter(pk=search_key).exists()):
+		if (AnnounceTags.objects.filter(the_tag=search_key).exists()):
+			matching_announce_assocs = list(AnnounceTags.objects.filter(the_tag=search_key))
+			for object in matching_announce_assocs:
+				announce_o_i = object.the_announcement
+				if announce_o_i.expired():
+					matching_announce_assocs.remove(AnnounceTags.objects.get(the_announcement=announce_o_i))
+				else:
+					matching_announces.append(announce_o_i)
+			if len(matching_announces) == 0:
+				no_match = "No Chirps are currently active with this tag"
 		else:
-			no_match = "No tags or individuals match your search"
+			no_match = "No Chirps have used this tag"
+
+	# search for users which match the input
+	elif (is_first or is_last):
+		if (Announcement.objects.filter(submitter=person).exists()):
+			matching_announces = list(Announcement.objects.filter(submitter=person))
+			for announce_o_i in matching_announces:
+				if announce_o_i.expired():
+					matching_announces.remove(Announcement.objects.get(pk=announce_o_i.announce_ID))
+			if len(matching_announces) == 0:
+				no_match = "No Chirps submitted by this user are currently active"
+	else:
+		no_match = "No tags or individuals match your search"
+
+	paginator = Paginator(matching_announces, 10)
+	page = request.GET.get('page')
+	my_chirps_announcements_list = paginator.get_page(page)
 	context = {
 		'no_match': no_match,
 		'matching_announces':matching_announces,
