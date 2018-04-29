@@ -40,21 +40,21 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
+            <form class="form-inline my-2 my-lg-0" method="post">
+              {% csrf_token %}
+              <input class="form-control mr-sm-2" type="text" name = "search_key" placeholder="Search..." required>
+              <input class="btn btn-outline-success my-2 my-sm-0" name = "search" value = "Search" type="submit">
+            </form>
+            <!-- <li class="nav-item active">
               <a class="nav-link" href="#">Settings
                 <span class="sr-only">(current)</span>
               </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+            </li> -->
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'logout'%}">Log Out</a>
             </li>
           </ul>
         </div>
-        <form class="form-inline my-2 my-lg-0" method="post">
-          {% csrf_token %}
-          <input class="form-control mr-sm-2" type="text" name = "search_key" placeholder="Search..." required>
-          <input class="btn btn-outline-success my-2 my-sm-0" name = "search" value = "Search" type="submit">
-        </form>
       </div>
     </nav>
 
@@ -86,32 +86,26 @@
                   Saved Chirps
                 </a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="fav_tags"></span>
-                  Favorite Tags
-                </a>
-              </li>
           </div>
         </nav>
 
         <!-- Blog Entries Column -->
-        <div class="col-md-6">
+        <div class="col-md-6 post-padding-top">
 
           <!-- <h1 class="my-4">Page Heading
             <small>Secondary Text</small>
           </h1> -->
 
           <!-- sort by button, checkbox -->
-          <div class="row">
+          <!-- <div class="row">
 
               <div class="form-check homepg-bar">
                 <input type="checkbox" id="exampleCheck1">
                 <label class="form-check-label" for="exampleCheck1">Favorite Tags Only</label>
               </div>
 
-          </div>
-          <p> {{ no_match }} </p>
+          </div> -->
+
           {% if matching_announces %}
             {% for match in matching_announces %}
             <!-- Blog Post -->

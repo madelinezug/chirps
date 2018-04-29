@@ -38,21 +38,21 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
+            <form class="form-inline my-2 my-lg-0" method="post">
+              {% csrf_token %}
+              <input class="form-control mr-sm-2" type="text" name = "search_key" placeholder="Search..." required>
+              <input class="btn btn-outline-success my-2 my-sm-0" name = "search" value = "Search" type="submit">
+            </form>
+            <!-- <li class="nav-item active">
               <a class="nav-link" href="#">Settings
                 <span class="sr-only">(current)</span>
               </a>
-            </li>
-            <li class="nav-item">
+            </li> -->
+            <li class="nav-item active">
               <a class="nav-link" href="{% url 'logout'%}">Log Out</a>
             </li>
           </ul>
         </div>
-          <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-          </form>
-      </div>
     </nav>
 
     <!-- Page Content -->
@@ -81,12 +81,6 @@
                     Saved Chirps
                   </a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">
-                    <span data-feather="fav_tags"></span>
-                    Favorite Tags
-                  </a>
-                </li>
               </div>
             </nav>
 
@@ -99,10 +93,10 @@
            <div class="card mb-4 ">
              <div class="card-body">
              <h2 class="card-title">{{ chirp.announce_title }}
-               <div class="btn-group-sm float-right" role="group" aria-label="Edit Delete Posts">
+               <!-- <div class="btn-group-sm float-right" role="group" aria-label="Edit Delete Posts">
                  <button type="button" class="btn btn-outline-secondary disabled">Edit</button>
                  <button type="button" class="btn btn-outline-danger disabled" onclick="return confirm('Are you sure you want to delete this chirp?')">Delete</button>
-               </div>
+               </div> -->
              </h2>
              <p class="card-text preview-text">{{chirp.announce_text}}</p>
              <a href="{% url 'detail' chirp.announce_ID %}" class="btn btn-sm btn-outline-primary">See More &rarr;</a>
