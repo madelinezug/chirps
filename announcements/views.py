@@ -172,6 +172,7 @@ def submit(request):
 			# save the tag and associate it with the announcement
 			current_user = Individual.objects.get(pk=request.user.username)
 			submit_tag_list = request.POST['tag_text'].split(",")
+			print(submit_tag_list)
 			for tag in submit_tag_list:
 				tag = tag.strip()
 				tag = tag.lower()
@@ -181,7 +182,7 @@ def submit(request):
 				announce_tag_pair = AnnounceTags(the_announcement=new_announce,the_tag=Tags.objects.get(pk=tag))
 				announce_tag_pair.save()
 
-				return redirect('/announcements/')
+			return redirect('/announcements/')
 		# else:
 			# form = SubmitAnnounceForm()
 	return render(request, 'announcements/submit.html', {'all_tags':all_tags})
