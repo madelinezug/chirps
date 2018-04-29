@@ -81,8 +81,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'chirps',
-        'USER': 'root',
-        'PASSWORD':'password',
+        'USER': 'maddiezug',
+        'PASSWORD':'chirp47',
         'HOST': '',
         'PORT': ''
     }
@@ -120,6 +120,14 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+#Email settings
+EMAIL_HOST = 'localhost'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 47
+EMAIL_USE_TLS = False
+DEFAULT_FROM_EMAIL = 'Cecil <cecilsagehen@pomona.edu>'
 
 
 # Static files (CSS, JavaScript, Images)
