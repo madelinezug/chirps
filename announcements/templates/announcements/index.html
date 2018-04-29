@@ -124,9 +124,11 @@
                             <p> No tags on this post </p> <br>
                           {% endif %}
                         {% endif %} -->
-                        <span class="tag badge badge-pill badge-secondary">party</span>
-                        <span class="tag badge badge-pill badge-secondary">food</span>
-                        <span class="tag badge badge-pill badge-secondary">aspc</span>
+                        {% if announcement.has_tags %}
+                          {% for tag_assoc in announcement.get_tags %}
+                            <span class="tag badge badge-pill badge-secondary">{{ tag_assoc.the_tag }}</span>
+                          {% endfor %}
+                        {% endif %}
                       </div>
                     </div>
 

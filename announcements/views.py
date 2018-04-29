@@ -120,7 +120,7 @@ def index(request):
 	latest_announcement_list = paginator.get_page(page)
 
 	context = {
-	'latest_announcement_list': latest_announcement_list,
+		'latest_announcement_list': latest_announcement_list,
 	}
 	return render(request,'announcements/index.html',context)
 
