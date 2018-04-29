@@ -103,6 +103,8 @@
 
             {% if latest_announcement_list %}
               {% for announcement in latest_announcement_list %}
+
+              {% if user.admin_status or announcement.approve_status %}
               <!-- Blog Post -->
                <div class="card mb-4">
                   <div class="card-body">
@@ -137,6 +139,7 @@
                       {{ announcement.submitter.first }} {{ announcement.submitter.last }}
                     </div>
                   </div>
+                  {% endif %}
                 {% endfor %}
 
                 <ul class="pagination justify-content-center mb-4">

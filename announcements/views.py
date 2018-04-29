@@ -132,6 +132,10 @@ def detail(request, announcement_id):
 @login_required
 def index(request):
 	latest_announcement_list = Announcement.objects.filter(expire_date__gte=timezone.now()).order_by('-submit_date')
+	try:
+		user = get_object_or_404(Individual,pk=request.user.username)
+	except:
+		return redirect('/accounts/login')
 
 	if request.method == "POST":
 		search_key = request.POST["search_key"]
@@ -144,6 +148,7 @@ def index(request):
 
 	context = {
 		'latest_announcement_list': latest_announcement_list,
+		'user':user,
 	}
 	return render(request,'announcements/index.html',context)
 
