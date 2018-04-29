@@ -108,7 +108,7 @@ def detail(request, announcement_id):
 
 @login_required
 def index(request):
-	latest_announcement_list = Announcement.objects.filter(expire_date__gte=timezone.now())
+	latest_announcement_list = Announcement.objects.filter(expire_date__gte=timezone.now()).order_by('-submit_date')
 
 	#paginator
 	paginator = Paginator(latest_announcement_list, 10)
@@ -194,7 +194,7 @@ def saved(request):
 		return redirect('/acccounts/login')
 	saved_announcements_list = None
 	if (Save.objects.filter(saver=user).exists()):
-		saved_announcements_list = Save.objects.filter(saver=user, saved_announce__expire_date__gte=timezone.now())
+		saved_announcements_list = Save.objects.filter(saver=user, saved_announce__expire_date__gte=timezone.now()).order_by('-saved_announce__submit_date')
 
 		paginator = Paginator(saved_announcements_list, 10)
 		page = request.GET.get('page')
@@ -215,7 +215,7 @@ def my_chirps(request):
 	my_chirps_announcements_list = None
 
 	if (Announcement.objects.filter(submitter=user).exists()):
-		my_chirps_announcements_list = Announcement.objects.filter(submitter=user, expire_date__gte=timezone.now())
+		my_chirps_announcements_list = Announcement.objects.filter(submitter=user, expire_date__gte=timezone.now()).order_by('-submit_date')
 
 		paginator = Paginator(my_chirps_announcements_list, 10)
 		page = request.GET.get('page')
