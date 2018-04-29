@@ -122,9 +122,11 @@
 
                 <!-- tags preview on post -->
                 <div class="padding-post-tag row">
-                  <span class="tag badge badge-pill badge-secondary">party</span>
-                  <span class="tag badge badge-pill badge-secondary">food</span>
-                  <span class="tag badge badge-pill badge-secondary">aspc</span>
+                  {% if saved.saved_announce.has_tags %}
+                    {% for tag_assoc in saved.saved_announce.get_tags %}
+                      <span class="tag badge badge-pill badge-secondary">{{ tag_assoc.the_tag }}</span>
+                    {% endfor %}
+                  {% endif %}
                 </div>
               </div>
 
