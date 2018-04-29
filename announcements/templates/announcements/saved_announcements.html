@@ -115,9 +115,7 @@
             <!-- Blog Post -->
            <div class="card mb-4">
               <div class="card-body">
-                  <h2 class="card-title">{{ saved.saved_announce.announce_title }}
-                    <button class="btn btn-sm btn-outline-secondary float-right">Unsave</button>
-                  </h2>
+                  <h2 class="card-title">{{ saved.saved_announce.announce_title }}</h2>
 
                 <p class="card-text">{{saved.saved_announce.announce_text}}</p>
                 <a href="{% url 'detail' saved.saved_announce.announce_ID %}" class="btn btn-sm btn-outline-primary">See More &rarr;</a>

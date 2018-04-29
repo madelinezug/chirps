@@ -10,5 +10,5 @@ urlpatterns = [
     path('saved/',views.saved,name='saved'),
     path('my_chirps/',views.my_chirps,name='my_chirps'),
     path('review_tags/',views.approve_tag,name='approve_tag'),
-    path('search/',views.search,name='search_tags'),
+    path('search/<str:search_key>',views.search,name='search_tags'),
 ]
