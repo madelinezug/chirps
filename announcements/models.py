@@ -26,7 +26,7 @@ class Announcement(models.Model):
     expire_date = models.DateField()
     approve_status = models.BooleanField()
     submitter = models.ForeignKey(Individual, related_name = 'submitter', on_delete=models.PROTECT)
-    approver = models.ForeignKey(Individual, related_name = 'approver', on_delete=models.PROTECT, default='sarahjin97@gmail.com')
+    # approver = models.ForeignKey(Individual, related_name = 'approver', on_delete=models.PROTECT, default='sarahjin97@gmail.com')
 
     def __str__(self):
         return self.announce_text
