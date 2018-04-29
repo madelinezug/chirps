@@ -113,8 +113,10 @@
               <hr>
 
               <!-- Preview Image -->
-              <img class="rounded mx-auto d-block" src="http://4.bp.blogspot.com/-__wL6X6ZLgs/VLCkNoIl0qI/AAAAAAAAX8E/K53XSZldgFU/s1600/Baby_Cecil_Decal_with_backing_large.png" alt="" height="275">
-
+              {% if announcement.announce_img %}
+              <!-- <img class="rounded mx-auto d-block" src="http://4.bp.blogspot.com/-__wL6X6ZLgs/VLCkNoIl0qI/AAAAAAAAX8E/K53XSZldgFU/s1600/Baby_Cecil_Decal_with_backing_large.png" alt="" height="275"> -->
+                <img class="rounded mx-auto d-block" src="{{ announcement.announce_img }}" alt="" height="275">
+              {% endif %}
               <hr>
 
               <!-- Post Content -->

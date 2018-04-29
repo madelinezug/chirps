@@ -162,7 +162,7 @@ def submit(request):
 			# save the announcement
 			# new_announce = ann_form.save(commit=False)
 			# new_announce = Announcement(announce_ID=request.POST["announce_ID"],announce_text=request.POST["announce_text"],announce_title=request.POST["announce_title"],
-			new_announce = Announcement(announce_text=request.POST["announce_text"],announce_title=request.POST["announce_title"],
+			new_announce = Announcement(announce_text=request.POST["announce_text"],announce_title=request.POST["announce_title"], announce_img=request.POST["announce_img"],
 			submit_date=timezone.now(),expire_date=request.POST["expire_date"],approve_status=False,submitter=Individual.objects.get(pk=request.user.username))
 			# new_announce.submit_date = timezone.now()
 			# new_announce.approve_status = False
