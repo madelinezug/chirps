@@ -94,6 +94,8 @@
 
             {% if latest_announcement_list %}
               {% for announcement in latest_announcement_list %}
+
+              {% if user.admin_status or announcement.approve_status %}
               <!-- Blog Post -->
                <div class="card mb-4">
                   <div class="card-body">
@@ -128,6 +130,7 @@
                       {{ announcement.submitter.first }} {{ announcement.submitter.last }}
                     </div>
                   </div>
+                  {% endif %}
                 {% endfor %}
 
                 <ul class="pagination justify-content-center mb-4">
@@ -172,26 +175,26 @@
                 <div class="col-lg-6">
                   <ul class="list-unstyled mb-0">
                     <li>
-                      <a href="#">Lost and Found</a>
+                      <a href="http://127.0.0.1:8000/announcements/search/Lost%20and%20Found">Lost and Found</a>
                     </li>
                     <li>
-                      <a href="#">Sports</a>
+                      <a href="http://127.0.0.1:8000/announcements/search/Sports">Sports</a>
                     </li>
                     <li>
-                      <a href="#">Food</a>
+                      <a href="http://127.0.0.1:8000/announcements/search/Food">Food</a>
                     </li>
                   </ul>
                 </div>
                 <div class="col-lg-6">
                   <ul class="list-unstyled mb-0">
                     <li>
-                      <a href="#">Parties</a>
+                      <a href="http://127.0.0.1:8000/announcements/search/Parties">Parties</a>
                     </li>
                     <li>
-                      <a href="#">For Sale</a>
+                      <a href="http://127.0.0.1:8000/announcements/search/For%20Sale">For Sale</a>
                     </li>
                     <li>
-                      <a href="#">Campus Safety</a>
+                      <a href="http://127.0.0.1:8000/announcements/search/Campus%20Safety">Campus Safety</a>
                     </li>
                   </ul>
                 </div>

@@ -82,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'chirps',
         'USER': 'root',
-        'PASSWORD':'password',
+        'PASSWORD':'chirpchirp',
         'HOST': '',
         'PORT': ''
     }
@@ -120,6 +120,13 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+#Email settings
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'chirps47@gmail.com'
+EMAIL_HOST_PASSWORD = 'chirpchirp47'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 
 # Static files (CSS, JavaScript, Images)
