@@ -47,6 +47,9 @@ class Announcement(models.Model):
     def has_tags(self):
         return AnnounceTags.objects.filter(the_announcement=self.announce_ID).exists()
 
+    def num_tags(self):
+        return len(list(AnnounceTags.objects.filter(the_announcement=self.announce_ID)))
+
 
 
 class Tags(models.Model):
