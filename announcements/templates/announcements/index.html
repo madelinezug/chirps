@@ -91,6 +91,10 @@
 
         <!-- Blog Entries Column -->
           <div class="col-md-6 post-padding-top">
+            {% if approval and user.admin_status%}
+            {% else %}
+              <p> No Chirps to see! </p>
+            {% endif %}
 
             {% if latest_announcement_list %}
               {% for announcement in latest_announcement_list %}
@@ -137,15 +141,27 @@
                   <span class="step-links">
                       {% if latest_announcement_list.has_previous %}
                           <!-- <a href="?page=1">&laquo; first</a> -->
-                          <a href="?page={{ latest_announcement_list.previous_page_number }}">&laquo; previous </a>
+                          {% if user.admin_status %}
+                            <a href="?page={{ latest_announcement_list.previous_page_number }}">&laquo; previous </a>
+                          {% else %}
+                            <a href="?page={{ approved_chirps_list.previous_page_number }}">&laquo; previous </a>
+                          {% endif %}
                       {% endif %}
 
                       <span class="current">
+                        {% if user.admin_status %}
                           Page {{ latest_announcement_list.number }} of {{ latest_announcement_list.paginator.num_pages }}.
+                        {% else %}
+                          Page {{ approved_chirps_list.number }} of {{ approved_chirps.paginator.num_pages }}.
+                        {% endif %}
                       </span>
 
                       {% if latest_announcement_list.has_next %}
+                        {% if user.admin_status %}
                           <a href="?page={{ latest_announcement_list.next_page_number }}">next &raquo;</a>
+                        {% else %}
+                          <a href="?page={{ approved_chirps_list.next_page_number }}">next &raquo;</a>
+                        {% endif %}
                           <!-- <a href="?page={{ latest_announcement_list.paginator.num_pages }}">last &raquo;</a> -->
                       {% endif %}
                   </span>
