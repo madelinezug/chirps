@@ -139,11 +139,7 @@
                 <input type="submit" value="Approve" name = "approve"/>
                 <input type="submit" value="Deny" name="deny"/>
 
-                <!-- {% if announcement.submitter == user %} -->
-                  <input type="submit" value="Delete" name="delete"/>
-                <!-- {% endif %} -->
-
-
+                <input type="submit" value="Delete" name="delete"/>
                 <input type="submit" value="Unsave" name="unsave"/><br>
                 {{ worked }}
                 {{saved_announcement}}
@@ -172,7 +168,7 @@
                           {% else %}
                             <p> No tags on this post </p> <br>
                           {% endif %}
-                          {% else %}
+                        {% else %}
                             <p> No tags on this post </p> <br>
                         {% endif %}
                     </div>

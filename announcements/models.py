@@ -25,7 +25,7 @@ class Announcement(models.Model):
     submit_date = models.DateField()
     expire_date = models.DateField()
     approve_status = models.BooleanField()
-    submitter = models.ForeignKey(Individual, related_name = 'submitter', on_delete=models.PROTECT, default='sarahjin97@gmail.com')
+    submitter = models.ForeignKey(Individual, related_name = 'submitter', on_delete=models.PROTECT)
     approver = models.ForeignKey(Individual, related_name = 'approver', on_delete=models.PROTECT, default='sarahjin97@gmail.com')
 
     def __str__(self):
@@ -40,6 +40,12 @@ class Announcement(models.Model):
     def expired(self):
         return date.today() > self.expire_date
 
+    def get_tags(self):
+        my_tags = list(AnnounceTags.objects.filter(the_announcement=self.announce_ID))
+        return my_tags
+
+    def has_tags(self):
+        return AnnounceTags.objects.filter(the_announcement=self.announce_ID).exists()
 
 
 
