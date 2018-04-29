@@ -120,7 +120,7 @@
                   </h2>
 
                 <p class="card-text">{{saved.saved_announce.announce_text}}</p>
-                <a href="{% url 'detail' saved.saved_announce.announce_ID %}" class="btn btn-outline-primary">Read More &rarr;</a>
+                <a href="{% url 'detail' saved.saved_announce.announce_ID %}" class="btn btn-sm btn-outline-primary">See More &rarr;</a>
 
                 <!-- tags preview on post -->
                 <div class="padding-post-tag row">
@@ -137,17 +137,21 @@
             </div>
             {% endfor %}
 
-            {% if saved_announcements_list|length > 10 %}
-              <!-- Pagination -->
-              <ul class="pagination justify-content-center mb-4">
-                <li class="page-item">
-                  <a class="page-link" href="#">&larr; Older</a>
-                </li>
-                <li class="page-item disabled">
-                  <a class="page-link" href="#">Newer &rarr;</a>
-                </li>
-              </ul>
-            {% endif %}
+            <ul class="pagination justify-content-center mb-4">
+              <span class="step-links">
+                  {% if saved_announcements_list.has_previous %}
+                      <a href="?page={{ saved_announcements_list.previous_page_number }}">&laquo; previous </a>
+                  {% endif %}
+
+                  <span class="current">
+                      Page {{ saved_announcements_list.number }} of {{ saved_announcements_list.paginator.num_pages }}.
+                  </span>
+
+                  {% if saved_announcements_list.has_next %}
+                    <a href="?page={{ saved_announcements_list.next_page_number }}">next &raquo;</a>
+                  {% endif %}
+              </span>
+            </ul>
 
           {% else %}
             <p> No saved announcements </p>

@@ -13,6 +13,8 @@ from django.utils import timezone
 
 from django.template import loader
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 # include forms
 from .forms import SubmitAnnounceForm
 from .forms import SaveAnnounceForm
@@ -107,6 +109,12 @@ def detail(request, announcement_id):
 @login_required
 def index(request):
 	latest_announcement_list = Announcement.objects.all()
+
+	#paginator
+	paginator = Paginator(latest_announcement_list, 10)
+	page = request.GET.get('page')
+	latest_announcement_list = paginator.get_page(page)
+
 	context = {
 	'latest_announcement_list': latest_announcement_list,
 	}
@@ -186,6 +194,11 @@ def saved(request):
 	saved_announcements_list = None
 	if (Save.objects.filter(saver=user).exists()):
 		saved_announcements_list = Save.objects.filter(saver=user)
+
+		paginator = Paginator(saved_announcements_list, 10)
+		page = request.GET.get('page')
+		saved_announcements_list = paginator.get_page(page)
+
 	context = {
 		'saved_announcements_list': saved_announcements_list,
 		'user': user
@@ -199,8 +212,14 @@ def my_chirps(request):
 	except:
 		return redirect('/acccounts/login')
 	my_chirps_announcements_list = None
+
 	if (Announcement.objects.filter(submitter=user).exists()):
-		my_chirps_announcements_list = Announcement.objects.filter(saver=user)
+		my_chirps_announcements_list = Announcement.objects.filter(submitter=user)
+
+		paginator = Paginator(my_chirps_announcements_list, 10)
+		page = request.GET.get('page')
+		my_chirps_announcements_list = paginator.get_page(page)
+
 	context = {
 		'my_chirps_announcements_list': my_chirps_announcements_list,
 		'user': user

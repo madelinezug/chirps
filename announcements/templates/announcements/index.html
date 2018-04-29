@@ -104,45 +104,60 @@
             {% if latest_announcement_list %}
               {% for announcement in latest_announcement_list %}
               <!-- Blog Post -->
-             <div class="card mb-4">
-                <!-- <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap"> -->
-                <div class="card-body">
-                    <h2 class="card-title">{{ announcement.announce_title }}
-                    <!-- <a href="#" class="btn btn-sm btn-outline-secondary float-right">Save</a> -->
-                    </h2>
-                    <p class="card-text">{{announcement.announce_text}}</p>
-                    <a href="{% url 'detail' announcement.announce_ID %}" class="btn btn-outline-primary">Read More &rarr;</a>
+               <div class="card mb-4">
+                  <!-- <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap"> -->
+                  <div class="card-body">
+                      <h2 class="card-title">{{ announcement.announce_title }}
+                      <!-- <a href="#" class="btn btn-sm btn-outline-secondary float-right">Save</a> -->
+                      </h2>
+                      <p class="card-text preview-text">{{announcement.announce_text}}</p>
+                      <a href="{% url 'detail' announcement.announce_ID %}" class="btn btn-sm btn-outline-primary">See More &rarr;</a>
 
-                    <!-- tags preview on post -->
-                    <div class="padding-post-tag row">
-                      <span class="tag badge badge-pill badge-secondary">party</span>
-                      <span class="tag badge badge-pill badge-secondary">food</span>
-                      <span class="tag badge badge-pill badge-secondary">aspc</span>
+                      <!-- tags preview on post -->
+                      <div class="padding-post-tag row">
+                        <!-- {% if announcement.announce_tags %}
+                          {% if announcement.num_tags > 0 %}
+                            {% for tag in announcement.announce_tags %}
+                              - {{ tag }} {{ tag.is_approved }} <br>
+                            {% endfor %}
+                          {% else %}
+                            <p> No tags on this post </p> <br>
+                          {% endif %}
+                        {% endif %} -->
+                        <span class="tag badge badge-pill badge-secondary">party</span>
+                        <span class="tag badge badge-pill badge-secondary">food</span>
+                        <span class="tag badge badge-pill badge-secondary">aspc</span>
+                      </div>
+                    </div>
+
+                    <div class="card-footer text-muted">
+                      {{ announcement.submit_date }} by
+                      {{ announcement.submitter.first }} {{ announcement.submitter.last }}
                     </div>
                   </div>
-
-                  <div class="card-footer text-muted">
-                    {{ announcement.submit_date }} by
-                    {{ announcement.submitter.first }} {{ announcement.submitter.last }}
-                  </div>
-                </div>
                 {% endfor %}
 
-                {% if latest_announcements_list|length > 10 %}
-                  <!-- Pagination -->
-                  <ul class="pagination justify-content-center mb-4">
-                    <li class="page-item">
-                      <a class="page-link" href="#">&larr; Older</a>
-                    </li>
-                    <li class="page-item disabled">
-                      <a class="page-link" href="#">Newer &rarr;</a>
-                    </li>
-                  </ul>
-                {% endif %}
+                <ul class="pagination justify-content-center mb-4">
+                  <span class="step-links">
+                      {% if latest_announcement_list.has_previous %}
+                          <!-- <a href="?page=1">&laquo; first</a> -->
+                          <a href="?page={{ latest_announcement_list.previous_page_number }}">&laquo; previous </a>
+                      {% endif %}
 
-              {% else %}
+                      <span class="current">
+                          Page {{ latest_announcement_list.number }} of {{ latest_announcement_list.paginator.num_pages }}.
+                      </span>
+
+                      {% if latest_announcement_list.has_next %}
+                          <a href="?page={{ latest_announcement_list.next_page_number }}">next &raquo;</a>
+                          <!-- <a href="?page={{ latest_announcement_list.paginator.num_pages }}">last &raquo;</a> -->
+                      {% endif %}
+                  </span>
+                </ul>
+
+                {% else %}
                   <p>No announcements are available.</p>
-            {% endif %}
+                {% endif %}
             </div>
 
         <!-- Sidebar Widgets Column -->

@@ -41,3 +41,10 @@ body {
 .padding-left-default{
 	padding-left:15px;
 }
+
+.preview-text {
+     width: 475px;
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+}
