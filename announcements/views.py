@@ -39,6 +39,7 @@ def sign_up(request):
 				request.POST['password'])
 			user.first_name = request.POST['first']
 			user.last_name = request.POST['last']
+			user.admin_status = request.POST['admin']
 			user.save()
 			return redirect('/accounts/login')
 		else:
@@ -302,7 +303,8 @@ def search(request, search_key):
 
 	paginator = Paginator(matching_announces, 10)
 	page = request.GET.get('page')
-	my_chirps_announcements_list = paginator.get_page(page)
+	matching_announces = paginator.get_page(page)
+
 	context = {
 		'no_match': no_match,
 		'matching_announces':matching_announces,
