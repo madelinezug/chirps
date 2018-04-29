@@ -284,7 +284,8 @@ def search(request, search_key):
 
 	paginator = Paginator(matching_announces, 10)
 	page = request.GET.get('page')
-	my_chirps_announcements_list = paginator.get_page(page)
+	matching_announces = paginator.get_page(page)
+
 	context = {
 		'no_match': no_match,
 		'matching_announces':matching_announces,
