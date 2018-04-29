@@ -49,10 +49,11 @@
             </li>
           </ul>
         </div>
-          <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-          </form>
+        <form class="form-inline my-2 my-lg-0" method="post">
+          {% csrf_token %}
+          <input class="form-control mr-sm-2" type="text" name = "search_key" placeholder="Search..." >
+          <input class="btn btn-outline-success my-2 my-sm-0" name = "search" value = "Search" type="submit">
+        </form>
       </div>
     </nav>
 
@@ -167,18 +168,7 @@
             </div>
           </a>
 
-          <!-- Search Widget -->
-          <div class="card my-4">
-            <h5 class="card-header">Search</h5>
-            <div class="card-body">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for...">
-                <span class="input-group-btn">
-                  <button class="btn btn-secondary" type="button">Go!</button>
-                </span>
-              </div>
-            </div>
-          </div>
+        
 
           <!-- Categories Widget -->
           <div class="card my-4">

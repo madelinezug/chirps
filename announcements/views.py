@@ -102,6 +102,9 @@ def detail(request, announcement_id):
 			return render(request,'announcements/error.html',{'error':"You have not saved this announcement"})
 		prev_save_announce.delete()
 		return redirect('/announcements/saved')
+	elif ("search" in request.POST):
+		search_key = request.POST["search_key"]
+		return redirect('/announcements/search/' + search_key)
 	context = {
 		'announcement': announcement,
 		'save_announcements_list': save_announcements_list,
@@ -116,7 +119,7 @@ def index(request):
 
 	if request.method == "POST":
 		search_key = request.POST["search_key"]
-		return redirect('search/' + search_key)
+		return redirect('/announcements/search/' + search_key)
 
 	#paginator
 	paginator = Paginator(latest_announcement_list, 10)
@@ -165,6 +168,10 @@ def submit(request):
 	except:
 		all_tags = []
 	if request.method == "POST":
+		if "search" in request.POST:
+			search_key = request.POST["search_key"]
+			return redirect('/announcements/search/' + search_key)
+		else:
 		# ann_form = SubmitAnnounceForm(request.POST)
 		# if ann_form.is_valid() :
 			# save the announcement
@@ -197,6 +204,10 @@ def submit(request):
 
 @login_required
 def saved(request):
+	if request.method == "POST":
+		search_key = request.POST["search_key"]
+		return redirect('/announcements/search/' + search_key)
+
 	try:
 		user = get_object_or_404(Individual,pk=request.user.username)
 	except:
@@ -217,6 +228,10 @@ def saved(request):
 
 @login_required
 def my_chirps(request):
+	if request.method == "POST":
+		search_key = request.POST["search_key"]
+		return redirect('/announcements/search/' + search_key)
+
 	try:
 		user = get_object_or_404(Individual,pk=request.user.username)
 	except:
@@ -238,6 +253,10 @@ def my_chirps(request):
 
 @login_required
 def search(request, search_key):
+	if request.method == "POST":
+		search_key = request.POST["search_key"]
+		return redirect('/announcements/search/' + search_key)
+
 	no_match = ""
 	matching_announces = []
 	search_key = search_key.strip()
