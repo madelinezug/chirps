@@ -33,13 +33,14 @@ def sign_up(request):
 	no_match = ""
 	if request.method == "POST":
 		if (request.POST['password'] == request.POST['redo_password']):
-			new_individual = Individual(email=request.POST['email'],password =request.POST['password'],first=request.POST['first'],last=request.POST['last'],admin_status=False)
+			admin_stat = len(request.POST.getlist('admin')) > 0
+			new_individual = Individual(email=request.POST['email'],password =request.POST['password'],first=request.POST['first'],last=request.POST['last'],admin_status=admin_stat)
 			new_individual.save()
 			user = User.objects.create_user(request.POST['email'],request.POST['email'],
 				request.POST['password'])
 			user.first_name = request.POST['first']
 			user.last_name = request.POST['last']
-			user.admin_status = request.POST['admin']
+			user.admin_status = admin_stat
 			user.save()
 			return redirect('/accounts/login')
 		else:
@@ -291,7 +292,7 @@ def search(request, search_key):
 	# search for tags that match the input
 	if (Tags.objects.filter(pk=search_key).exists()):
 		if (AnnounceTags.objects.filter(the_tag=search_key).exists()):
-			matching_announce_assocs = list(AnnounceTags.objects.filter(the_tag=search_key))
+			matching_announce_assocs = list(AnnounceTags.objects.filter(the_tag=search_key).order_by('-the_announcement__submit_date'))
 			for object in matching_announce_assocs:
 				announce_o_i = object.the_announcement
 				if announce_o_i.expired():
@@ -306,7 +307,7 @@ def search(request, search_key):
 	# search for users which match the input
 	elif (is_first or is_last):
 		if (Announcement.objects.filter(submitter=person).exists()):
-			matching_announces = list(Announcement.objects.filter(submitter=person))
+			matching_announces = list(Announcement.objects.filter(submitter=person).order_by('-submit_date'))
 			for announce_o_i in matching_announces:
 				if announce_o_i.expired():
 					matching_announces.remove(Announcement.objects.get(pk=announce_o_i.announce_ID))
