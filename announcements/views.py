@@ -145,7 +145,10 @@ def detail(request, announcement_id):
 
 @login_required
 def index(request):
+	approved_chirps_exist = Announcement.objects.filter(approve_status=True).exists()
 	latest_announcement_list = Announcement.objects.filter(expire_date__gte=timezone.now()).order_by('-submit_date')
+	if approved_chirps_exist:
+		approved_chirps_list = Announcements.objects.filter(approve_stats=True)
 	try:
 		user = get_object_or_404(Individual,pk=request.user.username)
 	except:
@@ -163,6 +166,7 @@ def index(request):
 	context = {
 		'latest_announcement_list': latest_announcement_list,
 		'user':user,
+		'approval':approved_chirps_exist,
 	}
 	return render(request,'announcements/index.html',context)
 
