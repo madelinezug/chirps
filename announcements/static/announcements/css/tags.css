@@ -1,0 +1,11 @@
+.tag {
+   display: inline-block;
+   margin-right: 5px;
+   font-size: 13px;
+   margin-bottom: 5px;
+}
+
+.padding-post-tag{
+	padding-left:15px;
+	padding-top:20px;
+}

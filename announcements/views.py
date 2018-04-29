@@ -40,14 +40,14 @@ def sign_up(request):
 	no_match = ""
 	if request.method == "POST":
 		if (request.POST['password'] == request.POST['redo_password']):
-			new_individual = Individual(email=request.POST['email'],password =request.POST['password'],first=request.POST['first'],last=request.POST['last'],admin_status=False)
+			admin_stat = len(request.POST.getlist('admin')) > 0
+			new_individual = Individual(email=request.POST['email'],password =request.POST['password'],first=request.POST['first'],last=request.POST['last'],admin_status=admin_stat)
 			new_individual.save()
 			user = User.objects.create_user(request.POST['email'],request.POST['email'],
 				request.POST['password'])
 			user.first_name = request.POST['first']
 			user.last_name = request.POST['last']
-			admin_stat = request.POST.getlist('admin')
-			user.admin_status = len(admin_stat) > 0
+			user.admin_status = admin_stat
 			user.save()
 			return redirect('/accounts/login')
 		else:
@@ -72,6 +72,11 @@ def detail(request, announcement_id):
 	announce_tags = AnnounceTags.objects.filter(the_announcement=announcement)
 	num_tags = len(announce_tags)
 
+	if Save.objects.filter(saver=user).exists():
+		already_saved = True
+	else:
+		already_saved = False
+
 	if ("approve" in request.POST):
 		if(user.admin_status):
 			if (~announcement.is_approved()):
@@ -86,6 +91,14 @@ def detail(request, announcement_id):
 				html_template = get_template("emails/approved_chirp_email.html").render()
 				message.attach_alternative(html_template, "text/html")
 				message.send()
+			tags_for_this_announce = announcement.get_tags()
+			for tag_assoc in tags_for_this_announce:
+				tag = tag_assoc.the_tag
+				if not tag.approved:
+					tag.approved = True
+					tag.save()
+			tag.approved = True
+			tag.save()
 	elif ("deny" in request.POST):
 		if(user.admin_status):
 			if (announcement.is_approved()):
@@ -120,11 +133,15 @@ def detail(request, announcement_id):
 			return render(request,'announcements/error.html',{'error':"You have not saved this announcement"})
 		prev_save_announce.delete()
 		return redirect('/announcements/saved')
+	elif ("search" in request.POST):
+		search_key = request.POST["search_key"]
+		return redirect('/announcements/search/' + search_key)
 	context = {
 		'announcement': announcement,
 		'save_announcements_list': save_announcements_list,
 		'announce_tags':announce_tags,
 		'num_tags':num_tags,
+		'already_saved':already_saved,
 	}
 	return render(request, 'announcements/detail.html', context)
 
@@ -134,7 +151,7 @@ def index(request):
 
 	if request.method == "POST":
 		search_key = request.POST["search_key"]
-		return redirect('search/' + search_key)
+		return redirect('/announcements/search/' + search_key)
 
 	#paginator
 	paginator = Paginator(latest_announcement_list, 10)
@@ -183,6 +200,10 @@ def submit(request):
 	except:
 		all_tags = []
 	if request.method == "POST":
+		if "search" in request.POST:
+			search_key = request.POST["search_key"]
+			return redirect('/announcements/search/' + search_key)
+		else:
 		# ann_form = SubmitAnnounceForm(request.POST)
 		# if ann_form.is_valid() :
 			# save the announcement
@@ -225,6 +246,10 @@ def submit(request):
 
 @login_required
 def saved(request):
+	if request.method == "POST":
+		search_key = request.POST["search_key"]
+		return redirect('/announcements/search/' + search_key)
+
 	try:
 		user = get_object_or_404(Individual,pk=request.user.username)
 	except:
@@ -245,6 +270,10 @@ def saved(request):
 
 @login_required
 def my_chirps(request):
+	if request.method == "POST":
+		search_key = request.POST["search_key"]
+		return redirect('/announcements/search/' + search_key)
+
 	try:
 		user = get_object_or_404(Individual,pk=request.user.username)
 	except:
@@ -266,6 +295,10 @@ def my_chirps(request):
 
 @login_required
 def search(request, search_key):
+	if request.method == "POST":
+		search_key = request.POST["search_key"]
+		return redirect('/announcements/search/' + search_key)
+
 	no_match = ""
 	matching_announces = []
 	search_key = search_key.strip()

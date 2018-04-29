@@ -49,10 +49,11 @@
             </li>
           </ul>
         </div>
-          <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-          </form>
+        <form class="form-inline my-2 my-lg-0" method="post">
+          {% csrf_token %}
+          <input class="form-control mr-sm-2" type="text" name = "search_key" placeholder="Search..." required>
+          <input class="btn btn-outline-success my-2 my-sm-0" name = "search" value = "Search" type="submit">
+        </form>
       </div>
     </nav>
 
@@ -124,7 +125,14 @@
                 <div class="padding-post-tag row">
                   {% if saved.saved_announce.has_tags %}
                     {% for tag_assoc in saved.saved_announce.get_tags|slice:"4" %}
-                      <span class="tag badge badge-pill badge-secondary">{{ tag_assoc.the_tag }}</span>
+                    <a href = "http://127.0.0.1:8000/announcements/search/{{ tag_assoc.the_tag }}">
+                      {% if tag_assoc.the_tag.approved %}
+                        <span class="tag badge badge-pill badge-primary">
+                      {% else %}
+                        <span class="tag badge badge-pill badge-danger">
+                      {% endif %}
+                          {{ tag_assoc.the_tag }}</span>
+                        </a>
                     {% endfor %}
                     {% if saved.saved_announce.num_tags > 4 %}
                         <small class="text-muted"> ... </small>
@@ -170,18 +178,7 @@
             </div>
           </a>
 
-          <!-- Search Widget -->
-          <div class="card my-4">
-            <h5 class="card-header">Search</h5>
-            <div class="card-body">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for...">
-                <span class="input-group-btn">
-                  <button class="btn btn-secondary" type="button">Go!</button>
-                </span>
-              </div>
-            </div>
-          </div>
+
 
           <!-- Categories Widget -->
           <div class="card my-4">
