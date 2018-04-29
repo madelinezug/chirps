@@ -63,6 +63,13 @@ class Announcement(models.Model):
     def is_expired(self):
         return date.today() > self.expire_date
 
+    def has_tags(self):
+        return AnnounceTags.objects.filter(the_announcement=self).exists()
+
+    def my_tags(self):
+        tags=AnnounceTags.objects.filter(the_announcement=self).exists()
+        return tags
+
 class Tags(models.Model):
     tag_text = models.CharField(max_length=10, primary_key=True)
     approved = models.BooleanField()
