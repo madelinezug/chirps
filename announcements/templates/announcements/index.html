@@ -116,7 +116,14 @@
                       <div class="padding-post-tag row">
                         {% if announcement.has_tags %}
                           {% for tag_assoc in announcement.get_tags|slice:"4" %}
-                            <span class="tag badge badge-pill badge-secondary">{{ tag_assoc.the_tag }}</span>
+                          <a href = "http://127.0.0.1:8000/announcements/search/{{ tag_assoc.the_tag }}">
+                            {% if tag_assoc.the_tag.approved %}
+                              <span class="tag badge badge-pill badge-primary">
+                            {% else %}
+                              <span class="tag badge badge-pill badge-danger">
+                            {% endif %}
+                                {{ tag_assoc.the_tag }}</span>
+                              </a>
                           {% endfor %}
                           {% if announcement.num_tags > 4 %}
                               <small class="text-muted"> ... </small>

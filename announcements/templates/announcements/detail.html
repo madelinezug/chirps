@@ -163,11 +163,6 @@
                             {% for tag in announce_tags %}
                               <li>
                                 <a href="http://127.0.0.1:8000/announcements/search/{{ tag }}">{{ tag }}</a>
-                                {% if tag.is_approved %}
-                                  <p> A </p>
-                                  {% else %}
-                                  <p> U </p>
-                                  {% endif %}
                               </li>
                             {% endfor %}
                             </ul>
