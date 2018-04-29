@@ -101,11 +101,19 @@
              <p class="card-text preview-text">{{chirp.announce_text}}</p>
              <a href="{% url 'detail' chirp.announce_ID %}" class="btn btn-sm btn-outline-primary">See More &rarr;</a>
 
+
              <!-- tags preview on post -->
              <div class="padding-post-tag row">
                {% if chirp.has_tags %}
                  {% for tag_assoc in chirp.get_tags|slice:"4" %}
-                   <span class="tag badge badge-pill badge-secondary">{{ tag_assoc.the_tag }}</span>
+                 <a href = "http://127.0.0.1:8000/announcements/search/{{ tag_assoc.the_tag }}">
+                   {% if tag_assoc.the_tag.approved %}
+                     <span class="tag badge badge-pill badge-primary">
+                   {% else %}
+                     <span class="tag badge badge-pill badge-danger">
+                   {% endif %}
+                       {{ tag_assoc.the_tag }}</span>
+                     </a>
                  {% endfor %}
                  {% if chirp.num_tags > 4 %}
                      <small class="text-muted"> ... </small>
@@ -118,9 +126,9 @@
              Posted on {{ chirp.submit_date }} by Me
 
                {%if chirp.approve_status%}
-                  <span class="float-right"><small> Approved </small></span>
+                  <span class="float-right approved"><small> Approved </small></span>
                {% else %}
-                  <span class="float-right"><small> Not Approved </small></span>
+                  <span class="float-right pending"><small> Not Approved </small></span>
                {% endif %}
           </div>
         </div>

@@ -84,7 +84,7 @@ def detail(request, announcement_id):
 				announcement.save()
 				subject = "Your chirp was approved!"
 				from_email = settings.EMAIL_HOST_USER
-				to_email = [current_user.email]
+				to_email = [user.email]
 				with open(settings.BASE_DIR + "/announcements/templates/emails/approved_chirp_email.txt") as f:
 					signup_message = f.read()
 				message = EmailMultiAlternatives(subject=subject, body=signup_message, from_email=from_email, to=to_email)
@@ -97,15 +97,13 @@ def detail(request, announcement_id):
 				if not tag.approved:
 					tag.approved = True
 					tag.save()
-			tag.approved = True
-			tag.save()
-	elif ("deny" in request.POST):
-		if(user.admin_status):
-			if (announcement.is_approved()):
-				announcement.approve_status = False
-				announcement.save()
+	# elif ("deny" in request.POST):
+	# 	if(user.admin_status):
+	# 		if (announcement.is_approved()):
+	# 			announcement.approve_status = False
+	# 			announcement.save()
 	elif ("delete" in request.POST):
-		if(announcement.submitter==user):
+		if(announcement.submitter==user or user.admin_status):
 			# remove saved instances
 			if (Save.objects.filter(saved_announce = announcement).exists()):
 				save_delete_list = Save.objects.filter(saved_announce = announcement)

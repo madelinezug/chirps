@@ -48,3 +48,11 @@ body {
      overflow: hidden;
      text-overflow: ellipsis;
 }
+
+.approved{
+	color:#32CD32;
+}
+
+.pending{
+	color:red;
+}
