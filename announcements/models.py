@@ -20,8 +20,8 @@ class Individual(models.Model):
 class Announcement(models.Model):
     announce_ID = models.AutoField(primary_key=True)
     announce_text = models.TextField()
-    announce_title = models.CharField(max_length=50)
-    announce_img = models.CharField(max_length=100, blank=True, default='')
+    announce_title = models.CharField(max_length=30)
+    announce_img = models.CharField(max_length=200, blank=True, default='')
     submit_date = models.DateField()
     expire_date = models.DateField()
     approve_status = models.BooleanField()
