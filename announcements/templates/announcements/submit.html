@@ -115,16 +115,16 @@
                <hr>
 
               <div class="title-margin">
-              <input type="text" class="form-control" id="announce_img" name="announce_img" placeholder="Optional Image URL">
-                Desired Expiration Date: <input type="date" name="expire_date" required/><br>
-                Tags (separated by commas): <input type="text" name="tag_text"/><br>
+                <input class="form-control" type="text" name="tag_text" placeholder="Optional Tags (separated by commas)"/>
+                <input type="text" class="form-control" style="margin-top:15px" id="announce_img" name="announce_img" placeholder="Optional Image URL"><br>
+                Desired Expiration Date: <input class="form-control" type="date" name="expire_date" required/><br>
               </div>
 
                 <!-- Adding Tags -->
-                 <div class="container" ng-app="myApp" ng-controller="tagsCtrl">
+                 <!-- <div class="container" ng-app="myApp" ng-controller="tagsCtrl">
                     <h6>Tags</h6> {{ all_tags }}
                     <tag-manager tags="tags" autocomplete="allTags"></tag-manager>
-                  </div>
+                  </div> -->
 
                   <input type="submit" value="Submit" class="btn btn-primary float-right"/>
                 </form>

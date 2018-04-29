@@ -64,27 +64,30 @@ def detail(request, announcement_id):
 	num_tags = len(announce_tags)
 
 	if ("approve" in request.POST):
-		if (~announcement.is_approved()):
-			announcement.approve_status = True
-			announcement.save()
+		if(user.admin_status):
+			if (~announcement.is_approved()):
+				announcement.approve_status = True
+				announcement.save()
 	elif ("deny" in request.POST):
-		if (announcement.is_approved()):
-			announcement.approve_status = False
-			announcement.save()
+		if(user.admin_status):
+			if (announcement.is_approved()):
+				announcement.approve_status = False
+				announcement.save()
 	elif ("delete" in request.POST):
-		# remove saved instances
-		if (Save.objects.filter(saved_announce = announcement).exists()):
-			save_delete_list = Save.objects.filter(saved_announce = announcement)
-			for saved in save_delete_list :
-				saved.delete()
-		# remove tag associations
-		if (AnnounceTags.objects.filter(the_announcement = announcement).exists()):
-			assoc_delete_list = AnnounceTags.objects.filter(the_announcement = announcement)
-			for assoc in assoc_delete_list :
-				assoc.delete()
-		# remove announcement
-		announcement.delete()
-		return redirect('/announcements/')
+		if(announcement.submitter==user):
+			# remove saved instances
+			if (Save.objects.filter(saved_announce = announcement).exists()):
+				save_delete_list = Save.objects.filter(saved_announce = announcement)
+				for saved in save_delete_list :
+					saved.delete()
+			# remove tag associations
+			if (AnnounceTags.objects.filter(the_announcement = announcement).exists()):
+				assoc_delete_list = AnnounceTags.objects.filter(the_announcement = announcement)
+				for assoc in assoc_delete_list :
+					assoc.delete()
+			# remove announcement
+			announcement.delete()
+			return redirect('/announcements/')
 	elif (("save" in request.POST) and (request.method == "POST")):
 		if (Save.objects.filter(saver=user,saved_announce=announcement).exists()):
 			return render(request,'announcements/error.html',{'error':"You have already saved this announcement"})
@@ -98,6 +101,7 @@ def detail(request, announcement_id):
 		except:
 			return render(request,'announcements/error.html',{'error':"You have not saved this announcement"})
 		prev_save_announce.delete()
+		return redirect('/announcements/saved')
 	context = {
 		'announcement': announcement,
 		'save_announcements_list': save_announcements_list,
