@@ -39,6 +39,7 @@ def sign_up(request):
 				request.POST['password'])
 			user.first_name = request.POST['first']
 			user.last_name = request.POST['last']
+			user.admin_status = request.POST['admin']
 			user.save()
 			return redirect('/accounts/login')
 		else:
