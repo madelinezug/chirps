@@ -12,7 +12,6 @@
     <title>Pending Posts</title>
 
     <!-- Bootstrap core CSS -->
-    <!-- <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
     <link href="{% static 'announcements/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
     <!-- bootstrap JS, Popper.js, and jQuery; need for dropdown -->
@@ -43,11 +42,6 @@
               <input class="form-control mr-sm-2" type="text" name = "search_key" placeholder="Search..." required>
               <input class="btn btn-outline-success my-2 my-sm-0" name = "search" value = "Search" type="submit">
             </form>
-            <!-- <li class="nav-item active">
-              <a class="nav-link" href="#">Settings
-                <span class="sr-only">(current)</span>
-              </a>
-            </li> -->
             <li class="nav-item active">
               <a class="nav-link" href="{% url 'logout'%}">Log Out</a>
             </li>
@@ -79,7 +73,9 @@
             </nav>
 
         <!-- Blog Entries Column -->
-        <div class="col-md-6 post-padding-top">
+        <div class="col-md-6">
+
+          <h1 class="my-4 font-default"> Pending Posts </h1>
 
          {% if pending_announcements_list %}
            {% for pending in pending_announcements_list %}
