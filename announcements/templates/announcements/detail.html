@@ -87,6 +87,7 @@
 
               <form method="post"/>
               <!-- Title -->
+              {% if announcement.approve_status %}
               <h1 class="mt-4">{{ announcement.announce_title }}
                 {% if already_saved %}
                   <input type="submit" class="btn btn-md btn-outline-primary float-right" value="Unsave" name="unsave"/>
@@ -94,6 +95,7 @@
                   <input type="submit" class="btn btn-md btn-outline-primary float-right" value="Save" name="save"/>
                 {% endif %}
               </h1>
+              {% endif %}
 
               <!-- Author -->
               <p class="lead">

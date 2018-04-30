@@ -354,7 +354,7 @@ def search(request, search_key):
 				matching_announce_assocs = list(AnnounceTags.objects.filter(the_tag=search_key).order_by('-the_announcement__submit_date'))
 				for object in matching_announce_assocs:
 					announce_o_i = object.the_announcement
-					if announce_o_i.expired():
+					if announce_o_i.expired() or (not announce_o_i.approve_status):
 						matching_announce_assocs.remove(AnnounceTags.objects.get(the_announcement=announce_o_i))
 					else:
 						matching_announces.append(announce_o_i)
@@ -370,7 +370,7 @@ def search(request, search_key):
 		if (Announcement.objects.filter(submitter=person).exists()):
 			matching_announces = list(Announcement.objects.filter(submitter=person).order_by('-submit_date'))
 			for announce_o_i in matching_announces:
-				if announce_o_i.expired():
+				if announce_o_i.expired() or (not announce_o_i.approve_status):
 					matching_announces.remove(Announcement.objects.get(pk=announce_o_i.announce_ID))
 			if len(matching_announces) == 0:
 				no_match = "No Chirps submitted by this user are currently active"
