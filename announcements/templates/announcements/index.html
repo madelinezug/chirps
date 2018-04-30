@@ -173,6 +173,12 @@
         <!-- Sidebar Widgets Column -->
         <div class="col-md-4">
 
+          {% if user.admin_status %}
+            <div class="card my-4">
+              <button class="btn btn-primary" type="submit">Send Chirps!</button>
+            </div>
+          {% endif %}
+
           <a href="{% url 'submit' %}">
             <div class="card my-4">
               <button class="btn btn-primary" type="submit">Submit a Chirp!</button>

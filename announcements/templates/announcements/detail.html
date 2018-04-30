@@ -2,9 +2,6 @@
 
 {% load static %}
 
-
-
-
 <!DOCTYPE html>
     <html lang="en">
 
@@ -104,8 +101,8 @@
                 {% else %}
                   <input type="submit" class="btn btn-md btn-outline-primary float-right" value="Save" name="save"/>
                 {% endif %}
-              </h1>
               {% endif %}
+              </h1>
 
               <!-- Author -->
               <p class="lead">
@@ -125,31 +122,30 @@
 
               <hr>
                 <!-- Date/Time -->
-                <p>Posted on {{ announcement.submit_date }}</p>
+                <p>Posted on {{ announcement.submit_date }}
+                  {% if user.admin_status or user == announcement.submitter %}
+                      {% if announcement.approve_status%}
+                        <span class="approved">Approved </span>
+                      {% else %}
+                        <span class="pending">Pending </span>
+                      {% endif %}
+                   {%endif%}
+
+                  {% if user.admin_status and not announcement.approve_status %}
+                    <input type="submit" class="btn btn-sm btn-outline-success float-right" value="Approve" name ="approve"/>
+                  {% endif %}
+                  {% if user.admin_status or user == announcement.submitter %}
+                    <input type="submit" class="btn btn-sm btn-outline-danger float-right" style="margin-right:5px" value="Delete" name="delete"/>
+                  {% endif %}
+
+                  {{ worked }}
+                  {{saved_announcement}}
+                  {% csrf_token %}
+                </p>
+
               <hr>
 
             </div>
-
-            <!-- Sidebar Widgets Column -->
-            <div class="col-md-3">
-
-              <b>Approval status:</b>
-                {% if announcement.approve_status%}
-                  <li>Approved</li> <br>
-                {% else %}
-                    <li>Not approved</li> <br>
-                {% endif %}
-
-                {% if user.admin_status %}
-                  <input type="submit" value="Approve" name ="approve"/>
-
-                  <input type="submit" value="Delete" name="delete"/>
-                {% endif %}
-
-                {{ worked }}
-                {{saved_announcement}}
-                {% csrf_token %}
-              </form>
 
 
               <!-- Categories Widget -->
@@ -157,7 +153,6 @@
                 <h5 class="card-header">Tags</h5>
                 <div class="card-body">
                   <div class="row">
-                    <div class="col-lg-10">
                         {% if announce_tags %}
                           {% if num_tags > 0 %}
                             <ul class="list-unstyled mb-0">
@@ -173,7 +168,6 @@
                         {% else %}
                             <p> No tags on this post </p> <br>
                         {% endif %}
-                    </div>
                   </div>
                 </div>
               </div>
