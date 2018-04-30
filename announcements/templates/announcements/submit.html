@@ -110,7 +110,7 @@
               <h1 class="my-4 font-default title-margin">Submit a Chirp</h1>
               <div class="form-group text-center">
                 <div class="col form-padding">
-                  <input type="text" class="form-control"  id="announce_title" name="announce_title" placeholder="Title" required>
+                  <input type="text" class="form-control"  id="announce_title" name="announce_title" placeholder="Title" maxlength="30" required>
                 </div>
                 <div class="col">
                     <textarea class="form-control" name="announce_text" id="exampleFormControlTextarea1" rows="6" placeholder="Text..." required></textarea>
@@ -121,7 +121,7 @@
 
               <div class="title-margin">
                 <input class="form-control" type="text" name="tag_text" placeholder="Optional Tags (separated by commas)"/>
-                <input type="text" class="form-control" style="margin-top:15px" id="announce_img" name="announce_img" placeholder="Optional Image URL"><br>
+                <input type="text" class="form-control" style="margin-top:15px" id="announce_img" name="announce_img" maxlength="200" placeholder="Optional Image URL"><br>
                 Desired Expiration Date: <input class="form-control" type="date" name="expire_date" required/><br>
               </div>
 
