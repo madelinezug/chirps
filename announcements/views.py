@@ -156,10 +156,10 @@ def index(request):
 	#paginator
 	paginator = Paginator(approved_chirps_list, 10)
 	page = request.GET.get('page')
-	latest_announcement_list = paginator.get_page(page)
+	approved_chirps_list = paginator.get_page(page)
 
 	context = {
-		'approved_chirps_list':approved_chirps_list,
+		'approved_chirps_list': approved_chirps_list,
 		'user':user,
 		'approval':approved_chirps_exist,
 	}
@@ -199,7 +199,7 @@ def approve_tag(request):
 def submit(request):
 	try:
 		all_tags = get_object_or_404(Tags,approved=True)
-		user = get_object_or_404(Individual, pk=request.user.username)
+		# user = get_object_or_404(Individual, pk=request.user.username)
 	except:
 		all_tags = []
 	if request.method == "POST":
@@ -227,15 +227,26 @@ def submit(request):
 					announce_tag_pair = AnnounceTags(the_announcement=new_announce,the_tag=Tags.objects.get(pk=tag))
 					announce_tag_pair.save()
 
-			subject = "You submitted a chirp!"
-			from_email = settings.EMAIL_HOST_USER
-			to_email = [current_user.email]
-			with open(settings.BASE_DIR + "/announcements/templates/emails/submit_chirp_email.txt") as f:
-				signup_message = f.read()
-			message = EmailMultiAlternatives(subject=subject, body=signup_message, from_email=from_email, to=to_email)
-			html_template = get_template("emails/submit_chirp_email.html").render()
-			message.attach_alternative(html_template, "text/html")
-			message.send()
+			if(current_user.admin_status):
+				new_announce.approve_status = True
+				new_announce.save()
+				tags_for_this_announce = new_announce.get_tags()
+				for tag_assoc in tags_for_this_announce:
+					tag = tag_assoc.the_tag
+					if not tag.approved:
+						tag.approved = True
+						tag.save()
+
+			# subject = "You submitted a chirp!"
+			# from_email = settings.EMAIL_HOST_USER
+			# to_email = [current_user.email]
+			# with open(settings.BASE_DIR + "/announcements/templates/emails/submit_chirp_email.txt") as f:
+			# 	signup_message = f.read()
+			# message = EmailMultiAlternatives(subject=subject, body=signup_message, from_email=from_email, to=to_email)
+			# html_template = get_template("emails/submit_chirp_email.html").render()
+			# message.attach_alternative(html_template, "text/html")
+			# message.send()
+
 
 			return redirect('/announcements/')
 		# else:

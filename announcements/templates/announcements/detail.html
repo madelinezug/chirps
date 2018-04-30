@@ -67,19 +67,27 @@
                       Home <span class="sr-only">(current)</span>
                     </a>
                   </li>
-                  {% if not user.admin_status %}
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'my_chirps' %}">
-                      <span data-feather="mychirps"></span>
-                      My Chirps
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'saved' %}">
-                      <span data-feather="savedchirps"></span>
-                      Saved Chirps
-                    </a>
-                  </li>
+                  {% if user.admin_status %}
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'pending' %}">
+                        <span data-feather="pending"></span>
+                         Pending Posts
+                      </a>
+                    </li>
+
+                   {% else %}
+                     <li class="nav-item">
+                       <a class="nav-link" href="{% url 'my_chirps' %}">
+                         <span data-feather="my_chirps"></span>
+                         My Chirps
+                       </a>
+                     </li>
+                     <li class="nav-item">
+                       <a class="nav-link" href="{% url 'saved' %}">
+                         <span data-feather="saved_chirps"></span>
+                         Saved Chirps
+                       </a>
+                     </li>
                   {% endif %}
               </div>
             </nav>
