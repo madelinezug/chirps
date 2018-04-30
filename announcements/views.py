@@ -204,6 +204,7 @@ def approve_tag(request):
 def submit(request):
 	try:
 		all_tags = get_object_or_404(Tags,approved=True)
+		user = get_object_or_404(Individual, pk=request.user.username)
 	except:
 		all_tags = []
 	if request.method == "POST":
@@ -217,7 +218,7 @@ def submit(request):
 			# new_announce = ann_form.save(commit=False)
 			# new_announce = Announcement(announce_ID=request.POST["announce_ID"],announce_text=request.POST["announce_text"],announce_title=request.POST["announce_title"],
 			new_announce = Announcement(announce_text=request.POST["announce_text"],announce_title=request.POST["announce_title"], announce_img=request.POST["announce_img"],
-			submit_date=timezone.now(),expire_date=request.POST["expire_date"],approve_status=False,submitter=Individual.objects.get(pk=request.user.username))
+			submit_date=timezone.now(),expire_date=request.POST["expire_date"],approve_status=Individual.objects.get(pk=request.user.username).admin_status,submitter=Individual.objects.get(pk=request.user.username))
 			# new_announce.submit_date = timezone.now()
 			# new_announce.approve_status = False
 			# new_announce.submitter = Individual.objects.get(pk=request.user.username)
@@ -287,7 +288,7 @@ def pending(request):
 		return redirect('/acccounts/login')
 	pending_announcements_list = None
 	if (Announcement.objects.filter(approve_status=False).exists()):
-		pending_announcements_list = Announcement.objects.filter(approve_status=False, saved_announce__expire_date__gte=timezone.now()).order_by('-submit_date')
+		pending_announcements_list = Announcement.objects.filter(approve_status=False, expire_date__gte=timezone.now()).order_by('-submit_date')
 
 		paginator = Paginator(pending_announcements_list, 10)
 		page = request.GET.get('page')
@@ -297,7 +298,7 @@ def pending(request):
 		'pending_announcements_list': pending_announcements_list,
 		'user': user
 	}
-	return render(request, 'announcements/pending_announcements.html', context)
+	return render(request, 'announcements/pending.html', context)
 
 @login_required
 def my_chirps(request):
