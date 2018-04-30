@@ -67,6 +67,7 @@
                       Home <span class="sr-only">(current)</span>
                     </a>
                   </li>
+                  {% if not user.admin_status %}
                   <li class="nav-item">
                     <a class="nav-link" href="{% url 'my_chirps' %}">
                       <span data-feather="mychirps"></span>
@@ -79,6 +80,7 @@
                       Saved Chirps
                     </a>
                   </li>
+                  {% endif %}
               </div>
             </nav>
 

@@ -135,6 +135,7 @@ def detail(request, announcement_id):
 		'announce_tags':announce_tags,
 		'num_tags':num_tags,
 		'already_saved':already_saved,
+		'user':user,
 	}
 	return render(request, 'announcements/detail.html', context)
 
@@ -207,14 +208,10 @@ def submit(request):
 			return redirect('/announcements/search/' + search_key)
 		else:
 			new_announce = Announcement(announce_text=request.POST["announce_text"],announce_title=request.POST["announce_title"], announce_img=request.POST["announce_img"],
-<<<<<<< HEAD
-			submit_date=timezone.now(),expire_date=request.POST["expire_date"],approve_status=False,submitter=Individual.objects.get(pk=request.user.username))
-=======
 			submit_date=timezone.now(),expire_date=request.POST["expire_date"],approve_status=Individual.objects.get(pk=request.user.username).admin_status,submitter=Individual.objects.get(pk=request.user.username))
 			# new_announce.submit_date = timezone.now()
 			# new_announce.approve_status = False
 			# new_announce.submitter = Individual.objects.get(pk=request.user.username)
->>>>>>> 91c0c85cd53b9c5b59479e29eef3f2439623f572
 			new_announce.save()
 
 			# save the tag and associate it with the announcement
@@ -225,7 +222,7 @@ def submit(request):
 					tag = tag.strip()
 					tag = tag.lower()
 					if not Tags.objects.filter(pk=tag).exists():
-						new_tag = Tags(tag_text=tag,approved=False)
+						new_tag = Tags(tag_text=tag,approved=Individual.objects.get(pk=request.user.username).admin_status)
 						new_tag.save()
 					announce_tag_pair = AnnounceTags(the_announcement=new_announce,the_tag=Tags.objects.get(pk=tag))
 					announce_tag_pair.save()
