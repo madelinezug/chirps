@@ -94,7 +94,7 @@
             {% if latest_announcement_list %}
               {% for announcement in latest_announcement_list %}
 
-              {% if user.admin_status or announcement.approve_status %}
+              {% if announcement.approve_status %}
               <!-- Blog Post -->
                <div class="card mb-4">
                   <div class="card-body">
