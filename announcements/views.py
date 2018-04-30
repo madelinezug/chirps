@@ -199,14 +199,19 @@ def approve_tag(request):
 def submit(request):
 	try:
 		all_tags = get_object_or_404(Tags,approved=True)
-		# user = get_object_or_404(Individual, pk=request.user.username)
 	except:
 		all_tags = []
+
+	if Individual.objects.filter(pk=request.user.username).exists():
+		current_user = Individual.objects.get(pk=request.user.username)
+	else:
+		current_user = None
+
 	if request.method == "POST":
 		if "search" in request.POST:
 			search_key = request.POST["search_key"]
 			return redirect('/announcements/search/' + search_key)
-		else:
+		elif current_user != None:
 			new_announce = Announcement(announce_text=request.POST["announce_text"],announce_title=request.POST["announce_title"], announce_img=request.POST["announce_img"],
 			submit_date=timezone.now(),expire_date=request.POST["expire_date"],approve_status=Individual.objects.get(pk=request.user.username).admin_status,submitter=Individual.objects.get(pk=request.user.username))
 			# new_announce.submit_date = timezone.now()
@@ -215,7 +220,6 @@ def submit(request):
 			new_announce.save()
 
 			# save the tag and associate it with the announcement
-			current_user = Individual.objects.get(pk=request.user.username)
 			submit_tag_list = request.POST['tag_text'].split(",")
 			for tag in submit_tag_list:
 				if len(tag) > 0:
@@ -249,9 +253,9 @@ def submit(request):
 
 
 			return redirect('/announcements/')
-		# else:
-			# form = SubmitAnnounceForm()
-	return render(request, 'announcements/submit.html', {'all_tags':all_tags})
+		else:
+			return redirect('/accounts/login')
+	return render(request, 'announcements/submit.html', {'all_tags':all_tags,'user':current_user})
 
 @login_required
 def saved(request):
