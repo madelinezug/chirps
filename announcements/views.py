@@ -206,15 +206,15 @@ def submit(request):
 						tag.approved = True
 						tag.save()
 
-			# subject = "You submitted a chirp!"
-			# from_email = settings.EMAIL_HOST_USER
-			# to_email = [current_user.email]
-			# with open(settings.BASE_DIR + "/announcements/templates/emails/submit_chirp_email.txt") as f:
-			# 	signup_message = f.read()
-			# message = EmailMultiAlternatives(subject=subject, body=signup_message, from_email=from_email, to=to_email)
-			# html_template = get_template("emails/submit_chirp_email.html").render()
-			# message.attach_alternative(html_template, "text/html")
-			# message.send()
+			subject = "You submitted a chirp!"
+			from_email = settings.EMAIL_HOST_USER
+			to_email = [current_user.email]
+			with open(settings.BASE_DIR + "/announcements/templates/emails/submit_chirp_email.txt") as f:
+				signup_message = f.read()
+			message = EmailMultiAlternatives(subject=subject, body=signup_message, from_email=from_email, to=to_email)
+			html_template = get_template("emails/submit_chirp_email.html").render()
+			message.attach_alternative(html_template, "text/html")
+			message.send()
 
 
 			return redirect('/announcements/')
