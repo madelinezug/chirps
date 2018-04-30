@@ -13,7 +13,6 @@
     <title>Chirps Home</title>
 
     <!-- Bootstrap core CSS -->
-    <!-- <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
     <link href="{% static '/announcements/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
     <!-- bootstrap JS, Popper.js, and jQuery; need for dropdown -->
@@ -97,13 +96,13 @@
 
         <!-- Blog Entries Column -->
           <div class="col-md-6 post-padding-top">
+
             {% if approved_chirps_list %}
               {% for announcement in approved_chirps_list %}
               <!-- Blog Post -->
                <div class="card mb-4">
                   <div class="card-body">
                       <h2 class="card-title">{{ announcement.announce_title }}
-                      <!-- <a href="#" class="btn btn-sm btn-outline-secondary float-right">Save</a> -->
                       </h2>
                       <p class="card-text preview-text">{{announcement.announce_text}}</p>
                       <a href="{% url 'detail' announcement.announce_ID %}" class="btn btn-sm btn-outline-primary">See More &rarr;</a>
@@ -138,7 +137,6 @@
                 <ul class="pagination justify-content-center mb-4">
                   <span class="step-links">
                       {% if approved_chirps_list.has_previous %}
-                          <!-- <a href="?page=1">&laquo; first</a> -->
                           {% if user.admin_status %}
                             <a href="?page={{ approved_chirps_list.previous_page_number }}">&laquo; previous </a>
                           {% else %}
@@ -160,7 +158,6 @@
                         {% else %}
                           <a href="?page={{ approved_chirps_list.next_page_number }}">next &raquo;</a>
                         {% endif %}
-                          <!-- <a href="?page={{ latest_announcement_list.paginator.num_pages }}">last &raquo;</a> -->
                       {% endif %}
                   </span>
                 </ul>
@@ -172,12 +169,6 @@
 
         <!-- Sidebar Widgets Column -->
         <div class="col-md-4">
-
-          {% if user.admin_status %}
-            <div class="card my-4">
-              <button class="btn btn-primary" type="submit">Send Chirps!</button>
-            </div>
-          {% endif %}
 
           <a href="{% url 'submit' %}">
             <div class="card my-4">
