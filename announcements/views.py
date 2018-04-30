@@ -148,7 +148,7 @@ def index(request):
 	approved_chirps_exist = Announcement.objects.filter(approve_status=True).exists()
 	latest_announcement_list = Announcement.objects.filter(expire_date__gte=timezone.now()).order_by('-submit_date')
 	if approved_chirps_exist:
-		approved_chirps_list = Announcements.objects.filter(approve_stats=True)
+		approved_chirps_list = Announcement.objects.filter(approve_status=True)
 	try:
 		user = get_object_or_404(Individual,pk=request.user.username)
 	except:
@@ -274,6 +274,30 @@ def saved(request):
 		'user': user
 	}
 	return render(request, 'announcements/saved_announcements.html', context)
+
+@login_required
+def pending(request):
+	if request.method == "POST":
+		search_key = request.POST["search_key"]
+		return redirect('/announcements/search/' + search_key)
+
+	try:
+		user = get_object_or_404(Individual,pk=request.user.username)
+	except:
+		return redirect('/acccounts/login')
+	pending_announcements_list = None
+	if (Announcement.objects.filter(approve_status=False).exists()):
+		pending_announcements_list = Announcement.objects.filter(approve_status=False, saved_announce__expire_date__gte=timezone.now()).order_by('-submit_date')
+
+		paginator = Paginator(pending_announcements_list, 10)
+		page = request.GET.get('page')
+		pending_announcements_list = paginator.get_page(page)
+
+	context = {
+		'pending_announcements_list': pending_announcements_list,
+		'user': user
+	}
+	return render(request, 'announcements/pending_announcements.html', context)
 
 @login_required
 def my_chirps(request):
