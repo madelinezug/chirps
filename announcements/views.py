@@ -97,11 +97,6 @@ def detail(request, announcement_id):
 				if not tag.approved:
 					tag.approved = True
 					tag.save()
-	# elif ("deny" in request.POST):
-	# 	if(user.admin_status):
-	# 		if (announcement.is_approved()):
-	# 			announcement.approve_status = False
-	# 			announcement.save()
 	elif ("delete" in request.POST):
 		if(announcement.submitter==user or user.admin_status):
 			# remove saved instances
@@ -146,9 +141,8 @@ def detail(request, announcement_id):
 @login_required
 def index(request):
 	approved_chirps_exist = Announcement.objects.filter(approve_status=True).exists()
-	latest_announcement_list = Announcement.objects.filter(expire_date__gte=timezone.now()).order_by('-submit_date')
-	if approved_chirps_exist:
-		approved_chirps_list = Announcement.objects.filter(approve_status=True)
+	approved_chirps_list = Announcement.objects.filter(approve_status=True)
+
 	try:
 		user = get_object_or_404(Individual,pk=request.user.username)
 	except:
@@ -212,11 +206,6 @@ def submit(request):
 			search_key = request.POST["search_key"]
 			return redirect('/announcements/search/' + search_key)
 		else:
-		# ann_form = SubmitAnnounceForm(request.POST)
-		# if ann_form.is_valid() :
-			# save the announcement
-			# new_announce = ann_form.save(commit=False)
-			# new_announce = Announcement(announce_ID=request.POST["announce_ID"],announce_text=request.POST["announce_text"],announce_title=request.POST["announce_title"],
 			new_announce = Announcement(announce_text=request.POST["announce_text"],announce_title=request.POST["announce_title"], announce_img=request.POST["announce_img"],
 			submit_date=timezone.now(),expire_date=request.POST["expire_date"],approve_status=False,submitter=Individual.objects.get(pk=request.user.username))
 			# new_announce.submit_date = timezone.now()
@@ -351,11 +340,11 @@ def search(request, search_key):
 	is_last = Individual.objects.filter(last=search_key).exists()
 
 	if is_first:
-		person = Individual.objects.get(first=search_key)
+		people = Individual.objects.filter(first=search_key)
 	elif is_last:
-		person = Individual.objects.get(last=search_key)
+		people = Individual.objects.filter(last=search_key)
 	else:
-		person = None
+		people = None
 
 
 	# search for tags that match the input
@@ -366,10 +355,12 @@ def search(request, search_key):
 				matching_announce_assocs = list(AnnounceTags.objects.filter(the_tag=search_key).order_by('-the_announcement__submit_date'))
 				for object in matching_announce_assocs:
 					announce_o_i = object.the_announcement
-					if announce_o_i.expired() or (not announce_o_i.approve_status):
-						matching_announce_assocs.remove(AnnounceTags.objects.get(the_announcement=announce_o_i))
-					else:
+					if (not announce_o_i.expired() and announce_o_i.approve_status):
 						matching_announces.append(announce_o_i)
+					# if announce_o_i.expired() or (not announce_o_i.approve_status):
+					# 	matching_announce_assocs.remove(AnnounceTags.objects.get(the_announcement=announce_o_i))
+					# else:
+					# 	matching_announces.append(announce_o_i)
 				if len(matching_announces) == 0:
 					no_match = "No Chirps are currently active with this tag"
 			else:
@@ -379,13 +370,15 @@ def search(request, search_key):
 
 	# search for users which match the input
 	elif (is_first or is_last):
-		if (Announcement.objects.filter(submitter=person).exists()):
-			matching_announces = list(Announcement.objects.filter(submitter=person).order_by('-submit_date'))
-			for announce_o_i in matching_announces:
-				if announce_o_i.expired() or (not announce_o_i.approve_status):
-					matching_announces.remove(Announcement.objects.get(pk=announce_o_i.announce_ID))
-			if len(matching_announces) == 0:
-				no_match = "No Chirps submitted by this user are currently active"
+		if (len(list(people)) > 1):
+			for person in people:
+				if (Announcement.objects.filter(submitter=person).exists()):
+					matching_announces.extend(Announcement.objects.filter(submitter=person).order_by('-submit_date'))
+					for announce_o_i in matching_announces:
+						if announce_o_i.expired() or (not announce_o_i.approve_status):
+							matching_announces.remove(Announcement.objects.get(pk=announce_o_i.announce_ID))
+					if len(matching_announces) == 0:
+						no_match = "No Chirps submitted by this user are currently active"
 	else:
 		no_match = "No tags or individuals match your search"
 
