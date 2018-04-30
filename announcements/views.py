@@ -20,9 +20,7 @@ from django.conf import settings
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-# include forms
-from .forms import SubmitAnnounceForm
-from .forms import SaveAnnounceForm
+
 
 # Register your models here.
 from .models import Individual
@@ -61,14 +59,13 @@ def detail(request, announcement_id):
 	try:
 		announcement = get_object_or_404(Announcement,pk=announcement_id)
 	except:
-		return render(request,'error.html',{'error':"No announcement with this ID number"})
+		return render(request,'announcements/error.html',{'error':"No announcement with this ID number"})
 	try:
 		user = get_object_or_404(Individual,pk=request.user.username)
 	except:
 		return redirect('/accounts/login')
-	form = SaveAnnounceForm(request.POST)
-	saved_announcement = ""
-	save_announcements_list = Save.objects.all()
+
+	# get the announcement tags
 	announce_tags = AnnounceTags.objects.filter(the_announcement=announcement)
 	num_tags = len(announce_tags)
 
@@ -82,6 +79,7 @@ def detail(request, announcement_id):
 			if (~announcement.is_approved()):
 				announcement.approve_status = True
 				announcement.save()
+
 				subject = "Your chirp was approved!"
 				from_email = settings.EMAIL_HOST_USER
 				to_email = [user.email]
@@ -91,6 +89,7 @@ def detail(request, announcement_id):
 				html_template = get_template("emails/approved_chirp_email.html").render()
 				message.attach_alternative(html_template, "text/html")
 				message.send()
+
 			tags_for_this_announce = announcement.get_tags()
 			for tag_assoc in tags_for_this_announce:
 				tag = tag_assoc.the_tag
@@ -131,7 +130,6 @@ def detail(request, announcement_id):
 		return redirect('/announcements/search/' + search_key)
 	context = {
 		'announcement': announcement,
-		'save_announcements_list': save_announcements_list,
 		'announce_tags':announce_tags,
 		'num_tags':num_tags,
 		'already_saved':already_saved,
@@ -141,8 +139,9 @@ def detail(request, announcement_id):
 
 @login_required
 def index(request):
-	approved_chirps_exist = Announcement.objects.filter(approve_status=True).exists()
-	approved_chirps_list = Announcement.objects.filter(approve_status=True)
+	if Announcement.objects.filter(approve_status=True).exists():
+		approved_chirps_list = Announcement.objects.filter(approve_status=True)
+
 
 	try:
 		user = get_object_or_404(Individual,pk=request.user.username)
@@ -161,39 +160,8 @@ def index(request):
 	context = {
 		'approved_chirps_list': approved_chirps_list,
 		'user':user,
-		'approval':approved_chirps_exist,
 	}
 	return render(request,'announcements/index.html',context)
-
-@login_required
-def approve_tag(request):
-	unapproved_tags = Tags.objects.filter(approved=False)
-	num_unapproved = len(unapproved_tags)
-	tags_to_approve = None
-	if request.method == "POST":
-		tags_selected = request.POST.getlist('checks')
-		if len(tags_selected) > 0:
-			for tag in tags_selected:
-				try:
-					sel_tag = get_object_or_404(Tags,pk=tag)
-				except:
-					return render(request,'error.html',{'error':"One of your selected tags does not exist"})
-				if "approve" in request.POST:
-					sel_tag.approved = True
-					sel_tag.save()
-				elif "delete" in request.POST:
-					# delete associations with chirps using this tag
-					if AnnounceTags.objects.filter(the_tag=sel_tag).exists():
-						announce_assocs = AnnounceTags.objects.filter(the_tag=sel_tag)
-						for assoc in announce_assocs:
-							assoc.delete()
-					sel_tag.delete()
-			return redirect('/announcements/review_tags')
-	context = {
-		'unapproved_tags': unapproved_tags,
-		'num_unapproved': num_unapproved
-	}
-	return render(request,'announcements/review_tags.html',context)
 
 @login_required
 def submit(request):
@@ -205,18 +173,15 @@ def submit(request):
 	if Individual.objects.filter(pk=request.user.username).exists():
 		current_user = Individual.objects.get(pk=request.user.username)
 	else:
-		current_user = None
+		return redirect('/accounts/login')
 
 	if request.method == "POST":
 		if "search" in request.POST:
 			search_key = request.POST["search_key"]
 			return redirect('/announcements/search/' + search_key)
-		elif current_user != None:
+		else:
 			new_announce = Announcement(announce_text=request.POST["announce_text"],announce_title=request.POST["announce_title"], announce_img=request.POST["announce_img"],
 			submit_date=timezone.now(),expire_date=request.POST["expire_date"],approve_status=Individual.objects.get(pk=request.user.username).admin_status,submitter=Individual.objects.get(pk=request.user.username))
-			# new_announce.submit_date = timezone.now()
-			# new_announce.approve_status = False
-			# new_announce.submitter = Individual.objects.get(pk=request.user.username)
 			new_announce.save()
 
 			# save the tag and associate it with the announcement
@@ -253,8 +218,6 @@ def submit(request):
 
 
 			return redirect('/announcements/')
-		else:
-			return redirect('/accounts/login')
 	return render(request, 'announcements/submit.html', {'all_tags':all_tags,'user':current_user})
 
 @login_required
@@ -362,10 +325,6 @@ def search(request, search_key):
 					announce_o_i = object.the_announcement
 					if (not announce_o_i.expired() and announce_o_i.approve_status):
 						matching_announces.append(announce_o_i)
-					# if announce_o_i.expired() or (not announce_o_i.approve_status):
-					# 	matching_announce_assocs.remove(AnnounceTags.objects.get(the_announcement=announce_o_i))
-					# else:
-					# 	matching_announces.append(announce_o_i)
 				if len(matching_announces) == 0:
 					no_match = "No Chirps are currently active with this tag"
 			else:
