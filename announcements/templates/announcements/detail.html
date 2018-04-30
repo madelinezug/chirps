@@ -97,8 +97,8 @@
 
               <form method="post"/>
               <!-- Title -->
-              {% if announcement.approve_status %}
               <h1 class="mt-4">{{ announcement.announce_title }}
+              {% if announcement.approve_status %}
                 {% if already_saved %}
                   <input type="submit" class="btn btn-md btn-outline-primary float-right" value="Unsave" name="unsave"/>
                 {% else %}
@@ -140,10 +140,11 @@
                     <li>Not approved</li> <br>
                 {% endif %}
 
+                {% if user.admin_status %}
+                  <input type="submit" value="Approve" name ="approve"/>
 
-                <input type="submit" value="Approve" name ="approve"/>
-
-                <input type="submit" value="Delete" name="delete"/>
+                  <input type="submit" value="Delete" name="delete"/>
+                {% endif %}
 
                 {{ worked }}
                 {{saved_announcement}}

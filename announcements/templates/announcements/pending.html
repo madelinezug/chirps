@@ -81,7 +81,7 @@
         <!-- Blog Entries Column -->
         <div class="col-md-6 post-padding-top">
 
-         {% if pending_announcements_list != None %}
+         {% if pending_announcements_list %}
            {% for pending in pending_announcements_list %}
            <!-- Blog Post -->
            <div class="card mb-4 ">
@@ -154,18 +154,6 @@
           </div>
         </a>
 
-          <!-- Search Widget -->
-          <div class="card my-4">
-            <h5 class="card-header">Search</h5>
-            <div class="card-body">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for...">
-                <span class="input-group-btn">
-                  <button class="btn btn-secondary" type="button">Go!</button>
-                </span>
-              </div>
-            </div>
-          </div>
 
           <!-- Categories Widget -->
           <div class="card my-4">
