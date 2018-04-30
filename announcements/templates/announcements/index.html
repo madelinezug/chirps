@@ -86,9 +86,6 @@
 
         <!-- Blog Entries Column -->
           <div class="col-md-6 post-padding-top">
-            {% if not approval %}
-              <p> No Chirps to see! </p>
-            {% endif %}
 
             {% if approved_chirps_list %}
               {% for announcement in approved_chirps_list %}
