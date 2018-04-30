@@ -86,15 +86,14 @@
 
         <!-- Blog Entries Column -->
           <div class="col-md-6 post-padding-top">
-            {% if approval and user.admin_status%}
-            {% else %}
+            {% if not approval %}
               <p> No Chirps to see! </p>
             {% endif %}
 
-            {% if latest_announcement_list %}
-              {% for announcement in latest_announcement_list %}
+            {% if approved_chirps_list %}
+              {% for announcement in approved_chirps_list %}
 
-              {% if announcement.approve_status %}
+
               <!-- Blog Post -->
                <div class="card mb-4">
                   <div class="card-body">
@@ -129,7 +128,6 @@
                       {{ announcement.submitter.first }} {{ announcement.submitter.last }}
                     </div>
                   </div>
-                  {% endif %}
                 {% endfor %}
 
                 <ul class="pagination justify-content-center mb-4">
