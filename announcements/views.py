@@ -187,7 +187,7 @@ def submit(request):
 			# save the tag and associate it with the announcement
 			submit_tag_list = request.POST['tag_text'].split(",")
 			for tag in submit_tag_list:
-				if len(tag) > 0:
+				if len(tag) > 0 and len(tag) < 40:
 					tag = tag.strip()
 					tag = tag.lower()
 					if not Tags.objects.filter(pk=tag).exists():
@@ -299,6 +299,11 @@ def search(request, search_key):
 		search_key = request.POST["search_key"]
 		return redirect('/announcements/search/' + search_key)
 
+	try:
+		user = get_object_or_404(Individual,pk=request.user.username)
+	except:
+		return redirect('/acccounts/login')
+
 	no_match = ""
 	matching_announces = []
 	search_key = search_key.strip()
@@ -353,5 +358,6 @@ def search(request, search_key):
 	context = {
 		'no_match': no_match,
 		'matching_announces':matching_announces,
+		'user':user,
 	}
 	return render(request, 'announcements/search.html',context)
