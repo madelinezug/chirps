@@ -41,15 +41,19 @@ def sign_up(request):
 	if request.method == "POST":
 		if (request.POST['password'] == request.POST['redo_password']):
 			admin_stat = len(request.POST.getlist('admin')) > 0
-			new_individual = Individual(email=request.POST['email'],password =request.POST['password'],first=request.POST['first'],last=request.POST['last'],admin_status=admin_stat)
-			new_individual.save()
-			user = User.objects.create_user(request.POST['email'],request.POST['email'],
-				request.POST['password'])
-			user.first_name = request.POST['first']
-			user.last_name = request.POST['last']
-			user.admin_status = admin_stat
-			user.save()
-			return redirect('/accounts/login')
+			email = request.POST['email']
+			if User.objects.filter(email=email):
+				no_match = "This email is already in use. Please try again."
+			else:
+				new_individual = Individual(email=request.POST['email'],password =request.POST['password'],first=request.POST['first'],last=request.POST['last'],admin_status=admin_stat)
+				new_individual.save()
+				user = User.objects.create_user(request.POST['email'],request.POST['email'],
+					request.POST['password'])
+				user.first_name = request.POST['first']
+				user.last_name = request.POST['last']
+				user.admin_status = admin_stat
+				user.save()
+				return redirect('/accounts/login')
 		else:
 			no_match = "Passwords did not match. Please try again."
 
