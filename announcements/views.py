@@ -20,6 +20,8 @@ from django.conf import settings
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from django.db.models import Q
+
 
 
 # Register your models here.
@@ -69,7 +71,7 @@ def detail(request, announcement_id):
 	announce_tags = AnnounceTags.objects.filter(the_announcement=announcement)
 	num_tags = len(announce_tags)
 
-	if Save.objects.filter(saver=user).exists():
+	if Save.objects.filter(saver=user,saved_announce=announcement).exists():
 		already_saved = True
 	else:
 		already_saved = False
@@ -139,9 +141,7 @@ def detail(request, announcement_id):
 
 @login_required
 def index(request):
-	if Announcement.objects.filter(approve_status=True).exists():
-		approved_chirps_list = Announcement.objects.filter(approve_status=True)
-
+	approved_chirps_list = Announcement.objects.filter(approve_status=True, expire_date__gte=timezone.now()).order_by('-submit_date')
 
 	try:
 		user = get_object_or_404(Individual,pk=request.user.username)
@@ -152,10 +152,11 @@ def index(request):
 		search_key = request.POST["search_key"]
 		return redirect('/announcements/search/' + search_key)
 
-	#paginator
-	paginator = Paginator(approved_chirps_list, 10)
-	page = request.GET.get('page')
-	approved_chirps_list = paginator.get_page(page)
+	if approved_chirps_list:
+		#paginator
+		paginator = Paginator(approved_chirps_list, 10)
+		page = request.GET.get('page')
+		approved_chirps_list = paginator.get_page(page)
 
 	context = {
 		'approved_chirps_list': approved_chirps_list,
@@ -231,7 +232,7 @@ def saved(request):
 	except:
 		return redirect('/acccounts/login')
 	saved_announcements_list = None
-	if (Save.objects.filter(saver=user).exists()):
+	if (Save.objects.filter(saver=user, saved_announce__expire_date__gte=timezone.now()).exists()):
 		saved_announcements_list = Save.objects.filter(saver=user, saved_announce__expire_date__gte=timezone.now()).order_by('-saved_announce__submit_date')
 
 		paginator = Paginator(saved_announcements_list, 10)
@@ -255,7 +256,7 @@ def pending(request):
 	except:
 		return redirect('/acccounts/login')
 	pending_announcements_list = None
-	if (Announcement.objects.filter(approve_status=False).exists()):
+	if (Announcement.objects.filter(approve_status=False, expire_date__gte=timezone.now()).exists()):
 		pending_announcements_list = Announcement.objects.filter(approve_status=False, expire_date__gte=timezone.now()).order_by('-submit_date')
 
 		paginator = Paginator(pending_announcements_list, 10)
@@ -280,7 +281,7 @@ def my_chirps(request):
 		return redirect('/acccounts/login')
 	my_chirps_announcements_list = None
 
-	if (Announcement.objects.filter(submitter=user).exists()):
+	if (Announcement.objects.filter(submitter=user, expire_date__gte=timezone.now()).exists()):
 		my_chirps_announcements_list = Announcement.objects.filter(submitter=user, expire_date__gte=timezone.now()).order_by('-submit_date')
 
 		paginator = Paginator(my_chirps_announcements_list, 10)
@@ -309,13 +310,12 @@ def search(request, search_key):
 	search_key = search_key.strip()
 	search_key = search_key.lower()
 
-	is_first = Individual.objects.filter(first=search_key).exists()
-	is_last = Individual.objects.filter(last=search_key).exists()
+	is_person = Individual.objects.filter(Q(first=search_key) | Q(last=search_key)).exists()
+	# is_last = Individual.objects.filter(last=search_key).exists()
 
-	if is_first:
-		people = Individual.objects.filter(first=search_key)
-	elif is_last:
-		people = Individual.objects.filter(last=search_key)
+	if is_person:
+		people = Individual.objects.filter(Q(first=search_key) | Q(last=search_key))
+		print(people)
 	else:
 		people = None
 
@@ -338,16 +338,14 @@ def search(request, search_key):
 			no_match = "You may only search using approved tags"
 
 	# search for users which match the input
-	elif (is_first or is_last):
-		if (len(list(people)) > 1):
+	elif (is_person):
+		if (len(list(people)) >= 1):
 			for person in people:
-				if (Announcement.objects.filter(submitter=person).exists()):
-					matching_announces.extend(Announcement.objects.filter(submitter=person).order_by('-submit_date'))
-					for announce_o_i in matching_announces:
-						if announce_o_i.expired() or (not announce_o_i.approve_status):
-							matching_announces.remove(Announcement.objects.get(pk=announce_o_i.announce_ID))
-					if len(matching_announces) == 0:
-						no_match = "No Chirps submitted by this user are currently active"
+				if (Announcement.objects.filter(submitter=person, approve_status=True, expire_date__gte=timezone.now()).exists()):
+					matching_announces.extend(Announcement.objects.filter(submitter=person, approve_status=True, expire_date__gte=timezone.now()).order_by('-submit_date'))
+				matching_announces.sort(key=lambda x: x.submit_date, reverse=True)
+				if len(matching_announces) == 0:
+					no_match = "No active chirps found by users of this name"
 	else:
 		no_match = "No tags or individuals match your search"
 

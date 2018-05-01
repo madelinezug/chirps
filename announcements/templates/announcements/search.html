@@ -74,7 +74,7 @@
                   Home <span class="sr-only">(current)</span>
                 </a>
               </li>
-              
+
               {% if user.admin_status %}
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'pending' %}">
@@ -101,25 +101,13 @@
         </nav>
 
         <!-- Blog Entries Column -->
-        <div class="col-md-6 post-padding-top">
+        <div class="col-md-6">
 
-          <!-- <h1 class="my-4">Page Heading
-            <small>Secondary Text</small>
-          </h1> -->
+          <h1 class="my-4 font-default"> Search Results </h1>
 
-          <!-- sort by button, checkbox -->
-          <!-- <div class="row">
-
-              <div class="form-check homepg-bar">
-                <input type="checkbox" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Favorite Tags Only</label>
-              </div>
-
-          </div> -->
           <p>{{ no_match }}</p>
           {% if matching_announces %}
             {% for match in matching_announces %}
-            <!-- {% if match.approve_status %} -->
             <!-- Blog Post -->
             <div class="card mb-4">
               <div class="card-body">
@@ -153,7 +141,6 @@
               {{ match.submitter.first }} {{ match.submitter.last}}
               </div>
             </div>
-            <!-- {% endif %} -->
             {% endfor %}
 
             <ul class="pagination justify-content-center mb-4">
