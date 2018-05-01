@@ -45,9 +45,9 @@ def sign_up(request):
 			if User.objects.filter(email=email):
 				no_match = "This email is already in use. Please try again."
 			else:
-				new_individual = Individual(email=request.POST['email'],password =request.POST['password'],first=request.POST['first'],last=request.POST['last'],admin_status=admin_stat)
+				new_individual = Individual(email=email,password =request.POST['password'],first=request.POST['first'],last=request.POST['last'],admin_status=admin_stat)
 				new_individual.save()
-				user = User.objects.create_user(request.POST['email'],request.POST['email'],
+				user = User.objects.create_user(email, email,
 					request.POST['password'])
 				user.first_name = request.POST['first']
 				user.last_name = request.POST['last']
@@ -316,32 +316,43 @@ def search(request, search_key):
 	search_key = search_key.lower()
 
 	is_person = Individual.objects.filter(Q(first=search_key) | Q(last=search_key)).exists()
-	# is_last = Individual.objects.filter(last=search_key).exists()
 
 	if is_person:
 		people = Individual.objects.filter(Q(first=search_key) | Q(last=search_key))
 	else:
 		people = None
 
+	# both user and tags match input
+	if (Tags.objects.filter(pk=search_key, approved=True).exists() and is_person):
+		# first add people
+		if (len(list(people)) >= 1):
+			for person in people:
+				if (Announcement.objects.filter(submitter=person, approve_status=True, expire_date__gte=timezone.now()).exists()):
+					matching_announces.extend(Announcement.objects.filter(submitter=person, approve_status=True, expire_date__gte=timezone.now()).order_by('-submit_date'))
 
-	# search for tags that match the input
-	if (Tags.objects.filter(pk=search_key).exists()):
-		tag = Tags.objects.get(pk=search_key)
-		if (tag.approved):
-			if (AnnounceTags.objects.filter(the_tag=search_key).exists()):
-				matching_announce_assocs = list(AnnounceTags.objects.filter(the_tag=search_key).order_by('-the_announcement__submit_date'))
-				for object in matching_announce_assocs:
-					announce_o_i = object.the_announcement
-					if (not announce_o_i.expired() and announce_o_i.approve_status):
-						matching_announces.append(announce_o_i)
-				if len(matching_announces) == 0:
-					no_match = "No Chirps are currently active with this tag"
-			else:
-				no_match = "No Chirps have used this tag"
+	    # add matching tags
+		tag = Tags.objects.get(pk=search_key, approved= True)
+		if (AnnounceTags.objects.filter(the_tag=search_key, the_announcement__approve_status=True, the_announcement__expire_date__gte=timezone.now()).exists()):
+			matching_announce_assocs = list(AnnounceTags.objects.filter(the_tag=search_key, the_announcement__approve_status=True, the_announcement__expire_date__gte=timezone.now()).order_by('-the_announcement__submit_date'))
+			for object in matching_announce_assocs:
+				if (object.the_announcement not in matching_announces):
+					matching_announces.append(object.the_announcement)
+		#sort by date
+		matching_announces.sort(key=lambda x: x.submit_date, reverse=True)
+
+	# only tags exist for matching input
+	elif (Tags.objects.filter(pk=search_key, approved=True).exists()):
+		tag = Tags.objects.get(pk=search_key, approved= True)
+		if (AnnounceTags.objects.filter(the_tag=search_key, the_announcement__approve_status=True, the_announcement__expire_date__gte=timezone.now()).exists()):
+			matching_announce_assocs = list(AnnounceTags.objects.filter(the_tag=search_key, the_announcement__approve_status=True, the_announcement__expire_date__gte=timezone.now()).order_by('-the_announcement__submit_date'))
+			for object in matching_announce_assocs:
+				matching_announces.append(object.the_announcement)
+			if len(matching_announces) == 0:
+				no_match = "No Chirps are currently active with this tag"
 		else:
-			no_match = "You may only search using approved tags"
+			no_match = "No Chirps are currently active with this tag"
 
-	# search for users which match the input
+	# only users exist for matching input
 	elif (is_person):
 		if (len(list(people)) >= 1):
 			for person in people:
