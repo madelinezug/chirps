@@ -95,7 +95,7 @@
               <form method="post"/>
               <!-- Title -->
               <h1 class="mt-4">{{ announcement.announce_title }}
-              {% if announcement.approve_status %}
+              {% if announcement.approve_status and not user.admin_status %}
                 {% if already_saved %}
                   <input type="submit" class="btn btn-md btn-outline-primary float-right" value="Unsave" name="unsave"/>
                 {% else %}
