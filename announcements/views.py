@@ -84,7 +84,7 @@ def detail(request, announcement_id):
 
 				subject = "Your chirp was approved!"
 				from_email = settings.EMAIL_HOST_USER
-				to_email = [user.email]
+				to_email = [announcement.submitter.email]
 				with open(settings.BASE_DIR + "/announcements/templates/emails/approved_chirp_email.txt") as f:
 					signup_message = f.read()
 				message = EmailMultiAlternatives(subject=subject, body=signup_message, from_email=from_email, to=to_email)
@@ -194,8 +194,9 @@ def submit(request):
 					if not Tags.objects.filter(pk=tag).exists():
 						new_tag = Tags(tag_text=tag,approved=Individual.objects.get(pk=request.user.username).admin_status)
 						new_tag.save()
-					announce_tag_pair = AnnounceTags(the_announcement=new_announce,the_tag=Tags.objects.get(pk=tag))
-					announce_tag_pair.save()
+					if not AnnounceTags.objects.filter(the_announcement=new_announce,the_tag=Tags.objects.get(pk=tag)).exists():
+						announce_tag_pair = AnnounceTags(the_announcement=new_announce,the_tag=Tags.objects.get(pk=tag))
+						announce_tag_pair.save()
 
 			if(current_user.admin_status):
 				new_announce.approve_status = True
@@ -206,16 +207,16 @@ def submit(request):
 					if not tag.approved:
 						tag.approved = True
 						tag.save()
-
-			subject = "You submitted a chirp!"
-			from_email = settings.EMAIL_HOST_USER
-			to_email = [current_user.email]
-			with open(settings.BASE_DIR + "/announcements/templates/emails/submit_chirp_email.txt") as f:
-				signup_message = f.read()
-			message = EmailMultiAlternatives(subject=subject, body=signup_message, from_email=from_email, to=to_email)
-			html_template = get_template("emails/submit_chirp_email.html").render()
-			message.attach_alternative(html_template, "text/html")
-			message.send()
+			else:
+				subject = "You submitted a chirp!"
+				from_email = settings.EMAIL_HOST_USER
+				to_email = [current_user.email]
+				with open(settings.BASE_DIR + "/announcements/templates/emails/submit_chirp_email.txt") as f:
+					signup_message = f.read()
+				message = EmailMultiAlternatives(subject=subject, body=signup_message, from_email=from_email, to=to_email)
+				html_template = get_template("emails/submit_chirp_email.html").render()
+				message.attach_alternative(html_template, "text/html")
+				message.send()
 
 
 			return redirect('/announcements/')
@@ -315,7 +316,6 @@ def search(request, search_key):
 
 	if is_person:
 		people = Individual.objects.filter(Q(first=search_key) | Q(last=search_key))
-		print(people)
 	else:
 		people = None
 
