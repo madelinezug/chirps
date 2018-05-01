@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Saved Chirps</title>
+    <title>Saved Posts</title>
 
     <!-- Bootstrap core CSS -->
     <!-- <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
@@ -72,7 +72,7 @@
                   Home <span class="sr-only">(current)</span>
                 </a>
               </li>
-              
+
               {% if user.admin_status %}
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'pending' %}">
@@ -170,8 +170,6 @@
             </div>
           </a>
 
-
-
           <!-- Categories Widget -->
           <div class="card my-4">
             <h5 class="card-header">Tags</h5>
@@ -180,26 +178,26 @@
                 <div class="col-lg-6">
                   <ul class="list-unstyled mb-0">
                     <li>
-                      <a href="#">Lost and Found</a>
+                      <a href="http://127.0.0.1:8000/announcements/search/Lost%20and%20Found">Lost and Found</a>
                     </li>
                     <li>
-                      <a href="#">Sports</a>
+                      <a href="http://127.0.0.1:8000/announcements/search/Sports">Sports</a>
                     </li>
                     <li>
-                      <a href="#">Food</a>
+                      <a href="http://127.0.0.1:8000/announcements/search/Food">Food</a>
                     </li>
                   </ul>
                 </div>
                 <div class="col-lg-6">
                   <ul class="list-unstyled mb-0">
                     <li>
-                      <a href="#">Parties</a>
+                      <a href="http://127.0.0.1:8000/announcements/search/Parties">Parties</a>
                     </li>
                     <li>
-                      <a href="#">For Sale</a>
+                      <a href="http://127.0.0.1:8000/announcements/search/For%20Sale">For Sale</a>
                     </li>
                     <li>
-                      <a href="#">Campus Safety</a>
+                      <a href="http://127.0.0.1:8000/announcements/search/Campus%20Safety">Campus Safety</a>
                     </li>
                   </ul>
                 </div>
