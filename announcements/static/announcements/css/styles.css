@@ -43,7 +43,7 @@ body {
 }
 
 .preview-text {
-     width: 475px;
+     width: 35vw;
      white-space: nowrap;
      overflow: hidden;
      text-overflow: ellipsis;
