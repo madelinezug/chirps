@@ -1,0 +1,157 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Edit your Chirp</title>
+
+    <!-- Bootstrap core CSS -->
+    <!-- <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="{% static 'announcements/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- angularJS and jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+      <link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
+    <script src="{% static 'announcements/js/app.js' %}"></script>
+
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'announcements/css/submit.css' %}" rel="stylesheet">
+    <link href="{% static 'announcements/css/styles.css' %}" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-chirp">
+      <div class="container">
+        <a class="navbar-brand navbar-text" href="{% url 'index' %}">Chirps!</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <form class="form-inline my-2 my-lg-0" method="post">
+              {% csrf_token %}
+              <input class="form-control mr-sm-2" type="text" name = "search_key" placeholder="Search..." required>
+              <input class="btn btn-outline-success my-2 my-sm-0" name = "search" value = "Search" type="submit">
+            </form>
+            <!-- <li class="nav-item active">
+              <a class="nav-link" href="#">Settings
+                <span class="sr-only">(current)</span>
+              </a>
+            </li> -->
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'logout'%}">Log Out</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <div class="row">
+
+      <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link active" href="{% url 'index' %}">
+                  <span data-feather="home"></span>
+                  Home <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              {% if user.admin_status %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'pending' %}">
+                    <span data-feather="pending"></span>
+                     Pending Posts
+                  </a>
+                </li>
+
+               {% else %}
+                 <li class="nav-item">
+                   <a class="nav-link" href="{% url 'my_chirps' %}">
+                     <span data-feather="my_chirps"></span>
+                     My Chirps
+                   </a>
+                 </li>
+                 <li class="nav-item">
+                   <a class="nav-link" href="{% url 'saved' %}">
+                     <span data-feather="saved_chirps"></span>
+                     Saved Chirps
+                   </a>
+                 </li>
+              {% endif %}
+          </div>
+        </nav>
+
+        <!--submission column-->
+        <!-- <div class="col-md-6 main-wrapper"> -->
+
+            <div class="col-md-7 main-wrapper">
+
+              <form method="post" class = "form-group">
+                {% csrf_token %}
+
+              <h1 class="my-4 font-default title-margin">Edit your Chirp</h1>
+              <div class="form-group text-center">
+                <div class="col form-padding">
+                  <input type="text" class="form-control"  id="announce_title" name="announce_title" value="{{ title }}" maxlength="30" required>
+                </div>
+                <div class="col">
+                    <textarea class="form-control" name="announce_text" id="exampleFormControlTextarea1" rows="6" required>{{ text }}</textarea>
+                </div>
+              </div>
+
+               <hr>
+
+              <div class="title-margin">
+                <input class="form-control" type="text" name="tag_text" value="{{ tag_list }}"/>
+                <input type="text" class="form-control" style="margin-top:15px" id="announce_img" name="announce_img" maxlength="200" value = "{{ image }}"><br>
+                Desired Expiration Date: <input class="form-control" type="date" name="expire_date" value = "{{ expire }}" required/><br>
+              </div>
+
+                <!-- Adding Tags -->
+                 <!-- <div class="container" ng-app="myApp" ng-controller="tagsCtrl">
+                    <h6>Tags</h6> {{ all_tags }}
+                    <tag-manager tags="tags" autocomplete="allTags"></tag-manager>
+                  </div> -->
+
+                  <input type="submit" value="Submit" class="btn btn-primary float-right"/>
+                </form>
+              </div>
+
+              <!-- Sidebar Widgets Column -->
+              <!-- <div class="col-md-4">
+                <input type="submit" value="Submit" class="btn btn-primary btn-sm btn-block"/>
+              </div> -->
+
+      </div>
+      <!-- /.row -->
+
+    </div>
+  </div>
+</div>
+
+
+<!--     Bootstrap core JavaScript
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script> -->
+
+   </body>
+
+</html>

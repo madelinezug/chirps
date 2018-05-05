@@ -374,3 +374,101 @@ def search(request, search_key):
 		'user':user,
 	}
 	return render(request, 'announcements/search.html',context)
+
+def edit(request, announcement_id):
+	try:
+		announcement = get_object_or_404(Announcement,pk=announcement_id)
+	except:
+		return render(request,'announcements/error.html',{'error':"No announcement with this ID number"})
+	title = announcement.announce_title
+	text = announcement.announce_text
+	assoc_tags = AnnounceTags.objects.filter(the_announcement=announcement)
+	old_tags=[]
+	for assoc in assoc_tags:
+		old_tags.append(str(assoc.the_tag))
+
+
+	# get old inputs
+	month = str(announcement.expire_date.month)
+	if len(month) == 1:
+		month = "0" + month
+	day = str(announcement.expire_date.day)
+	if len(day) == 1:
+		day = "0" + day
+	year = str(announcement.expire_date.year)
+	expire = year + "-" + month + "-" + day
+	image = announcement.announce_img
+	tag_list = ""
+	for tag in old_tags:
+		tag_list = tag_list + tag + ", "
+	tag_list = tag_list[:-2]
+
+	try:
+		all_tags = get_object_or_404(Tags,approved=True)
+	except:
+		all_tags = []
+
+	if Individual.objects.filter(pk=request.user.username).exists():
+		current_user = Individual.objects.get(pk=request.user.username)
+	else:
+		return redirect('/accounts/login')
+
+	if request.method == "POST":
+		if "search" in request.POST:
+			search_key = request.POST["search_key"]
+			return redirect('/announcements/search/' + search_key)
+		else:
+			# update the announcement
+			announcement.announce_text = request.POST["announce_text"]
+			announcement.announce_title = request.POST["announce_title"]
+			announcement.announce_img = request.POST["announce_img"]
+			announcement.expire_date=request.POST["expire_date"]
+			announcement.save()
+
+			# save the tag and associate it with the announcement
+			submit_tag_list = request.POST['tag_text'].split(",")
+			new_tags = []
+			remove_tags = old_tags
+			print("submitted tags:")
+			for tag in submit_tag_list:
+				if len(tag) > 0 and len(tag) < 40:
+					tag = tag.strip()
+					tag = tag.lower()
+					new_tags.append(tag)
+					print(str(tag))
+					# if len(old_tags) > 0:
+					# 	if tag in old_tags:
+					# 		print("removed " + str(tag))
+					# 		remove_tags.remove(tag)
+					if not Tags.objects.filter(pk=tag).exists():
+						new_tag = Tags(tag_text=tag,approved=Individual.objects.get(pk=request.user.username).admin_status)
+						new_tag.save()
+					if not AnnounceTags.objects.filter(the_announcement=announcement,the_tag=Tags.objects.get(pk=tag)).exists():
+						announce_tag_pair = AnnounceTags(the_announcement=announcement,the_tag=Tags.objects.get(pk=tag))
+						announce_tag_pair.save()
+
+			remove_tags = set(old_tags).difference(set(new_tags))
+			print("old tags:")
+			for tag in old_tags:
+				print(str(tag))
+			print("remove tags:")
+			for tag in remove_tags:
+				print(str(tag))
+
+			for tag in remove_tags:
+				if AnnounceTags.objects.filter(the_announcement=announcement,the_tag=Tags.objects.get(pk=tag)).exists():
+					old_assoc = AnnounceTags.objects.get(the_announcement=announcement,the_tag=Tags.objects.get(pk=tag))
+					old_assoc.delete()
+
+
+			return redirect('/announcements/')
+	context = {
+		'title': title,
+		'text': text,
+		'tag_list': tag_list,
+		'expire': expire,
+		'image': image,
+		'all_tags':all_tags,
+		'user':current_user
+	}
+	return render(request,'announcements/edit.html',context)
