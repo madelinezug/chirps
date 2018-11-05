@@ -81,8 +81,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'chirps',
-        'USER': 'root',
-        'PASSWORD':'chirpchirp',
+        'USER': 'maddiezug',
+        'PASSWORD':'chirp47',
         'HOST': '',
         'PORT': ''
     }
@@ -104,6 +104,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+    {
+        'NAME': 'chirps.validators.CustomValidator.CustomValidator',
     },
 ]
 
