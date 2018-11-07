@@ -47,20 +47,13 @@ https://docs.djangoproject.com/en/2.0/ref/databases/#mysql-notes
 
 You’ll have to set up your own username and password. Keep track of it :) 
 
-Mine are:
-Root User
-Password: chirpchirp
-
-Username: maddiezug
-Password: chirp47
-
 In your project directory navigate to chirps/chirps/settings and replace this:
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'chirps',
-        'USER': 'maddiezug',
-        'PASSWORD':'chirp47',
+        'USER': '',
+        'PASSWORD':'',
         'HOST': '',
         'PORT': ''
     }
@@ -77,7 +70,5 @@ To see the website make sure your virtual environment is activated and use this 
 
 And navigate to this url: http://127.0.0.1:8000/accounts/login/
 
-Login info:
-Username: chirps47@gmail.com
-Password: chirpchirp
+
 
