@@ -22,6 +22,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django.db.models import Q
 
+from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.password_validation import ValidationError
+
 
 
 # Register your models here.
@@ -45,15 +48,22 @@ def sign_up(request):
 			if User.objects.filter(email=email):
 				no_match = "This email is already in use. Please try again."
 			else:
+
 				new_individual = Individual(email=email,password =request.POST['password'],first=request.POST['first'],last=request.POST['last'],admin_status=admin_stat)
-				new_individual.save()
 				user = User.objects.create_user(email, email,
 					request.POST['password'])
 				user.first_name = request.POST['first']
 				user.last_name = request.POST['last']
 				user.admin_status = admin_stat
-				user.save()
-				return redirect('/accounts/login')
+
+				password = request.POST['password']
+				try:
+					validation_result = validate_password(password, user=user, password_validators=None)
+					new_individual.save()
+					user.save()
+					return redirect('/accounts/login')
+				except ValidationError as e:
+					no_match = ''.join(e)
 		else:
 			no_match = "Passwords did not match. Please try again."
 
