@@ -75,12 +75,7 @@
                           Pending Posts
                        </a>
                      </li>
-                     <li class="nav-item">
-                       <a class="nav-link" href="{% url 'email_digest' %}">
-                         <span data-feather="email_digest"></span>
-                          Email Digest
-                       </a>
-                     </li>
+                     
 
                     {% else %}
                       <li class="nav-item">
@@ -179,6 +174,12 @@
           <a href="{% url 'submit' %}">
             <div class="card my-4">
               <button class="btn btn-primary" type="submit">Submit a Chirp!</button>
+            </div>
+          </a>
+
+          <a href="{% url 'email_digest' %}">
+            <div class="card my-4">
+              <button class="btn btn-primary" type="submit">Send email digest</button>
             </div>
           </a>
 
