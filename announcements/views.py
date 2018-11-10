@@ -179,6 +179,20 @@ def index(request):
 	return render(request,'announcements/index.html',context)
 
 @login_required
+def email_digest(request):
+
+	try:
+		user = get_object_or_404(Individual,pk=request.user.username)
+	except:
+		return redirect('/accounts/login')
+
+
+	context = {
+		'user':user,
+	}
+	return render(request,'announcements/email_digest.html',context)
+
+@login_required
 def submit(request):
 	try:
 		all_tags = get_object_or_404(Tags,approved=True)

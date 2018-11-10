@@ -100,78 +100,9 @@
                 </div>
               </nav>
 
-        <!-- Blog Entries Column -->
-          <div class="col-md-6 post-padding-top">
 
-            {% if approved_chirps_list %}
-              {% for announcement in approved_chirps_list %}
-              <!-- Blog Post -->
-               <div class="card mb-4">
-                  <div class="card-body">
-                      <h2 class="card-title">{{ announcement.announce_title }}
-                      </h2>
-                      <p class="card-text preview-text">{{announcement.announce_text}}</p>
-                      <a href="{% url 'detail' announcement.announce_ID %}" class="btn btn-sm btn-outline-primary">See More &rarr;</a>
 
-                      <!-- tags preview on post -->
-                      <div class="padding-post-tag row">
-                        {% if announcement.has_tags %}
-                          {% for tag_assoc in announcement.get_tags|slice:"4" %}
-                          <a href = "http://127.0.0.1:8000/announcements/search/{{ tag_assoc.the_tag }}">
-                            {% if tag_assoc.the_tag.approved %}
-                              <span class="tag badge badge-pill badge-primary">
-                            {% else %}
-                              <span class="tag badge badge-pill badge-danger">
-                            {% endif %}
-                                {{ tag_assoc.the_tag }}</span>
-                              </a>
-                          {% endfor %}
-                          {% if announcement.num_tags > 4 %}
-                              <small class="text-muted"> ... </small>
-                          {% endif %}
-                        {% endif %}
-                      </div>
-                    </div>
-
-                    <div class="card-footer text-muted">
-                      {{ announcement.submit_date }} by
-                      {{ announcement.submitter.first }} {{ announcement.submitter.last }}
-                    </div>
-                  </div>
-                {% endfor %}
-
-                <ul class="pagination justify-content-center mb-4">
-                  <span class="step-links">
-                      {% if approved_chirps_list.has_previous %}
-                          {% if user.admin_status %}
-                            <a href="?page={{ approved_chirps_list.previous_page_number }}">&laquo; previous </a>
-                          {% else %}
-                            <a href="?page={{ approved_chirps_list.previous_page_number }}">&laquo; previous </a>
-                          {% endif %}
-                      {% endif %}
-
-                      <span class="current">
-                        {% if user.admin_status %}
-                          Page {{ approved_chirps_list.number }} of {{ approved_chirps_list.paginator.num_pages }}.
-                        {% else %}
-                          Page {{ approved_chirps_list.number }} of {{ approved_chirps_list.paginator.num_pages }}.
-                        {% endif %}
-                      </span>
-
-                      {% if approved_chirps_list.has_next %}
-                        {% if user.admin_status %}
-                          <a href="?page={{ approved_chirps_list.next_page_number }}">next &raquo;</a>
-                        {% else %}
-                          <a href="?page={{ approved_chirps_list.next_page_number }}">next &raquo;</a>
-                        {% endif %}
-                      {% endif %}
-                  </span>
-                </ul>
-
-                {% else %}
-                  <p>No announcements are available.</p>
-                {% endif %}
-            </div>
+        <!-- Body code goes here!!!!!!!!!!-->
 
         <!-- Sidebar Widgets Column -->
         <div class="col-md-4">
