@@ -45,7 +45,9 @@ def sign_up(request):
 		if (request.POST['password'] == request.POST['redo_password']):
 			admin_stat = len(request.POST.getlist('admin')) > 0
 			email = request.POST['email']
-			if User.objects.filter(email=email):
+			if not (email.endswith('pomona.edu')):
+				no_match = "Please enter a valid Pomona College email."
+			elif User.objects.filter(email=email):
 				no_match = "This email is already in use. Please try again."
 			else:
 
