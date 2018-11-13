@@ -1,7 +1,7 @@
 # chirps3.0
 A secure re-make of the Pomona Chirps announcement section for System Security, Fall 2018
 
-Original website created by Sarah Jin, Maddie Zug, Mark Penrod for Database Systems, Spring 2018
+original website created by Sarah Jin, Maddie Zug, Mark Penrod for Database Systems, Spring 2018
 
 Before everything else, clone the repo:
 Git clone https://github.com/madelinezug/chirps.git
