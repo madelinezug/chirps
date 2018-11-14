@@ -139,7 +139,7 @@
                     <input type="submit" class="btn btn-sm btn-outline-danger float-right" style="margin-right:5px" value="Delete" name="delete"/>
                   {% endif %}
                   {% if user == announcement.submitter %}
-                    <a href = "{% url 'edit' announcement.announce_ID %}" class="btn btn-sm btn-outline-success float-right">Edit  </a>
+                    <a href = "{% url 'edit' announcement.announce_ID %}" class="btn btn-sm btn-outline-success float-right" style="margin-right:5px">Edit  </a>
                   {% endif %}
 
                   {{ worked }}
