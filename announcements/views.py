@@ -25,7 +25,11 @@ from django.db.models import Q
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.password_validation import ValidationError
 
-
+import os
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from cryptography.hazmat.backends import default_backend
+from cryptography.exceptions import InvalidKey
 
 # Register your models here.
 from .models import Individual
@@ -48,22 +52,27 @@ def sign_up(request):
 			if User.objects.filter(email=email):
 				no_match = "This email is already in use. Please try again."
 			else:
+				backend = default_backend()
+				salt = os.urandom(16)
+				key_gen = PBKDF2HMAC(
+					algorithm=hashes.SHA256(),
+					length=32,
+					salt=salt,
+					iterations=100000,
+					backend=backend
+				)
+				byte_pass = bytes(request.POST['password'], encoding='utf-8')
+				hash_pass = key_gen.derive(byte_pass)
 
-				new_individual = Individual(email=email,password =request.POST['password'],first=request.POST['first'],last=request.POST['last'],admin_status=admin_stat)
+				new_individual = Individual(email=email,password =request.POST['password'],chirp_pass=hash_pass,chirp_salt=salt,first=request.POST['first'],last=request.POST['last'],admin_status=admin_stat)
+				new_individual.save()
 				user = User.objects.create_user(email, email,
 					request.POST['password'])
 				user.first_name = request.POST['first']
 				user.last_name = request.POST['last']
 				user.admin_status = admin_stat
-
-				password = request.POST['password']
-				try:
-					validation_result = validate_password(password, user=user, password_validators=None)
-					new_individual.save()
-					user.save()
-					return redirect('/accounts/login')
-				except ValidationError as e:
-					no_match = ''.join(e)
+				user.save()
+				return redirect('/accounts/login')
 		else:
 			no_match = "Passwords did not match. Please try again."
 
