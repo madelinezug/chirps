@@ -71,7 +71,6 @@
                          Pending Posts
                       </a>
                     </li>
-                    
 
                    {% else %}
                      <li class="nav-item">
@@ -123,7 +122,8 @@
 
               <hr>
                 <!-- Date/Time -->
-                <p>Posted on {{ announcement.submit_date }}
+                <div>
+                  <span>Submitted on {{ announcement.submit_date }}</span>
                   {% if user.admin_status or user == announcement.submitter %}
                       {% if announcement.approve_status%}
                         <span class="approved">Approved </span>
@@ -134,18 +134,23 @@
 
                   {% if user.admin_status and not announcement.approve_status %}
                     <input type="submit" class="btn btn-sm btn-outline-success float-right" value="Approve" name ="approve"/>
-                  {% endif %}
-                  {% if user.admin_status or user == announcement.submitter %}
-                    <input type="submit" class="btn btn-sm btn-outline-danger float-right" style="margin-right:5px" value="Delete" name="delete"/>
+                    <span class="btn btn-sm btn-outline-danger float-right" onclick="document.getElementById('reject_msg_block').style.display = 'block';" style="margin-right:5px">Reject</span>
+
+                    <div id="reject_msg_block" style="display:none; text-align:right; margin-top:20px">
+                      <span>Enter a message explaining why this announcement was rejected:</span><br>
+                      <textarea name="reject_msg" cols="40" rows="5"></textarea><br>
+                      <input type="submit" class="btn btn-sm btn-outline-danger" value="Submit" name="submit_reject"/>
+                    </div>
                   {% endif %}
                   {% if user == announcement.submitter %}
-                    <a href = "{% url 'edit' announcement.announce_ID %}" class="btn btn-sm btn-outline-success float-right" style="margin-right:5px">Edit  </a>
+                    <a href = "{% url 'edit' announcement.announce_ID %}" class="btn btn-sm btn-outline-success float-right">Edit</a>
+                    <input type="submit" class="btn btn-sm btn-outline-danger float-right" style="margin-right:5px" value="Delete" name="delete"/>
                   {% endif %}
 
                   {{ worked }}
                   {{saved_announcement}}
                   {% csrf_token %}
-                </p>
+                </div>
 
               <hr>
 
