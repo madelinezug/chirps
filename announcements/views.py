@@ -67,14 +67,20 @@ def sign_up(request):
 				hash_pass = key_gen.derive(byte_pass)
 
 				new_individual = Individual(email=email,password =request.POST['password'],chirp_pass=hash_pass,chirp_salt=salt,first=request.POST['first'],last=request.POST['last'],admin_status=admin_stat)
-				new_individual.save()
 				user = User.objects.create_user(email, email,
 					request.POST['password'])
 				user.first_name = request.POST['first']
 				user.last_name = request.POST['last']
 				user.admin_status = admin_stat
-				user.save()
-				return redirect('/accounts/login')
+
+				password = request.POST['password']
+				try:
+					validation_result = validate_password(password, user=user, password_validators=None)
+					new_individual.save()
+					user.save()
+					return redirect('/accounts/login')
+				except ValidationError as e:
+					no_match = ''.join(e)
 		else:
 			no_match = "Passwords did not match. Please try again."
 
