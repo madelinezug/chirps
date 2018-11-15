@@ -127,8 +127,41 @@ def detail(request, announcement_id):
 				if not tag.approved:
 					tag.approved = True
 					tag.save()
+
+	elif ("reject" in request.POST):
+		if(user.admin_status):
+			context = {
+				'user': user,
+				'announcement':announcement,
+				'reject_msg':request.POST["reject_msg"]
+			}
+
+			subject = "Your chirp was rejected"
+			from_email = settings.EMAIL_HOST_USER
+			to_email = [announcement.submitter.email]
+			with open(settings.BASE_DIR + "/announcements/templates/emails/rejected_chirp_email.txt") as f:
+				signup_message = f.read()
+			message = EmailMultiAlternatives(subject=subject, body=signup_message, from_email=from_email, to=to_email)
+			html_template = get_template("emails/rejected_chirp_email.html").render(context)
+			message.attach_alternative(html_template, "text/html")
+			message.send()
+
+			# remove saved instances
+			if (Save.objects.filter(saved_announce = announcement).exists()):
+				save_delete_list = Save.objects.filter(saved_announce = announcement)
+				for saved in save_delete_list :
+					saved.delete()
+			# remove tag associations
+			if (AnnounceTags.objects.filter(the_announcement = announcement).exists()):
+				assoc_delete_list = AnnounceTags.objects.filter(the_announcement = announcement)
+				for assoc in assoc_delete_list :
+					assoc.delete()
+			# remove announcement
+			announcement.delete()
+			return redirect('/announcements/')
+
 	elif ("delete" in request.POST):
-		if(announcement.submitter==user or user.admin_status):
+		if(announcement.submitter==user):
 			# remove saved instances
 			if (Save.objects.filter(saved_announce = announcement).exists()):
 				save_delete_list = Save.objects.filter(saved_announce = announcement)
