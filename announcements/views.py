@@ -41,8 +41,6 @@ from .models import UserSearch
 from .models import TagSearch
 from .models import Save
 
-
-
 def sign_up(request):
 	no_match = ""
 	if request.method == "POST":
