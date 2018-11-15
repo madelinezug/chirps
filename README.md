@@ -41,6 +41,11 @@ To turn on the mySQL service pane go to System Preferences and open the mySQL ic
 Install mysqlclient
 > pip install mysqlclient
 
+Install other required packages
+> pip install cryptography
+
+> pip install django-sslserver
+
 
 Specific notes for mySQL
 https://docs.djangoproject.com/en/2.0/ref/databases/#mysql-notes
@@ -67,6 +72,10 @@ http://www.marinamele.com/taskbuster-django-tutorial/install-and-configure-mysql
 
 To see the website make sure your virtual environment is activated and use this command to start a local server:
 > Python manage.py runserver
+
+Or start the server with only https traffic
+> python manage.py runsslserver --certificate chirp_certificate.pem --key key.pem
+
 
 And navigate to this url: http://127.0.0.1:8000/accounts/login/
 
