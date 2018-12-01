@@ -45,7 +45,7 @@ def sign_up(request):
 	no_match = ""
 	if request.method == "POST":
 		if (request.POST['password'] == request.POST['redo_password']):
-			admin_stat = len(request.POST.getlist('admin')) > 0
+			admin_stat = False#len(request.POST.getlist('admin')) > 0
 			email = request.POST['email']
 			if not (email.endswith('pomona.edu')):
 				no_match = "Please enter a valid Pomona College email."
