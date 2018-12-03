@@ -24,6 +24,8 @@ from django.db.models import Q
 
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.password_validation import ValidationError
+from django.core.exceptions import ObjectDoesNotExist
+
 
 import os
 from cryptography.hazmat.primitives import hashes
@@ -83,6 +85,35 @@ def sign_up(request):
 			no_match = "Passwords did not match. Please try again."
 
 	return render(request,'announcements/sign_up.html',{ 'no_match': no_match})
+
+def reset_pw(request):
+	if request.method == "POST" and (request.POST['password'] == request.POST['redo_password']):
+		try:
+			user = User.objects.get(email=request.POST['user_email'])
+			ind = Individual.objects.get(email=request.POST['user_email'])
+			validation_result = validate_password(request.POST['password'], password_validators=None)
+
+			backend = default_backend()
+			salt = os.urandom(16)
+			key_gen = PBKDF2HMAC(
+				algorithm=hashes.SHA256(),
+				length=32,
+				salt=salt,
+				iterations=100000,
+				backend=backend
+			)
+			byte_pass = bytes(request.POST['password'], encoding='utf-8')
+			hash_pass = key_gen.derive(byte_pass)
+
+			ind.chirp_pass = hash_pass
+			ind.chirp_salt = salt
+			ind.save()
+			print('ind saved...')
+			return redirect('/accounts/login')
+		except (ValidationError, ObjectDoesNotExist, InvalidKey):
+			print('error reset pw')
+			return redirect('/accounts/password_reset')
+	return redirect('/accounts/password_reset')
 
 
 @login_required
