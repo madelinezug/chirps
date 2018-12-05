@@ -90,6 +90,13 @@
             </nav>
 
             <!-- Post Content Column -->
+            {% if not announcement.approve_status and not user.email == announcement.submitter.email and not user.admin_status %}
+
+            <div class="col-md-7 main-wrapper" style="word-wrap:break-word">
+              <p> You are not authorized to view this Chirp. </p>
+             </div>
+
+            {% else %}
             <div class="col-md-7 main-wrapper" style="word-wrap:break-word">
 
               <form method="post"/>
@@ -142,8 +149,10 @@
                       <input type="submit" class="btn btn-sm btn-outline-danger" value="Submit" name="reject"/>
                     </div>
                   {% endif %}
-                  {% if user == announcement.submitter %}
+                  {% if user == announcement.submitter and not announcement.approve_status %}
                     <a href = "{% url 'edit' announcement.announce_ID %}" class="btn btn-sm btn-outline-success float-right">Edit</a>
+                    {% endif %}
+                  {% if user == announcement.submitter %}
                     <input type="submit" class="btn btn-sm btn-outline-danger float-right" style="margin-right:5px" value="Delete" name="delete"/>
                   {% endif %}
 
@@ -183,6 +192,8 @@
               </div>
 
             </div>
+
+            {% endif %}
 
           </div>
           <!-- /.row -->

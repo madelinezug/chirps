@@ -151,6 +151,14 @@
           </div>
         </a>
 
+        {% if user.admin_status %}
+          <a href="{% url 'email_digest' %}">
+            <div class="card my-4">
+              <button class="btn btn-primary" type="submit">Send email digest</button>
+            </div>
+          </a>
+          {% endif %}
+
 
         <!-- Categories Widget -->
         <div class="card my-4">
