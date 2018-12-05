@@ -9,10 +9,10 @@
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="details about posts">
+        <meta name="description" content="details about users">
         <meta name="author" content="Sarah Jin, Mark Penrod, Maddie Zug">
 
-        <title>Post Details</title>
+        <title>User Details</title>
 
         <!-- Bootstrap core CSS -->
         <link href="{% static 'announcements/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -99,94 +99,60 @@
             <div class="col-md-7 main-wrapper" style="word-wrap:break-word">
 
               <form method="post"/>
-              <!-- Title -->
-              <h1 class="mt-4">{{ announcement.announce_title }}
-              {% if announcement.approve_status and not user.admin_status %}
-                {% if already_saved %}
-                  <input type="submit" class="btn btn-md btn-outline-primary float-right" value="Unsave" name="unsave"/>
-                {% else %}
-                  <input type="submit" class="btn btn-md btn-outline-primary float-right" value="Save" name="save"/>
-                {% endif %}
-              {% endif %}
+              <!-- Name -->
+              <h1 class="mt-4">{{ individual.first }} {{ individual.last }}
               </h1>
 
-              <!-- Author -->
+              <!-- Email -->
               <p class="lead">
-                by {{ announcement.submitter.first }} {{ announcement.submitter.last }}
+                {{ individual.email }}
               </p>
 
               <hr>
 
-              <!-- Preview Image -->
-              {% if announcement.announce_img %}
-                <img class="rounded mx-auto d-block" src="{{ announcement.announce_img }}" alt="" height="275">
-                <hr>
-              {% endif %}
+              <!-- Blocked status and controls -->
+              <div>
+                {% if user.admin_status %}
+                    {% if individual.blocked_status %}
+                      <span class="blocked">Blocked </span>
+                    {% else %}
+                      <span class="not-blocked">Not blocked </span>
+                    {% endif %}
+                 {% endif %}
 
-              <!-- Post Content -->
-              <p class="lead">{{ announcement.announce_text }}</p>
-
-              <hr>
-                <!-- Date/Time -->
-                <div>
-                  <span>Submitted on {{ announcement.submit_date }}</span>
-                  {% if user.admin_status or user == announcement.submitter %}
-                      {% if announcement.approve_status%}
-                        <span class="approved">Approved </span>
-                      {% else %}
-                        <span class="pending">Pending </span>
-                      {% endif %}
-                   {%endif%}
-
-                  {% if user.admin_status and not announcement.approve_status %}
-                    <input type="submit" class="btn btn-sm btn-outline-success float-right" value="Approve" name ="approve"/>
-                    <span class="btn btn-sm btn-outline-danger float-right" onclick="document.getElementById('reject_msg_block').style.display = 'block';" style="margin-right:5px">Reject</span>
-
-                    <div id="reject_msg_block" style="display:none; text-align:right; margin-top:20px">
-                      <span>Enter a message explaining why this announcement was rejected:</span><br>
-                      <textarea name="reject_msg" cols="40" rows="5"></textarea><br>
-                      <input type="submit" class="btn btn-sm btn-outline-danger" value="Submit" name="reject"/>
-                    </div>
-                  {% endif %}
-                  {% if user == announcement.submitter %}
-                    <a href = "{% url 'edit' announcement.announce_ID %}" class="btn btn-sm btn-outline-success float-right">Edit</a>
-                    <input type="submit" class="btn btn-sm btn-outline-danger float-right" style="margin-right:5px" value="Delete" name="delete"/>
-                  {% endif %}
-
-                  {{ worked }}
-                  {{saved_announcement}}
-                  {% csrf_token %}
-                </div>
-
-              <hr>
-
-            </div>
-
-            <div class="col-md-3" style="word-wrap:break-word">
-
-              <!-- Categories Widget -->
-              <div class="card my-4">
-                <h5 class="card-header">Tags</h5>
-                <div class="card-body">
-                  <div class="row">
-                        {% if announce_tags %}
-                          {% if num_tags > 0 %}
-                            <ul class="list-unstyled mb-0">
-                            {% for tag in announce_tags %}
-                              <li>
-                                <a href="http://127.0.0.1:8000/announcements/search/{{ tag }}">{{ tag }}</a>
-                              </li>
-                            {% endfor %}
-                            </ul>
-                          {% else %}
-                            <p> No tags on this post </p> <br>
-                          {% endif %}
-                        {% else %}
-                            <p> No tags on this post </p> <br>
-                        {% endif %}
-                  </div>
-                </div>
+                {% if user.admin_status %}
+                    {% if individual.blocked_status %}
+                      <input type="submit" class="btn btn-sm btn-outline-success float-right" value="Unblock" name ="unblock"/>
+                    {% else %}
+                      <input type="submit" class="btn btn-sm btn-outline-danger float-right" value="Block" name ="block"/>
+                    {% endif %}
+                {% endif %}
               </div>
+
+              <hr>
+
+              <!-- Admin status and controls -->
+              <div>
+                {% if user.admin_status %}
+                    {% if individual.admin_status %}
+                      <span>Admin </span>
+                    {% else %}
+                      <span>Not admin </span>
+                    {% endif %}
+                 {% endif %}
+
+                {% if user.admin_status %}
+                    {% if individual.admin_status %}
+                      <input type="submit" class="btn btn-sm btn-outline-danger float-right" value="Revoke Admin" name ="revoke_admin"/>
+                    {% else %}
+                      <input type="submit" class="btn btn-sm btn-outline-success float-right" value="Make Admin" name ="make_admin"/>
+                    {% endif %}
+                {% endif %}
+              </div>
+
+              <hr>
+
+              {% csrf_token %}
 
             </div>
 

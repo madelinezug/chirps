@@ -56,3 +56,11 @@ body {
 .pending{
 	color:red;
 }
+
+.not-blocked{
+	color:#32CD32;
+}
+
+.blocked{
+	color:red;
+}

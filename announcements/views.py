@@ -232,6 +232,48 @@ def detail(request, announcement_id):
 	}
 	return render(request, 'announcements/detail.html', context)
 
+
+@login_required
+def individual_detail(request, individual_email):
+	try:
+		individual = get_object_or_404(Individual,pk=individual_email)
+	except:
+		return render(request,'announcements/error.html',{'error':"No user with this email"})
+	try:
+		user = get_object_or_404(Individual,pk=request.user.username)
+	except:
+		return redirect('/accounts/login')
+
+	if ("unblock" in request.POST):
+		if(user.admin_status):
+			individual.blocked_status = False
+			individual.save()
+
+	elif ("block" in request.POST):
+		if(user.admin_status):
+			individual.blocked_status = True
+			individual.save()
+
+	elif ("make_admin" in request.POST):
+		if(user.admin_status):
+			individual.admin_status = True
+			individual.save()
+
+	elif ("revoke_admin" in request.POST):
+		if(user.admin_status):
+			individual.admin_status = False
+			individual.save()
+
+	elif ("search" in request.POST):
+		search_key = request.POST["search_key"]
+		return redirect('/announcements/search/' + search_key)
+
+	context = {
+		'individual': individual,
+		'user':user,
+	}
+	return render(request, 'announcements/individual_detail.html', context)
+
 @login_required
 def index(request):
 	approved_chirps_list = Announcement.objects.filter(approve_status=True, expire_date__gte=timezone.now()).order_by('-submit_date')
@@ -259,6 +301,10 @@ def index(request):
 
 @login_required
 def email_digest(request):
+	if request.method == "POST":
+		search_key = request.POST["search_key"]
+		return redirect('/announcements/search/' + search_key)
+
 	approved_chirps_list = Announcement.objects.filter(approve_status=True, expire_date__gte=timezone.now()).order_by('-submit_date')
 	try:
 		user = get_object_or_404(Individual,pk=request.user.username)
@@ -418,6 +464,31 @@ def my_chirps(request):
 		'user': user
 	}
 	return render(request, 'announcements/my_chirps.html', context)
+
+@login_required
+def individuals(request):
+	if request.method == "POST":
+		search_key = request.POST["search_key"]
+		return redirect('/announcements/search/' + search_key)
+
+	try:
+		user = get_object_or_404(Individual,pk=request.user.username)
+	except:
+		return redirect('/acccounts/login')
+	individuals_list = None
+
+	if (Individual.objects.exists()):
+		individuals_list = Individual.objects.order_by('last')
+
+		paginator = Paginator(individuals_list, 10)
+		page = request.GET.get('page')
+		individuals_list = paginator.get_page(page)
+
+	context = {
+		'individuals_list': individuals_list,
+		'user': user
+	}
+	return render(request, 'announcements/individuals.html', context)
 
 @login_required
 def search(request, search_key):

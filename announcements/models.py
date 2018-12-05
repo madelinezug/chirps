@@ -20,8 +20,8 @@ class Individual(models.Model):
     def is_admin(self):
         return self.admin_status
 
-    def block(self):
-        self.blocked_status = True
+    def is_blocked(self):
+        return self.blocked_status
 
 
 class Announcement(models.Model):

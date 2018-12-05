@@ -75,7 +75,13 @@
                           Pending Posts
                        </a>
                      </li>
-                     
+                     <li class="nav-item">
+                       <a class="nav-link" href="{% url 'individuals' %}">
+                         <span data-feather="users"></span>
+                          Users
+                       </a>
+                     </li>
+
 
                     {% else %}
                       <li class="nav-item">
@@ -171,11 +177,17 @@
         <!-- Sidebar Widgets Column -->
         <div class="col-md-4">
 
-          <a href="{% url 'submit' %}">
+          {% if user.blocked_status %}
             <div class="card my-4">
-              <button class="btn btn-primary" type="submit">Submit a Chirp!</button>
+              <p style="margin:5px">You cannot submit a Chirp, because you have been blocked.</p>
             </div>
-          </a>
+          {% else %}
+            <a href="{% url 'submit' %}">
+              <div class="card my-4">
+                <button class="btn btn-primary" type="submit">Submit a Chirp!</button>
+              </div>
+            </a>
+          {% endif %}
 
           <a href="{% url 'email_digest' %}">
             <div class="card my-4">
