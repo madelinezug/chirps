@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from ratelimit.decorators import ratelimit
 
 from django.shortcuts import get_object_or_404, render
 from django.http import Http404
@@ -43,6 +44,8 @@ from .models import UserSearch
 from .models import TagSearch
 from .models import Save
 
+@ratelimit(key='ip', rate='5/m')
+@ratelimit(key='post:email', rate='5/m')
 def sign_up(request):
 	no_match = ""
 	if request.method == "POST":

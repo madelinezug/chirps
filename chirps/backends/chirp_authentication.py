@@ -10,7 +10,7 @@ from cryptography.exceptions import InvalidKey
 
 
 class ChirpAuthBackend:
-
+    
     def authenticate(self, request, username=None, password=None):
         try:
             print("CHIRP AUTH")
