@@ -22,7 +22,18 @@
 <p>Here's the chirp:</p>
 <h2>{{ announcement.announce_title }}</h2>
 <p class="preview-text">{{ announcement.announce_text }}</p>
-<a href="{% url 'detail' announcement.announce_ID %}" class="btn btn-sm btn-outline-primary">See More &rarr;</a>
+
+<!-- tags preview on post -->
+<div class="padding-post-tag row">
+  {% if announcement.has_tags %}
+        <span class="tag badge badge-pill badge-primary">
+          Tagged: {{ announcement.get_tags.0.the_tag}}{% for tag_assoc in announcement.get_tags|slice:"1:4" %}, {{ tag_assoc.the_tag }}{% endfor %}
+        </span>
+    {% if announcement.num_tags > 4 %}
+        <small class="text-muted"> ... </small>
+    {% endif %}
+  {% endif %}
+</div>
 
 <p>Here's the reason why:</p>
 <p>{{ reject_msg }}</p>
