@@ -4,12 +4,12 @@ from datetime import date
 
 class Individual(models.Model):
     email = models.CharField(max_length=100, primary_key=True)
-    password = models.CharField(max_length=128, default='')
     chirp_pass = models.BinaryField(max_length=128, default=b'')
     chirp_salt = models.BinaryField(max_length=16, default=b'')
     first = models.CharField(max_length=20, default='')
     last = models.CharField(max_length=30, default='')
-    admin_status = models.BooleanField()
+    admin_status = models.BooleanField(default=False)
+    blocked_status = models.BooleanField(default=False)
 
     def __str__(self):
         return self.email
@@ -19,6 +19,9 @@ class Individual(models.Model):
 
     def is_admin(self):
         return self.admin_status
+
+    def block(self):
+        self.blocked_status = True
 
 
 class Announcement(models.Model):

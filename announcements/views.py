@@ -66,7 +66,7 @@ def sign_up(request):
 				byte_pass = bytes(request.POST['password'], encoding='utf-8')
 				hash_pass = key_gen.derive(byte_pass)
 
-				new_individual = Individual(email=email,password =request.POST['password'],chirp_pass=hash_pass,chirp_salt=salt,first=request.POST['first'],last=request.POST['last'],admin_status=admin_stat)
+				new_individual = Individual(email=email,chirp_pass=hash_pass,chirp_salt=salt,first=request.POST['first'],last=request.POST['last'])
 				user = User.objects.create_user(email, email,
 					request.POST['password'])
 				user.first_name = request.POST['first']
