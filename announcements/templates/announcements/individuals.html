@@ -101,6 +101,14 @@
               </div>
             </nav>
 
+
+        {% if not user.admin_status %}
+
+            <div class="col-md-6 ">
+              <p> You are not authorized to view users. </p>
+             </div>
+
+            {% else %}
         <!-- Blog Entries Column -->
         <div class="col-md-6 ">
 
@@ -156,6 +164,7 @@
         {% endif %}
 
         </div>
+        {% endif %}
 
         <!-- Sidebar Widgets Column -->
         <div class="col-md-4">

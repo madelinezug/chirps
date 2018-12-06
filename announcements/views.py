@@ -27,12 +27,17 @@ from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.password_validation import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 
+from django.contrib.auth.models import Group, Permission 
+from django.contrib.contenttypes.models import ContentType 
+
 
 import os
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.backends import default_backend
 from cryptography.exceptions import InvalidKey
+
+from .groups import group_required
 
 # Register your models here.
 from .models import Individual
@@ -79,6 +84,14 @@ def sign_up(request):
 				password = request.POST['password']
 				try:
 					validation_result = validate_password(password, user=user, password_validators=None)
+					admin_group = Group.objects.get(name='admin_group') 
+					non_admin_group = Group.objects.get(name='non_admin_group') 
+					if user.admin_status:
+						admin_group.user_set.add(user)
+						user.groups.add(admin_group)
+					else:
+						non_admin_group.user_set.add(user)
+						user.groups.add(non_admin_group)
 					new_individual.save()
 					user.save()
 					return redirect('/accounts/login')
@@ -237,6 +250,7 @@ def detail(request, announcement_id):
 
 
 @login_required
+@group_required('admin_group')
 def individual_detail(request, individual_email):
 	try:
 		individual = get_object_or_404(Individual,pk=individual_email)
