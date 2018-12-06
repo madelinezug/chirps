@@ -143,6 +143,7 @@
               <div class="card-footer text-muted">
                 Posted on {{ saved.saved_announce.submit_date }} by
               {{ saved.saved_announce.submitter.first }} {{ saved.saved_announce.submitter.last}}
+              (<a href="mailto:{{ saved.saved_announce.submitter.email }}">{{ saved.saved_announce.submitter.email }}</a>)
               </div>
             </div>
             {% endfor %}

@@ -146,6 +146,7 @@
               <div class="card-footer text-muted">
                 Posted on {{ match.submit_date }} by
               {{ match.submitter.first }} {{ match.submitter.last}}
+              (<a href="mailto:{{ match.submitter.email }}">{{ match.submitter.email }}</a>)
               </div>
             </div>
             {% endfor %}

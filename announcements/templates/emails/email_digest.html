@@ -45,6 +45,7 @@
                     <div class="card-footer text-muted">
                       {{ announcement.submit_date }} by
                       {{ announcement.submitter.first }} {{ announcement.submitter.last }}
+                      (<a href="mailto:{{ announcement.submitter.email }}">{{ announcement.submitter.email }}</a>)
                     </div>
                   </div>
                 {% endfor %}

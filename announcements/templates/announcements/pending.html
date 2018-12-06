@@ -116,6 +116,7 @@
            </div>
            <div class="card-footer text-muted">
              Posted on {{ pending.submit_date }} by {{ pending.submitter.first }}  {{ pending.submitter.last }}
+             (<a href="mailto:{{ pending.submitter.email }}">{{ pending.submitter.email }}</a>)
 
                {%if pending.approve_status%}
                   <span class="float-right approved"><small> Approved </small></span>
