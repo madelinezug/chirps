@@ -149,6 +149,9 @@ def detail(request, announcement_id):
 	except:
 		return redirect('/accounts/login')
 
+	if (not announcement.approve_status) and (not user.email == announcement.submitter.email) and (not user.admin_status):
+		return redirect('index')
+
 	# get the announcement tags
 	announce_tags = AnnounceTags.objects.filter(the_announcement=announcement)
 	num_tags = len(announce_tags)
@@ -325,7 +328,6 @@ def index(request):
 	return render(request,'announcements/index.html',context)
 
 @login_required
-@user_passes_test(in_admin_group, login_url='/login')
 def email_digest(request):
 	if request.method == "POST":
 		search_key = request.POST["search_key"]
@@ -336,6 +338,9 @@ def email_digest(request):
 		user = get_object_or_404(Individual,pk=request.user.username)
 	except:
 		return redirect('/accounts/login')
+
+	if not in_admin_group(user):
+		return redirect('index')
 
 	context = {
 		'approved_chirps_list': approved_chirps_list,
@@ -502,6 +507,9 @@ def individuals(request):
 	except:
 		return redirect('/acccounts/login')
 	individuals_list = None
+
+	if not in_admin_group(user):
+		return redirect('index')
 
 	if (Individual.objects.exists()):
 		individuals_list = Individual.objects.order_by('last')
