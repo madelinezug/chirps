@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from announcements.models import Individual
 from django.core.exceptions import ObjectDoesNotExist
+from ratelimit.decorators import ratelimit
 
 import os
 from cryptography.hazmat.primitives import hashes
@@ -11,6 +12,8 @@ from cryptography.exceptions import InvalidKey
 
 class ChirpAuthBackend:
     
+    @ratelimit(key='ip', rate='5/m')
+    @ratelimit(key='post:username', rate='5/m')
     def authenticate(self, request, username=None, password=None):
         try:
             print("CHIRP AUTH")

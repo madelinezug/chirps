@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 from ratelimit.decorators import ratelimit
 
 from django.shortcuts import get_object_or_404, render
@@ -37,7 +38,6 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.backends import default_backend
 from cryptography.exceptions import InvalidKey
 
-from .groups import group_required
 
 # Register your models here.
 from .models import Individual
@@ -48,6 +48,11 @@ from .models import SubmitTag
 from .models import UserSearch
 from .models import TagSearch
 from .models import Save
+
+def in_admin_group(user):
+    if user:
+        return user.admin_status
+    return False
 
 @ratelimit(key='ip', rate='5/m')
 @ratelimit(key='post:email', rate='5/m')
@@ -101,6 +106,7 @@ def sign_up(request):
 			no_match = "Passwords did not match. Please try again."
 
 	return render(request,'announcements/sign_up.html',{ 'no_match': no_match})
+
 
 def reset_pw(request):
 	if request.method == "POST" and (request.POST['password'] == request.POST['redo_password']):
@@ -250,7 +256,6 @@ def detail(request, announcement_id):
 
 
 @login_required
-@group_required('admin_group')
 def individual_detail(request, individual_email):
 	try:
 		individual = get_object_or_404(Individual,pk=individual_email)
@@ -260,6 +265,9 @@ def individual_detail(request, individual_email):
 		user = get_object_or_404(Individual,pk=request.user.username)
 	except:
 		return redirect('/accounts/login')
+
+	if not in_admin_group(user):
+		return redirect('index')
 
 	if ("unblock" in request.POST):
 		if(user.admin_status):
@@ -317,6 +325,7 @@ def index(request):
 	return render(request,'announcements/index.html',context)
 
 @login_required
+@user_passes_test(in_admin_group, login_url='/login')
 def email_digest(request):
 	if request.method == "POST":
 		search_key = request.POST["search_key"]
