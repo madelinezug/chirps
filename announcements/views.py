@@ -707,3 +707,70 @@ def edit(request, announcement_id):
 		'user':current_user
 	}
 	return render(request,'announcements/edit.html',context)
+
+@login_required
+def logs(request):
+	if request.method == "POST":
+		search_key = request.POST["search_key"]
+		return redirect('/announcements/search/' + search_key)
+
+	try:
+		user = get_object_or_404(Individual,pk=request.user.username)
+	except:
+		return redirect('/acccounts/login')
+
+	if not in_admin_group(user):
+		return redirect('index')
+
+	context = {
+		'user': user
+	}
+	return render(request, 'announcements/logs.html', context)
+
+@login_required
+def admin_logs(request):
+	if request.method == "POST":
+		search_key = request.POST["search_key"]
+		return redirect('/announcements/search/' + search_key)
+
+	try:
+		user = get_object_or_404(Individual,pk=request.user.username)
+	except:
+		return redirect('/acccounts/login')
+	admin_logs_list = None
+
+	if not in_admin_group(user):
+		return redirect('index')
+
+	if (Individual.objects.exists()):
+		admin_logs_list = AdminLog.objects.order_by('date')
+
+	context = {
+		'admin_logs_list': admin_logs_list,
+		'user': user
+	}
+	return render(request, 'announcements/admin_logs.html', context)
+
+@login_required
+def block_logs(request):
+	if request.method == "POST":
+		search_key = request.POST["search_key"]
+		return redirect('/announcements/search/' + search_key)
+
+	try:
+		user = get_object_or_404(Individual,pk=request.user.username)
+	except:
+		return redirect('/acccounts/login')
+	block_logs_list = None
+
+	if not in_admin_group(user):
+		return redirect('index')
+
+	if (Individual.objects.exists()):
+		block_logs_list = BlockLog.objects.order_by('date')
+
+	context = {
+		'block_logs_list': block_logs_list,
+		'user': user
+	}
+	return render(request, 'announcements/block_logs.html', context)

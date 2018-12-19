@@ -6,10 +6,10 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="users">
+    <meta name="description" content="admin logs">
     <meta name="author" content="Sarah Jin, Mark Penrod, Maddie Zug">
 
-    <title>Manage Users</title>
+    <title>Log - Admin Privileges</title>
 
     <!-- Bootstrap core CSS -->
     <!-- <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
@@ -110,126 +110,41 @@
 
         {% if not user.admin_status %}
 
-            <div class="col-md-6 ">
-              <p> You are not authorized to view users. </p>
+            <div class="col-md-10 post-padding-top ">
+              <p> You are not authorized to view logs. </p>
              </div>
 
-            {% else %}
-        <!-- Blog Entries Column -->
-        <div class="col-md-6 ">
-
-           <h1 class="my-4 font-default"> Manage Users </h1>
-
-         {% if individuals_list != None %}
-           {% for individual in individuals_list %}
-           <!-- Name, email, and see more button -->
-           <div class="card mb-4 ">
-             <div class="card-body">
-             <h2 class="card-title">{{ individual.first }} {{ individual.last }}
-             </h2>
-             <p class="card-text preview-text">{{ individual.email }}</p>
-             <a href="{% url 'individual_detail' individual.email %}" class="btn btn-sm btn-outline-primary">See More &rarr;</a>
-
-           </div>
-
-           <!-- blocked and admin status -->
-           <div class="card-footer text-muted">
-             {% if individual.is_blocked %}
-                <span class="text-danger">Blocked</span>
-             {% else %}
-                <span class="text-success">Not blocked</span>
-             {% endif %}
-
-             {%if individual.admin_status%}
-                <span class="float-right">Admin</span>
-             {% else %}
-                <span class="float-right">Not admin</span>
-             {% endif %}
-          </div>
-        </div>
-        {% endfor %}
-
-        <ul class="pagination justify-content-center mb-4">
-          <span class="step-links">
-              {% if individuals_list.has_previous %}
-                  <a href="?page={{ individuals_list.previous_page_number }}">&laquo; previous </a>
-              {% endif %}
-
-              <span class="current">
-                  Page {{ individuals_list.number }} of {{ individuals_list.paginator.num_pages }}.
-              </span>
-
-              {% if individuals_list.has_next %}
-                <a href="?page={{ individuals_list.next_page_number }}">next &raquo;</a>
-              {% endif %}
-          </span>
-        </ul>
-
         {% else %}
-          <p> There are no users in the system. ... How is this possible? </p>
-        {% endif %}
+        <!-- Blog Entries Column -->
+        <div class="col-md-10 post-padding-top " style="width:100%">
 
-        </div>
-        {% endif %}
+          <h1 class="my-4 font-default">Log - Admin Privileges</h1>
 
-        <!-- Sidebar Widgets Column -->
-        <div class="col-md-4">
-
-          {% if user.blocked_status %}
-            <div class="card my-4">
-              <p style="margin:5px">You cannot submit a Chirp, because you have been blocked.</p>
-            </div>
+          {% if admin_logs_list != None %}
+            <table class="table table-bordered">
+              <th>Date</th>
+              <th>User Affected</th>
+              <th>Action</th>
+              <th>Actor</th>
+            {% for admin_log in admin_logs_list %}
+              <tr>
+                <td>{{ admin_log.date }}</td>
+                <td>{{ admin_log.admin_status_changed.email }}</td>
+                {% if admin_log.granted_admin %}
+                  <td class="text-success">granted</td>
+                {% else %}
+                  <td class="text-danger">revoked</td>
+                {% endif %}
+                <td>{{ admin_log.admin_status_changer.email }}</td>
+            {% endfor %}
+            </table>
           {% else %}
-            <a href="{% url 'submit' %}">
-              <div class="card my-4">
-                <button class="btn btn-primary" type="submit">Submit a Chirp!</button>
-              </div>
-            </a>
+            <p>No logs to display.</p>
           {% endif %}
-
-          {% if user.admin_status %}
-            <a href="{% url 'email_digest' %}">
-              <div class="card my-4">
-                <button class="btn btn-primary" type="submit">Send email digest</button>
-              </div>
-            </a>
-          {% endif %}
-
-          <!-- Categories Widget -->
-          <div class="card my-4">
-            <h5 class="card-header">Tags</h5>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-lg-6">
-                  <ul class="list-unstyled mb-0">
-                    <li>
-                      <a href="http://127.0.0.1:8000/announcements/search/Lost%20and%20Found">Lost and Found</a>
-                    </li>
-                    <li>
-                      <a href="http://127.0.0.1:8000/announcements/search/Sports">Sports</a>
-                    </li>
-                    <li>
-                      <a href="http://127.0.0.1:8000/announcements/search/Food">Food</a>
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-lg-6">
-                  <ul class="list-unstyled mb-0">
-                    <li>
-                      <a href="http://127.0.0.1:8000/announcements/search/Parties">Parties</a>
-                    </li>
-                    <li>
-                      <a href="http://127.0.0.1:8000/announcements/search/For%20Sale">For Sale</a>
-                    </li>
-                    <li>
-                      <a href="http://127.0.0.1:8000/announcements/search/Campus%20Safety">Campus Safety</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
+        {% endif %}
+
+
       </div>
     </div>
 

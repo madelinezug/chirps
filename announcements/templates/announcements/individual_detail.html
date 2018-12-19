@@ -77,6 +77,12 @@
                          Users
                       </a>
                     </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'logs' %}">
+                        <span data-feather="logs"></span>
+                         Logs
+                      </a>
+                    </li>
 
                    {% else %}
                      <li class="nav-item">
@@ -121,9 +127,9 @@
               <div>
                 {% if user.admin_status %}
                     {% if individual.blocked_status %}
-                      <span class="blocked">Blocked </span>
+                      <span class="text-danger">Blocked </span>
                     {% else %}
-                      <span class="not-blocked">Not blocked </span>
+                      <span class="text-success">Not blocked </span>
                     {% endif %}
                  {% endif %}
 

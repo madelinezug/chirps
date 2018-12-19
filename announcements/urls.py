@@ -15,5 +15,8 @@ urlpatterns = [
     path('pending/', views.pending, name='pending'),
     path('search/<str:search_key>', views.search, name='search_tags'),
     path('edit/<int:announcement_id>/', views.edit, name='edit'),
+    path('logs/', views.logs, name='logs'),
+    path('logs/admin/', views.admin_logs, name='admin_logs'),
+    path('logs/block/', views.block_logs, name='block_logs'),
     path('reset_pw/', views.reset_pw, name='reset_pw')
 ]

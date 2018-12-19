@@ -6,10 +6,10 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="users">
+    <meta name="description" content="logs">
     <meta name="author" content="Sarah Jin, Mark Penrod, Maddie Zug">
 
-    <title>Manage Users</title>
+    <title>Logs</title>
 
     <!-- Bootstrap core CSS -->
     <!-- <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
@@ -110,65 +110,24 @@
 
         {% if not user.admin_status %}
 
-            <div class="col-md-6 ">
-              <p> You are not authorized to view users. </p>
+            <div class="col-md-6 post-padding-top ">
+              <p> You are not authorized to view logs. </p>
              </div>
 
-            {% else %}
-        <!-- Blog Entries Column -->
-        <div class="col-md-6 ">
-
-           <h1 class="my-4 font-default"> Manage Users </h1>
-
-         {% if individuals_list != None %}
-           {% for individual in individuals_list %}
-           <!-- Name, email, and see more button -->
-           <div class="card mb-4 ">
-             <div class="card-body">
-             <h2 class="card-title">{{ individual.first }} {{ individual.last }}
-             </h2>
-             <p class="card-text preview-text">{{ individual.email }}</p>
-             <a href="{% url 'individual_detail' individual.email %}" class="btn btn-sm btn-outline-primary">See More &rarr;</a>
-
-           </div>
-
-           <!-- blocked and admin status -->
-           <div class="card-footer text-muted">
-             {% if individual.is_blocked %}
-                <span class="text-danger">Blocked</span>
-             {% else %}
-                <span class="text-success">Not blocked</span>
-             {% endif %}
-
-             {%if individual.admin_status%}
-                <span class="float-right">Admin</span>
-             {% else %}
-                <span class="float-right">Not admin</span>
-             {% endif %}
-          </div>
-        </div>
-        {% endfor %}
-
-        <ul class="pagination justify-content-center mb-4">
-          <span class="step-links">
-              {% if individuals_list.has_previous %}
-                  <a href="?page={{ individuals_list.previous_page_number }}">&laquo; previous </a>
-              {% endif %}
-
-              <span class="current">
-                  Page {{ individuals_list.number }} of {{ individuals_list.paginator.num_pages }}.
-              </span>
-
-              {% if individuals_list.has_next %}
-                <a href="?page={{ individuals_list.next_page_number }}">next &raquo;</a>
-              {% endif %}
-          </span>
-        </ul>
-
         {% else %}
-          <p> There are no users in the system. ... How is this possible? </p>
-        {% endif %}
+        <!-- Blog Entries Column -->
+        <div class="col-md-6 post-padding-top ">
 
+          <h1 class="my-4 font-default">Logs</h1>
+
+          <p><a href="{% url 'admin_logs' %}">
+            <span data-feather="admin_logs"></span>
+            Admin privileges
+          </a></p>
+          <p><a href="{% url 'block_logs' %}">
+            <span data-feather="block_logs"></span>
+            Blocking and unblocking
+          </a></p>
         </div>
         {% endif %}
 

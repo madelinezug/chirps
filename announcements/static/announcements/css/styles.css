@@ -48,19 +48,3 @@ body {
      overflow: hidden;
      text-overflow: ellipsis;
 }
-
-.approved{
-	color:#32CD32;
-}
-
-.pending{
-	color:red;
-}
-
-.not-blocked{
-	color:#32CD32;
-}
-
-.blocked{
-	color:red;
-}
