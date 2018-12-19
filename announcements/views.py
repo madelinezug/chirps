@@ -28,8 +28,8 @@ from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.password_validation import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 
-from django.contrib.auth.models import Group, Permission 
-from django.contrib.contenttypes.models import ContentType 
+from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
 
 
 import os
@@ -48,11 +48,13 @@ from .models import SubmitTag
 from .models import UserSearch
 from .models import TagSearch
 from .models import Save
+from .models import AdminLog
+from .models import BlockLog
 
 def in_admin_group(user):
-    if user:
-        return user.admin_status
-    return False
+	if user:
+		return user.admin_status
+	return False
 
 @ratelimit(key='ip', rate='5/m')
 @ratelimit(key='post:email', rate='5/m')
@@ -89,8 +91,8 @@ def sign_up(request):
 				password = request.POST['password']
 				try:
 					validation_result = validate_password(password, user=user, password_validators=None)
-					admin_group = Group.objects.get(name='admin_group') 
-					non_admin_group = Group.objects.get(name='non_admin_group') 
+					admin_group = Group.objects.get(name='admin_group')
+					non_admin_group = Group.objects.get(name='non_admin_group')
 					if user.admin_status:
 						admin_group.user_set.add(user)
 						user.groups.add(admin_group)
@@ -276,21 +278,29 @@ def individual_detail(request, individual_email):
 		if(user.admin_status):
 			individual.blocked_status = False
 			individual.save()
+			new_block_log = BlockLog(date=timezone.now(), blocked=False, block_status_changer=user, block_status_changed=individual)
+			new_block_log.save()
 
 	elif ("block" in request.POST):
 		if(user.admin_status):
 			individual.blocked_status = True
 			individual.save()
+			new_block_log = BlockLog(date=timezone.now(), blocked=True, block_status_changer=user, block_status_changed=individual)
+			new_block_log.save()
 
 	elif ("make_admin" in request.POST):
 		if(user.admin_status):
 			individual.admin_status = True
 			individual.save()
+			new_admin_log = AdminLog(date=timezone.now(), granted_admin=True, admin_status_changer=user, admin_status_changed=individual)
+			new_admin_log.save()
 
 	elif ("revoke_admin" in request.POST):
 		if(user.admin_status):
 			individual.admin_status = False
 			individual.save()
+			new_admin_log = AdminLog(date=timezone.now(), granted_admin=False, admin_status_changer=user, admin_status_changed=individual)
+			new_admin_log.save()
 
 	elif ("search" in request.POST):
 		search_key = request.POST["search_key"]
@@ -383,7 +393,7 @@ def submit(request):
 			return redirect('/announcements/search/' + search_key)
 		else:
 			new_announce = Announcement(announce_text=request.POST["announce_text"],announce_title=request.POST["announce_title"], announce_img=request.POST["announce_img"],
-			submit_date=timezone.now(),expire_date=request.POST["expire_date"],approve_status=Individual.objects.get(pk=request.user.username).admin_status,submitter=Individual.objects.get(pk=request.user.username))
+			submit_date=timezone.now(),expire_date=request.POST["expire_date"],approve_status=current_user.admin_status,submitter=current_user)
 			new_announce.save()
 
 			# save the tag and associate it with the announcement
@@ -393,7 +403,7 @@ def submit(request):
 					tag = tag.strip()
 					tag = tag.lower()
 					if not Tags.objects.filter(pk=tag).exists():
-						new_tag = Tags(tag_text=tag,approved=Individual.objects.get(pk=request.user.username).admin_status)
+						new_tag = Tags(tag_text=tag,approved=current_user.admin_status)
 						new_tag.save()
 					if not AnnounceTags.objects.filter(the_announcement=new_announce,the_tag=Tags.objects.get(pk=tag)).exists():
 						announce_tag_pair = AnnounceTags(the_announcement=new_announce,the_tag=Tags.objects.get(pk=tag))
@@ -555,7 +565,7 @@ def search(request, search_key):
 				if (Announcement.objects.filter(submitter=person, approve_status=True, expire_date__gte=timezone.now()).exists()):
 					matching_announces.extend(Announcement.objects.filter(submitter=person, approve_status=True, expire_date__gte=timezone.now()).order_by('-submit_date'))
 
-	    # add matching tags
+		# add matching tags
 		tag = Tags.objects.get(pk=search_key, approved= True)
 		if (AnnounceTags.objects.filter(the_tag=search_key, the_announcement__approve_status=True, the_announcement__expire_date__gte=timezone.now()).exists()):
 			matching_announce_assocs = list(AnnounceTags.objects.filter(the_tag=search_key, the_announcement__approve_status=True, the_announcement__expire_date__gte=timezone.now()).order_by('-the_announcement__submit_date'))

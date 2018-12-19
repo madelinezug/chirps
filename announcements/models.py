@@ -140,3 +140,21 @@ class Save(models.Model):
     def create(cls, user, announcement):
         new_save = cls(saver=user, saved_announce=announcement)
         return new_save
+
+
+class AdminLog(models.Model):
+    date = models.DateField()
+    granted_admin = models.BooleanField()
+    admin_status_changer = models.ForeignKey(
+        Individual, related_name='admin_status_changer', on_delete=models.PROTECT)
+    admin_status_changed = models.ForeignKey(
+        Individual, related_name='admin_status_changed', on_delete=models.PROTECT)
+
+
+class BlockLog(models.Model):
+    date = models.DateField()
+    blocked = models.BooleanField()
+    block_status_changer = models.ForeignKey(
+        Individual, related_name='block_status_changer', on_delete=models.PROTECT)
+    block_status_changed = models.ForeignKey(
+        Individual, related_name='block_status_changed', on_delete=models.PROTECT)
