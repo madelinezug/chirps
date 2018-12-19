@@ -13,7 +13,6 @@ from cryptography.exceptions import InvalidKey
 class ChirpAuthBackend:
     
     @ratelimit(key='ip', rate='5/m')
-    @ratelimit(key='post:username', rate='5/m')
     def authenticate(self, request, username=None, password=None):
         try:
             print("CHIRP AUTH")

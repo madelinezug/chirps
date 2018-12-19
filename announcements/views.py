@@ -54,8 +54,7 @@ def in_admin_group(user):
         return user.admin_status
     return False
 
-@ratelimit(key='ip', rate='5/m')
-@ratelimit(key='post:email', rate='5/m')
+@ratelimit(key='ip', rate='3/m', block=True)
 def sign_up(request):
 	no_match = ""
 	if request.method == "POST":
@@ -365,6 +364,7 @@ def email_digest(request):
 
 	return render(request,'announcements/email_digest.html',context)
 
+@ratelimit(key='ip', rate='6/m', block=True)
 @login_required
 def submit(request):
 	try:
