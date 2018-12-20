@@ -460,7 +460,7 @@ def saved(request):
 	try:
 		user = get_object_or_404(Individual,pk=request.user.username)
 	except:
-		return redirect('/acccounts/login')
+		return redirect('/accounts/login')
 	saved_announcements_list = None
 	if (Save.objects.filter(saver=user, saved_announce__expire_date__gte=timezone.now()).exists()):
 		saved_announcements_list = Save.objects.filter(saver=user, saved_announce__expire_date__gte=timezone.now()).order_by('-saved_announce__submit_date')
@@ -484,7 +484,7 @@ def pending(request):
 	try:
 		user = get_object_or_404(Individual,pk=request.user.username)
 	except:
-		return redirect('/acccounts/login')
+		return redirect('/accounts/login')
 	pending_announcements_list = None
 	if (Announcement.objects.filter(approve_status=False, expire_date__gte=timezone.now()).exists()):
 		pending_announcements_list = Announcement.objects.filter(approve_status=False, expire_date__gte=timezone.now()).order_by('-submit_date')
@@ -508,7 +508,7 @@ def my_chirps(request):
 	try:
 		user = get_object_or_404(Individual,pk=request.user.username)
 	except:
-		return redirect('/acccounts/login')
+		return redirect('/accounts/login')
 	my_chirps_announcements_list = None
 
 	if (Announcement.objects.filter(submitter=user, expire_date__gte=timezone.now()).exists()):
@@ -533,7 +533,7 @@ def individuals(request):
 	try:
 		user = get_object_or_404(Individual,pk=request.user.username)
 	except:
-		return redirect('/acccounts/login')
+		return redirect('/accounts/login')
 	individuals_list = None
 
 	if not in_admin_group(user):
@@ -561,7 +561,7 @@ def search(request, search_key):
 	try:
 		user = get_object_or_404(Individual,pk=request.user.username)
 	except:
-		return redirect('/acccounts/login')
+		return redirect('/accounts/login')
 
 	no_match = ""
 	matching_announces = []
@@ -735,7 +735,7 @@ def logs(request):
 	try:
 		user = get_object_or_404(Individual,pk=request.user.username)
 	except:
-		return redirect('/acccounts/login')
+		return redirect('/accounts/login')
 
 	if not in_admin_group(user):
 		return redirect('index')
@@ -754,7 +754,7 @@ def admin_logs(request):
 	try:
 		user = get_object_or_404(Individual,pk=request.user.username)
 	except:
-		return redirect('/acccounts/login')
+		return redirect('/accounts/login')
 	admin_logs_list = None
 
 	if not in_admin_group(user):
@@ -778,7 +778,7 @@ def block_logs(request):
 	try:
 		user = get_object_or_404(Individual,pk=request.user.username)
 	except:
-		return redirect('/acccounts/login')
+		return redirect('/accounts/login')
 	block_logs_list = None
 
 	if not in_admin_group(user):
