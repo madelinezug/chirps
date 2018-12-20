@@ -34,7 +34,9 @@ class Announcement(models.Model):
     approve_status = models.BooleanField()
     submitter = models.ForeignKey(
         Individual, related_name='submitter', on_delete=models.PROTECT)
-    # approver = models.ForeignKey(Individual, related_name = 'approver', on_delete=models.PROTECT, default='sarahjin97@gmail.com')
+    approver = models.ForeignKey(Individual, related_name = 'approver', on_delete=models.PROTECT, default="testadmin@pomona.edu")
+    is_deleted = models.BooleanField(default=False)
+    is_rejected = models.BooleanField(default=False)
 
     def __str__(self):
         return self.announce_text
@@ -158,3 +160,10 @@ class BlockLog(models.Model):
         Individual, related_name='block_status_changer', on_delete=models.PROTECT)
     block_status_changed = models.ForeignKey(
         Individual, related_name='block_status_changed', on_delete=models.PROTECT)
+
+class ChirpsLog(models.Model):
+    event_date = models.DateField(default=date.today())
+    approver = models.CharField(max_length=100, default="n/a")
+    chirpslog_status = models.CharField(max_length=8, default="pending")
+    chirpslog_announcement = models.ForeignKey(
+        Announcement, related_name='chirpslog_announcement', on_delete=models.PROTECT)

@@ -112,40 +112,42 @@
 
             {% if approved_chirps_list %}
               {% for announcement in approved_chirps_list %}
-              <!-- Blog Post -->
-               <div class="card mb-4">
-                  <div class="card-body">
-                      <h2 class="card-title">{{ announcement.announce_title }}
-                      </h2>
-                      <p class="card-text preview-text">{{announcement.announce_text}}</p>
-                      <a href="{% url 'detail' announcement.announce_ID %}" class="btn btn-sm btn-outline-primary">See More &rarr;</a>
+                {% if not announcement.is_deleted and not announcement.is_rejected %}
+                  <!-- Blog Post -->
+                  <div class="card mb-4">
+                      <div class="card-body">
+                          <h2 class="card-title">{{ announcement.announce_title }}
+                          </h2>
+                          <p class="card-text preview-text">{{announcement.announce_text}}</p>
+                          <a href="{% url 'detail' announcement.announce_ID %}" class="btn btn-sm btn-outline-primary">See More &rarr;</a>
 
-                      <!-- tags preview on post -->
-                      <div class="padding-post-tag row">
-                        {% if announcement.has_tags %}
-                          {% for tag_assoc in announcement.get_tags|slice:"4" %}
-                          <a href = "http://127.0.0.1:8000/announcements/search/{{ tag_assoc.the_tag }}">
-                            {% if tag_assoc.the_tag.approved %}
-                              <span class="tag badge badge-pill badge-primary">
-                            {% else %}
-                              <span class="tag badge badge-pill badge-danger">
+                          <!-- tags preview on post -->
+                          <div class="padding-post-tag row">
+                            {% if announcement.has_tags %}
+                              {% for tag_assoc in announcement.get_tags|slice:"4" %}
+                              <a href = "http://127.0.0.1:8000/announcements/search/{{ tag_assoc.the_tag }}">
+                                {% if tag_assoc.the_tag.approved %}
+                                  <span class="tag badge badge-pill badge-primary">
+                                {% else %}
+                                  <span class="tag badge badge-pill badge-danger">
+                                {% endif %}
+                                    {{ tag_assoc.the_tag }}</span>
+                                  </a>
+                              {% endfor %}
+                              {% if announcement.num_tags > 4 %}
+                                  <small class="text-muted"> ... </small>
+                              {% endif %}
                             {% endif %}
-                                {{ tag_assoc.the_tag }}</span>
-                              </a>
-                          {% endfor %}
-                          {% if announcement.num_tags > 4 %}
-                              <small class="text-muted"> ... </small>
-                          {% endif %}
-                        {% endif %}
-                      </div>
-                    </div>
+                          </div>
+                        </div>
 
-                    <div class="card-footer text-muted">
-                      {{ announcement.submit_date }} by
-                      {{ announcement.submitter.first }} {{ announcement.submitter.last }}
-                      (<a href="mailto:{{ announcement.submitter.email }}">{{ announcement.submitter.email }}</a>)
-                    </div>
-                  </div>
+                        <div class="card-footer text-muted">
+                          {{ announcement.submit_date }} by
+                          {{ announcement.submitter.first }} {{ announcement.submitter.last }}
+                          (<a href="mailto:{{ announcement.submitter.email }}">{{ announcement.submitter.email }}</a>)
+                        </div>
+                      </div>
+                  {% endif %}
                 {% endfor %}
 
                 <ul class="pagination justify-content-center mb-4">

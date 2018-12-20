@@ -50,6 +50,8 @@ from .models import TagSearch
 from .models import Save
 from .models import AdminLog
 from .models import BlockLog
+from .models import ChirpsLog
+
 
 def in_admin_group(user):
 	if user:
@@ -184,6 +186,9 @@ def detail(request, announcement_id):
 				if not tag.approved:
 					tag.approved = True
 					tag.save()
+						
+			new_chirp_log = ChirpsLog(date=timezone.now(), approver=user)
+			new_chirp_log.save()
 
 	elif ("reject" in request.POST):
 		if(user.admin_status):
@@ -213,8 +218,13 @@ def detail(request, announcement_id):
 				assoc_delete_list = AnnounceTags.objects.filter(the_announcement = announcement)
 				for assoc in assoc_delete_list :
 					assoc.delete()
-			# remove announcement
-			announcement.delete()
+			# flag announcement as rejected
+			announcement.is_rejected = True
+			announcement.save()
+
+			new_chirp_log = ChirpsLog(date=timezone.now(), actor=user)
+			new_chirp_log.save()
+			
 			return redirect('/announcements/')
 
 	elif ("delete" in request.POST):
@@ -229,8 +239,13 @@ def detail(request, announcement_id):
 				assoc_delete_list = AnnounceTags.objects.filter(the_announcement = announcement)
 				for assoc in assoc_delete_list :
 					assoc.delete()
-			# remove announcement
-			announcement.delete()
+			# flag announcement as deleted
+			announcement.is_deleted = True
+			announcement.save()
+
+			new_chirp_log = ChirpsLog(date=timezone.now())
+			new_chirp_log.save()
+
 			return redirect('/announcements/')
 	elif (("save" in request.POST) and (request.method == "POST")):
 		if (Save.objects.filter(saver=user,saved_announce=announcement).exists()):
@@ -429,6 +444,9 @@ def submit(request):
 				message.attach_alternative(html_template, "text/html")
 				message.send()
 
+
+			new_chirp_log = ChirpsLog(event_date=timezone.now(), approver="n/a")
+			new_chirp_log.save()
 
 			return redirect('/announcements/')
 	return render(request, 'announcements/submit.html', {'all_tags':all_tags,'user':current_user})
@@ -774,3 +792,27 @@ def block_logs(request):
 		'user': user
 	}
 	return render(request, 'announcements/block_logs.html', context)
+
+@login_required
+def chirps_logs(request):
+	if request.method == "POST":
+		search_key = request.POST["search_key"]
+		return redirect('/announcements/search/' + search_key)
+
+	try:
+		user = get_object_or_404(Individual,pk=request.user.username)
+	except:
+		return redirect('/acccounts/login')
+	chirps_logs_list = None
+
+	if not in_admin_group(user):
+		return redirect('index')
+
+	if (Individual.objects.exists()):
+		chirps_logs_list = ChirpsLog.objects.order_by('event_date')
+
+	context = {
+		'chirps_logs_list': chirps_logs_list,
+		'user': user
+	}
+	return render(request, 'announcements/chirps_logs.html', context)

@@ -121,6 +121,7 @@
           <p>{{ no_match }}</p>
           {% if matching_announces %}
             {% for match in matching_announces %}
+            {% if not match.is_deleted and not match.is_rejected %}
             <!-- Blog Post -->
             <div class="card mb-4">
               <div class="card-body">
@@ -155,6 +156,7 @@
               (<a href="mailto:{{ match.submitter.email }}">{{ match.submitter.email }}</a>)
               </div>
             </div>
+            {% endif %}
             {% endfor %}
 
             <ul class="pagination justify-content-center mb-4">

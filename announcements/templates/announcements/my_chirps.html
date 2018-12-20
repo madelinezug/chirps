@@ -114,49 +114,51 @@
 
          {% if my_chirps_announcements_list != None %}
            {% for chirp in my_chirps_announcements_list %}
-           <!-- Blog Post -->
-           <div class="card mb-4 ">
-             <div class="card-body">
-             <h2 class="card-title">{{ chirp.announce_title }}
-               <!-- <div class="btn-group-sm float-right" role="group" aria-label="Edit Delete Posts">
-                 <button type="button" class="btn btn-outline-secondary disabled">Edit</button>
-                 <button type="button" class="btn btn-outline-danger disabled" onclick="return confirm('Are you sure you want to delete this chirp?')">Delete</button>
-               </div> -->
-             </h2>
-             <p class="card-text preview-text">{{chirp.announce_text}}</p>
-             <a href="{% url 'detail' chirp.announce_ID %}" class="btn btn-sm btn-outline-primary">See More &rarr;</a>
+             {% if not chirp.is_deleted and not chirp.is_rejected %}
+              <!-- Blog Post -->
+              <div class="card mb-4 ">
+                <div class="card-body">
+                <h2 class="card-title">{{ chirp.announce_title }}
+                  <!-- <div class="btn-group-sm float-right" role="group" aria-label="Edit Delete Posts">
+                    <button type="button" class="btn btn-outline-secondary disabled">Edit</button>
+                    <button type="button" class="btn btn-outline-danger disabled" onclick="return confirm('Are you sure you want to delete this chirp?')">Delete</button>
+                  </div> -->
+                </h2>
+                <p class="card-text preview-text">{{chirp.announce_text}}</p>
+                <a href="{% url 'detail' chirp.announce_ID %}" class="btn btn-sm btn-outline-primary">See More &rarr;</a>
 
 
-             <!-- tags preview on post -->
-             <div class="padding-post-tag row">
-               {% if chirp.has_tags %}
-                 {% for tag_assoc in chirp.get_tags|slice:"4" %}
-                 <a href = "http://127.0.0.1:8000/announcements/search/{{ tag_assoc.the_tag }}">
-                   {% if tag_assoc.the_tag.approved %}
-                     <span class="tag badge badge-pill badge-primary">
-                   {% else %}
-                     <span class="tag badge badge-pill badge-danger">
-                   {% endif %}
-                       {{ tag_assoc.the_tag }}</span>
-                     </a>
-                 {% endfor %}
-                 {% if chirp.num_tags > 4 %}
-                     <small class="text-muted"> ... </small>
-                 {% endif %}
-               {% endif %}
-             </div>
+                <!-- tags preview on post -->
+                <div class="padding-post-tag row">
+                  {% if chirp.has_tags %}
+                    {% for tag_assoc in chirp.get_tags|slice:"4" %}
+                    <a href = "http://127.0.0.1:8000/announcements/search/{{ tag_assoc.the_tag }}">
+                      {% if tag_assoc.the_tag.approved %}
+                        <span class="tag badge badge-pill badge-primary">
+                      {% else %}
+                        <span class="tag badge badge-pill badge-danger">
+                      {% endif %}
+                          {{ tag_assoc.the_tag }}</span>
+                        </a>
+                    {% endfor %}
+                    {% if chirp.num_tags > 4 %}
+                        <small class="text-muted"> ... </small>
+                    {% endif %}
+                  {% endif %}
+                </div>
 
-           </div>
-           <div class="card-footer text-muted">
-             Posted on {{ chirp.submit_date }} by Me
+              </div>
+              <div class="card-footer text-muted">
+                Posted on {{ chirp.submit_date }} by Me
 
-               {%if chirp.approve_status%}
-                  <span class="float-right text-success"><small> Approved </small></span>
-               {% else %}
-                  <span class="float-right text-danger"><small> Pending </small></span>
-               {% endif %}
-          </div>
-        </div>
+                  {%if chirp.approve_status%}
+                      <span class="float-right text-success"><small> Approved </small></span>
+                  {% else %}
+                      <span class="float-right text-danger"><small> Pending </small></span>
+                  {% endif %}
+              </div>
+            </div>
+          {% endif %}
         {% endfor %}
 
         <ul class="pagination justify-content-center mb-4">

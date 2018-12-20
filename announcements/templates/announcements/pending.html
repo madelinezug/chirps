@@ -92,6 +92,7 @@
 
          {% if pending_announcements_list %}
            {% for pending in pending_announcements_list %}
+           {% if not pending.is_deleted and not pending.is_rejected %}
            <!-- Blog Post -->
            <div class="card mb-4 ">
              <div class="card-body">
@@ -131,6 +132,7 @@
                {% endif %}
           </div>
         </div>
+        {% endif %}
         {% endfor %}
 
         <ul class="pagination justify-content-center mb-4">

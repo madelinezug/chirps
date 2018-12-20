@@ -118,6 +118,7 @@
 
           {% if saved_announcements_list != None %}
             {% for saved in saved_announcements_list %}
+            {% if not saved.is_deleted and not chirp.is_rejected %}
             <!-- Blog Post -->
            <div class="card mb-4">
               <div class="card-body">
@@ -152,6 +153,7 @@
               (<a href="mailto:{{ saved.saved_announce.submitter.email }}">{{ saved.saved_announce.submitter.email }}</a>)
               </div>
             </div>
+            {% endif %}
             {% endfor %}
 
             <ul class="pagination justify-content-center mb-4">

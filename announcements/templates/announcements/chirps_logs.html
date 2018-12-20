@@ -6,10 +6,10 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="logs">
+    <meta name="description" content="admin logs">
     <meta name="author" content="Sarah Jin, Mark Penrod, Maddie Zug">
 
-    <title>Logs</title>
+    <title>Log - Admin Privileges</title>
 
     <!-- Bootstrap core CSS -->
     <!-- <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
@@ -110,89 +110,51 @@
 
         {% if not user.admin_status %}
 
-            <div class="col-md-6 post-padding-top ">
+            <div class="col-md-10 post-padding-top ">
               <p> You are not authorized to view logs. </p>
              </div>
 
         {% else %}
         <!-- Blog Entries Column -->
-        <div class="col-md-6 post-padding-top ">
+        <div class="col-md-10 post-padding-top " style="width:100%">
 
-          <h1 class="my-4 font-default">Logs</h1>
+          <h1 class="my-4 font-default">Log - Chirps</h1>
 
-          <p><a href="{% url 'admin_logs' %}">
-            <span data-feather="admin_logs"></span>
-            Admin privileges
-          </a></p>
-          <p><a href="{% url 'block_logs' %}">
-            <span data-feather="block_logs"></span>
-            Blocking and unblocking
-          </a></p>
-          <p><a href="{% url 'chirps_logs' %}">
-            <span data-feather="chirps_logs"></span>
-            Chirps
-          </a></p>
+          {% if chirps_logs_list != None %}
+            <table class="table table-bordered">
+              <th>Date</th>
+              <th>ID</th>
+              <th>Submitter</th>
+              <th>Status</th>
+              <th>Actor</th>
+            {% for chirps_log in chirps_logs_list %}
+              <tr>
+                <td>{{ chirps_log.event_date }}</td>
+                <td>{{ chirps_log.chirpslog_announcement.announce_ID }}</td>
+                <td>{{ chirps_log.chirpslog_announcement.submitter }}</td>
+                {% if chirps_log.chirpslog_announcement.approve_status %}
+                  <td class="text-success">approved</td>
+                  <td>{{ chirps_log.approver }}</td>
+                {% elif chirps_log.chirpslog_announcement.is_rejected %}
+                  <td class="text-success">rejected</td>  
+                  <td>{{ chirps_log.approver }}</td>
+                {% elif chirps_log.chirpslog_announcement.is_deleted %}
+                  <td class="text-success">deleted</td>
+                  <td>{{ chirps_log.chirpslog_announcement.submitter }}d</td>
+                {% else %}
+                  <td>pending</td>
+                  <td>n/a</td>
+                {% endif %}
+              </tr>
+            {% endfor %}
+          </table>
+          {% else %}
+            <p>No logs to display.</p>
+          {% endif %}
         </div>
         {% endif %}
 
-        <!-- Sidebar Widgets Column -->
-        <div class="col-md-4">
 
-          {% if user.blocked_status %}
-            <div class="card my-4">
-              <p style="margin:5px">You cannot submit a Chirp, because you have been blocked.</p>
-            </div>
-          {% else %}
-            <a href="{% url 'submit' %}">
-              <div class="card my-4">
-                <button class="btn btn-primary" type="submit">Submit a Chirp!</button>
-              </div>
-            </a>
-          {% endif %}
-
-          {% if user.admin_status %}
-            <a href="{% url 'email_digest' %}">
-              <div class="card my-4">
-                <button class="btn btn-primary" type="submit">Send email digest</button>
-              </div>
-            </a>
-          {% endif %}
-
-          <!-- Categories Widget -->
-          <div class="card my-4">
-            <h5 class="card-header">Tags</h5>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-lg-6">
-                  <ul class="list-unstyled mb-0">
-                    <li>
-                      <a href="http://127.0.0.1:8000/announcements/search/Lost%20and%20Found">Lost and Found</a>
-                    </li>
-                    <li>
-                      <a href="http://127.0.0.1:8000/announcements/search/Sports">Sports</a>
-                    </li>
-                    <li>
-                      <a href="http://127.0.0.1:8000/announcements/search/Food">Food</a>
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-lg-6">
-                  <ul class="list-unstyled mb-0">
-                    <li>
-                      <a href="http://127.0.0.1:8000/announcements/search/Parties">Parties</a>
-                    </li>
-                    <li>
-                      <a href="http://127.0.0.1:8000/announcements/search/For%20Sale">For Sale</a>
-                    </li>
-                    <li>
-                      <a href="http://127.0.0.1:8000/announcements/search/Campus%20Safety">Campus Safety</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 

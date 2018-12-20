@@ -22,6 +22,7 @@
 
 {% if approved_chirps_list %}
               {% for announcement in approved_chirps_list %}
+              {% if not chirp.is_deleted and not chirp.is_rejected %}
               <!-- Blog Post -->
                <div class="card mb-4">
                   <div class="card-body">
@@ -48,6 +49,7 @@
                       (<a href="mailto:{{ announcement.submitter.email }}">{{ announcement.submitter.email }}</a>)
                     </div>
                   </div>
+                {% endif %}
                 {% endfor %}
 {% else %}
                   <p>No announcements are available.</p>
